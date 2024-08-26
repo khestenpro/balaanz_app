@@ -5,4 +5,4 @@ FROM tomcat:8.0.20-jre8
 EXPOSE 8080
 
 # Copy the WAR file from the target directory of your Maven project to the Tomcat webapps directory
-COPY target/target/bitsvalley-micro-0.0.1-SNAPSHOT.jar /usr/local/tomcat/webapps/
+COPY target/bitsvalley-micro-0.0.1-SNAPSHOT.jar /usr/local/tomcat/webapps/
