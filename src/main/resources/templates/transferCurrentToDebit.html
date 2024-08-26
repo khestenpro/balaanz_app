@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:insert="header::navbar" class="sticky-header" ></div>
+<br/>
+<br/>
+<br/>
+<div th:insert="summary::navbar"></div>
+
+<div class="container">
+
+<!--    &lt;!&ndash; Contact form area start &ndash;&gt;-->
+<!--    <section class="main-page-container">-->
+
+        <form action="#" th:action="@{/transferFromCurrentToDebitFormReview}" method="post" th:object="${transferBilanz}">
+            <table class="center" width="100%" border="0">
+                <tr>
+                    <td align="center">
+                        <h3>TRANSFER FROM <spam th:text="${session.runtimeSettings.contextName}"/>  TO SAVING ACCOUNT</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2">
+
+                        <br/>
+                        <label> From Account:</label>
+                        <br/>
+                        <select class="selectNormal" th:field="*{transferFromAccount}">
+                            <option th:each="i : ${session.customerInUse.currentAccount}"
+                                    th:value="${i.accountNumber}"
+                                    th:text="'Account Number: ' + ${i.accountNumber} + ' Balance:'+ ${#numbers.formatDecimal(i.accountBalance, 0, 'COMMA', 0, 'POINT')}">
+                            </option>
+                        </select>
+                        <br/>
+                        <br/>
+                        <font size="4"> <div class="error" th:text="${invalidToAccount}"/> </font>
+                        <label>To Saving Account:</label>
+                        <br/>
+
+                        <input class="selectNormal125" type="number" size="12" th:field="*{transferToAccount}">
+                        <br/>
+                        <br/>
+                        <label>Enter Amount:</label>
+                        <br/>
+
+                        <input class="form-control amount-field currency-original-field" name="transferAmount" hidden type="text" th:field="*{transferAmount}" required/>
+
+                        <input class="selectAmount currency-input" name="transferAmount" type="text" value="${transferAmount}"/>
+
+                        <input type="hidden"  id="transferType" th:field="*{transferType}"/>
+                        <br/>
+                        <br/>
+                        <textarea class="selectNormal" placeholder="Notes here ..." id="loanNotes" rows="3" cols="30" th:field="*{notes}">
+                        </textarea>
+
+                        <br/>
+                        <br/>
+
+                        <button type="submit" class="btn btn-success">
+                            Next - Review Transfer
+                        </button>
+                        <br/>
+                        <br/>
+
+                    </td>
+                </tr>
+            </table>
+        </form>
+<!--    </section>-->
+</div>
+<div th:insert="footer::navbar"></div>
+<script src="/assets/js/jquery-3.5.1.min.js"></script>
+<script src="/assets/js/currencyFormatter.js"></script>
+</html>

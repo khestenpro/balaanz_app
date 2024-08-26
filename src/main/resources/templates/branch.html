@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header" >  </div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings?.themeColor2}">REGISTER A NEW BRANCH
+                        </h2>
+                        <span>Fill up form to register new branch.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container branch-form-container">
+            <span class="alert alert-info" th:if="${branchInfo}" th:text="${branchInfo}"/>
+            <span class="alert alert-danger" th:if="${branchError}" th:text="${branchError}"/>
+
+            <form action="#" th:action="@{/registerBranchForm}" method="post" th:object="${branch}">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="country">Choose a Country:</label>
+                            <select class="form-control" name="country" id="country">
+                                <option value="100">CAMEROON</option>
+                                <option value="200">GABON</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="code">Code:</label>
+                            <input minlength="2" type="text" name="code" id="code"
+                                       class="form-control" required>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" name="name" th:field="*{name}" id="name"
+                                       class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="street">Street:</label>
+                            <input type="text" name="street" th:field="*{street}" id="street"
+                                       class="form-control" required>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="city">City:</label>
+                            <input type="text" name="city" th:field="*{city}" id="city"
+                                       class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="poBox">P. O. Box:</label>
+                            <input type="poBox" name="poBox" th:field="*{poBox}" id="poBox"
+                                       class="form-control">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="telephone">Telephone:</label>
+                            <input type="text" name="telephone" th:field="*{telephone}" id="telephone" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="fax">Fax:</label>
+                            <input type="text" name="fax" th:field="*{fax}" id="fax"
+                                       class="form-control">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" name="email" th:field="*{email}" id="email"
+                                       class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="contact">Contact Person:</label>
+                            <input type="text" name="contact" th:field="*{contact}" id="contact"
+                                       class="form-control" required>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="notes">Notes e.g Opening hours ..</label>
+                            <input type="text" name="notes" th:field="*{notes}" id="notes"
+                                       class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">Create Branch</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<div th:insert="footer::navbar">  </div>
+</html>

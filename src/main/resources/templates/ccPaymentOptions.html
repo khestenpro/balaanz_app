@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+
+  <div class="container">
+    <div class="radius-container payment-status-modal">
+      <!--            <span class="status-icon success" th:unless='${error}'><i class="far fa-check-circle"></i></span>-->
+      <!--            <span class="status-icon error" th:if='${error}'><i class="far fa-times-circle"></i></span>-->
+      <form th:action="@{/checkoutShoppingCart}" method='POST' id='checkout-form'>
+        <div class="payment-options">
+          <h3>Payment Options</h3>
+          <ul id="paymentTabs">
+            <li><a class="active" data-tab="account">
+              <img src="assets/images/b-icon.png"> &nbsp; Current
+              Account</a></li>
+            <li><a class="orange" href="javascript:void(0);" data-tab="momo">
+              <div class="tab-mtn-money">
+                            <span class="material-symbols-outlined">
+                              call_made
+                            </span>
+              </div>
+              <div class="tab-orange-money">
+                            <span class="material-symbols-outlined">
+                                call_made
+                            </span>
+              </div>
+              Momo
+            </a></li>
+<!--            <li><a href="javascript:void(0);" data-tab="cash"><i class="fas fa-money-bill-wave"></i>Cash</a>-->
+<!--            </li>-->
+              <li><a href="javascript:void(0);" data-tab="anonym"><i class="fas fa-user"></i>Anonymous</a>
+              </li>
+          </ul>
+          <div class="payment-tab-content">
+
+            <div id="account" class="b-tab active input-group">
+              <div class="input-group mb-3 w-100">
+                <input type="text"
+                       placeholder="username"
+                       id="currentAccountUser"
+                       name="currentAccountUser"
+                       required="required"
+                       th:value="${isConfirmationNeeded} == 'y' ? ${username} : ''"/>
+              </div>
+              <label th:if="${isConfirmationNeeded == 'y'}" th:text="${confirmationMessage}"
+                     th:class="${primary == '0'} ? 'text-danger' : 'text-success'"
+              ><br/></label>
+              <div class="input-group">
+                <input type="text" placeholder="balaanz Current Account" class="form-control"
+                />
+              </div>
+
+
+            </div>
+            <div id="momo" class="b-tab">
+
+              <input type="text"
+                     id="momoNumber"
+                     name="moMoSenderNumber"
+                     placeholder="Enter a Mobile Money Number">
+            </div>
+            <!--<div id="cash" class="b-tab">
+
+              <input type="text" placeholder="Enter Cash Amount">
+            </div>-->
+            <div id="anonym" class="b-tab">
+
+              <input type="text"
+                     id="anonymousUser"
+                     name="anonymousUser"
+
+                     placeholder="Enter name">
+            </div>
+          </div>
+          <div class="btn-block">
+            <input type="submit"
+                   class="btn"
+                   value="Process Payment"
+                   th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}"/>
+          </div>
+        </div>
+        <div class="order-summery">
+          <h3>Order summary</h3>
+
+          <div class="pos-checkout-item-row" th:each="orderItem : ${session.shoppingCart?.orderItems}">
+            <div class="table-row">
+              <div class="table-cell"><span
+                      th:text="${orderItem.name} +' - x'+ ${#numbers.formatDecimal(orderItem.qty, 0, 'COMMA', 0, 'POINT')}"/>
+              </div>
+
+              <div class="table-cell"><span th:style="${'color:' + session.runtimeSettings.themeColor}"
+                                            th:text="${#numbers.formatDecimal(orderItem.qty*orderItem.price, 0, 'COMMA', 0, 'POINT')}"/>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="table-row">
+            <div class="table-cell">Subtotal</div>
+            <div class="table-cell"><span
+                    th:text="${#numbers.formatDecimal(session.shoppingCart?.total, 0, 'COMMA', 0, 'POINT')}"></span>&nbsp;frs
+            </div>
+          </div>
+          <div class="table-row">
+            <div class="table-cell">Discount</div>
+            <div class="table-cell">0frs</div>
+          </div>
+          <div class="table-row last" th:style="${'color:' + session.runtimeSettings.themeColor}">
+            <div class="table-cell">Total</div>
+            <div class="table-cell"><span
+                    th:text="${#numbers.formatDecimal(session.shoppingCart?.total, 0, 'COMMA', 0, 'POINT')}"></span>&nbsp;frs
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<div th:insert="footer::navbar"></div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+    'use strict';
+
+    function Tabs() {
+        var bindAll = function () {
+            var menuElements = document.querySelectorAll('[data-tab]');
+            for (var i = 0; i < menuElements.length; i++) {
+                menuElements[i].addEventListener('click', change, false);
+            }
+        }
+
+        var clear = function () {
+            var menuElements = document.querySelectorAll('[data-tab]');
+            for (var i = 0; i < menuElements.length; i++) {
+                menuElements[i].classList.remove('active');
+                var id = menuElements[i].getAttribute('data-tab');
+                document.getElementById(id).classList.remove('active');
+                let contentElement = document.getElementById(id);
+                let inputField = contentElement.querySelector('input');
+                if (inputField) {
+                    console.log("setting required")
+                    inputField.removeAttribute('required');
+                    inputField.value=''
+                }
+            }
+        }
+        var change = function (e) {
+            clear();
+            e.target.classList.add('active');
+            const id = e.currentTarget.getAttribute('data-tab');
+            let contentElement = document.getElementById(id);
+            contentElement.classList.add('active');
+            let inputField = contentElement.querySelector('input');
+            if (inputField && inputField.id !== "anonymousUser") {
+                console.log("setting required", inputField)
+                inputField.setAttribute('required', 'required');
+            }
+
+        }
+        bindAll();
+    }
+    var connectTabs = new Tabs();
+</script>
+</html>

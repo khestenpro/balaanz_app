@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+  <div class="container">
+    <span class="alert alert-danger" th:if="${customersInfo}" th:text="${customersInfo}"/>
+    <div class="radius-container">
+      <div class="radius-container-title" th:style="${'background-color:' + session.runtimeSettings?.themeColor2}">
+        <h2>Accounts</h2>
+        <div class="page-h-link" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_AGENT'')')}">
+          <a href="/registerCustomer">Create New Agent<i class="fas fa-plus"></i></a>
+        </div>
+      </div>
+      <div class="user-list-container">
+        <div class="user-list">
+
+          <h4 th:style="${'color:' + session.runtimeSettings.themeColor}">Active Agents</h4>
+          <form action="#" th:action="@{/registerEventForm}" method="post">
+            <table class="default-list">
+              <tr>
+                <th></th>
+                <th th:unless="${session?.bulkLedgerSelected == null}">
+                </th>
+                <th>Username <br/> Agent Since </th>
+                <th>Firstname Lastname <br/> Email</th>
+                <th>Account <br/> Status</th>
+                <th>Unsigned Amount <br/> Limit</th>
+                <th>Creator</th>
+                <th>Update</th>
+              </tr>
+              <tr th:each="user, state : ${customersDTO.activeAgents}">
+                <td th:utext="${state.count}">count</td>
+                <td th:unless="${session?.bulkLedgerSelected == null}">
+                  <input class="form-check-input" type="checkbox" id="bulkCustomer" th:value="${user.userName} +' - '+${user.id}" name="bulkCustomer"/>
+                </td>
+                <td>
+                  <a style="text-decoration: underline; text-decoration-color: blue;"
+                          href="#" th:href="@{/getAgentStats/{id}(id=${user.id})}"><span th:text="${user.userName}"/>
+                    <i class="fas fa-external-link-alt"></i></a>
+                  <br/>
+                  <i><span th:text="${#dates.format(user.created, 'dd-MMM-yyyy HH:mm')}"/></i>
+                </td>
+                <td>
+                  <span th:text="${user.gender} +'. '+${user.firstName} +' '+ ${user.lastName}"/>
+                  <br/>
+                  <span th:text="${user.email}"></span>
+                </td>
+
+                <td>
+                  <!--                        <a href="#" th:href="@{/memberStatus/{status}(status=${user.accountStatus.name})}">-->
+                  <span th:text="${user.accountStatus?.name}"/>
+                  <!--                        </a>-->
+                  <a class="table-list-icon" th:href="@{/editAgentAccountStatus/{id}(id=${user.id})}">
+                    <i class="fas fa-pencil-alt" style="font-size:6px"></i>
+                  </a>
+                </td>
+                <td>  <a style="text-decoration: underline; text-decoration-color: blue;"
+                               href="#" th:href="@{/getAgentStats/{id}(id=${user.id})}">
+                  <span th:text="${#numbers.formatDecimal(user.unsignedAmount, 0, 'COMMA', 0, 'POINT')}"/>
+                </a> <br/> <span th:text="${#numbers.formatDecimal(user.collectionLimit, 0, 'COMMA', 0, 'POINT')}"/>
+
+                </td>
+                <td>
+                  <span th:text="${user.createdBy}"/>
+                  <br/>
+                  <span th:text="${user.referral}"/>
+                </td>
+
+                <td th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ADMIN'')')} OR ${#authorization.expression('hasAnyAuthority(''ROLE_EDIT_USER_ACCOUNT'')')} ">
+                  <!--                            <div th:unless="${#authorization.expression('hasAnyAuthority(''ROLE_EMPLOYEE'')')}">-->
+                  <a th:href="@{/updateUserProfile/{id}(id=${user.id})}">
+                    Profile
+                  </a>
+                  <br/>
+                  <a th:href="@{/reloadUser/{id}(id=${user.id})}">
+                    Beneficiary
+                  </a>
+                  <!--                    </div>-->
+                <td th:unless="${#authorization.expression('hasAnyAuthority(''ROLE_ADMIN'')')} OR ${#authorization.expression('hasAnyAuthority(''ROLE_EDIT_USER_ACCOUNT'')')}">
+                  <a class="table-list-icon" href="">
+                    <i class="fas fa-pencil-alt"></i>
+                  </a>
+                  <span class="table-list-icon" title="Requires ROLE_EDIT_USER_ACCOUNT"><i class="fas fa-info"></i></span>
+                </td>
+              </tr>
+            </table>
+            <br/>
+            <div th:unless="${session?.bulkLedgerSelected == null}">
+              <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">Create Event</button>
+            </div>
+          </form>
+
+          <br/>
+          <h4 th:style="${'color:' + session.runtimeSettings.themeColor}">InActive Agents</h4>
+
+          <form action="#" th:action="@{/registerEventForm}" method="post">
+            <table class="default-list">
+              <tr>
+                <th>
+                  <div th:unless="${customerDTO == null}">
+                    All <input class="form-check-input" type="checkbox" id="bulkCustomersInactive" name="bulkCustomers"/>
+                  </div>
+                  Username - Name</th>
+                <th>Email</th>
+                <th>Telephone</th>
+                <th>Member Since</th>
+                <th>Status</th>
+                <th th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MANAGER'')')}">Locked</th>
+                <th>Unsigned Amount <br/> Limit</th>
+                <th>Creator</th>
+                <th>View</th>
+                <th>Edit</th>
+              </tr>
+              <tr th:each="user : ${customersDTO.inActiveAgents}">
+                <td>
+                  <div th:unless="${customerDTO == null}">
+                    <input class="form-check-input" type="checkbox" id="bulkCustomerInactiv" th:value="${user.userName} +' - '+${user.id}" name="bulkCustomer"/>
+                  </div>
+                  <a href="#" th:href="@{/memberStatus/{status}(status=${user.accountStatus.name})}">
+                    <span th:text="${user.userName}+' - '+ ${user.gender} +'. '+${user.firstName} +' '+ ${user.lastName}"/>
+                  </a>
+                </td>
+
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.telephone1}"></td>
+                <td th:text="${#dates.format(user.created, 'dd-MMM-yyyy HH:mm')}"></td>
+                <td>
+
+                  <!--                            <a href="#" th:href="@{/memberStatus/{status}(status=${user.accountStatus.name})}">-->
+                  <span th:text="${user.accountStatus.name}"/>
+                  <!--                            </a>-->
+                  <a class="table-list-icon" th:href="@{/editAgentAccountStatus/{id}(id=${user.id})}">
+                    <i class="fas fa-pencil-alt" style="font-size:6px"></i>
+                  </a>
+
+                </td>
+                <td th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MANAGER'')')}">
+                  <a href="#" th:href="@{/lockAgentAccount/{id}(id=${user.id})}" th:text="${user.accountLocked}"></a>
+                </td>
+                <td> 48 000 <br/> 50 000
+                <td th:text="${user.createdBy}"></td>
+                <td th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}">
+                  <a href="#" th:href="@{/showCustomer/{id}(id=${user.id})}"></a>
+                </td>
+                <td th:unless="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}">
+                            <span class="table-list-icon" title="Requires ROLE_ACCOUNT_BALANCES">
+                                <i class="fas fa-info"></i>
+                            </span>
+                </td>
+                <td th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ADMIN'')')} OR ${#authorization.expression('hasAnyAuthority(''ROLE_EDIT_USER_ACCOUNT'')')} ">
+                  <a class="table-list-icon" th:href="@{/editUserRole/{id}(id=${user.id})}">
+                    <i class="fas fa-pencil-alt"></i>
+                  </a>
+                </td>
+                <td th:unless="${#authorization.expression('hasAnyAuthority(''ROLE_ADMIN'')')} OR ${#authorization.expression('hasAnyAuthority(''ROLE_EDIT_USER_ACCOUNT'')')}">
+                  <a class="table-list-icon" href="">
+                    <i class="fas fa-pencil-alt"></i>
+                  </a>
+                  <span class="table-list-icon" title="Requires ROLE_EDIT_USER_ACCOUNT"><i class="fas fa-info"></i></span>
+                </td>
+              </tr>
+            </table>
+            <br/>
+            <div th:unless="${session?.bulkLedgerSelected == null}">
+              <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">Create Event</button>
+            </div>
+          </form>
+          <br/>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div th:insert="footer::navbar"></div>
+</html>

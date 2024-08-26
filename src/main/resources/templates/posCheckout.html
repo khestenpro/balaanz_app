@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="navbar">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>bitsvalley - bala@nz</title>
+        <!-- Favicon  -->
+        <link rel="icon" type="image/x-icon" th:href="@{/assets/images/favicon/faviconn.ico}">
+        <!--Bootstrap-->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+        <!--Fontawesome-->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/all.min.css}">
+        <!--Owl-carousel-->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/owl.carousel.min.css}">
+        <!--Owl Carousel theme-->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/owl.theme.default.min.css}">
+        <!--Animate-->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/animate.min.css}">
+        <!-- magnific CSS -->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/magnific-popup.css}">
+        <!-- Mmenu CSS -->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/slicknav.min.css}">
+        <!--Style-->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/style.css}">
+        <!-- Responsive -->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/responsive.css}">
+    </head>
+    <header class="app-header">
+        <div class="container">
+            <div class="inner-header">
+
+            </div>
+        </div>
+    </header>
+</div>
+<section class="main-page-container">
+  <div class="container">
+    <div class="row row-space-14">
+      <div class="col-md-8">
+        <div class="product-checkout-container">
+          <div class="product-checkout-title">
+            <h2>Cart</h2>
+            <span>Product list added to cart</span>
+          </div>
+          <div class="product-list list-view">
+            <div class="product-item">
+              <span class="remove-product">
+                <i class="fas fa-times"></i>
+              </span>
+              <div class="product-image">
+                <img src="https://www.incimages.com/uploaded_files/image/1920x1080/GettyImages-1158242033_411023.jpg" />
+              </div>
+              <div class="product-description">
+                <h4>Fellow Prismo French Black</h4>
+                <p>Product description with it's associated details</p>
+                <h3 th:style="${'color:' + session.runtimeSettings.themeColor}">30 FRS</h3>
+                <div class="product-action">
+                  <div class="product-count">
+                    <span class="count-btn" th:style="${'background-color:' + session.runtimeSettings.themeColor}">
+                      -
+                    </span>
+                    <span class="count">
+                      2
+                    </span>
+                    <span class="count-btn" th:style="${'background-color:' + session.runtimeSettings.themeColor}">
+                      +
+                    </span>
+                  </div>
+                  <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings?.themeColor2 + ';' + 'border-color:' + session.runtimeSettings?.themeColor2}">Save for Later</button>
+                </div>
+              </div>
+              
+            </div>
+            <div class="product-item">
+              <span class="remove-product">
+                <i class="fas fa-times"></i>
+              </span>
+              <div class="product-image">
+                <img src="https://www.incimages.com/uploaded_files/image/1920x1080/GettyImages-1158242033_411023.jpg" />
+              </div>
+              <div class="product-description">
+                <h4>Fellow Prismo French Black</h4>
+                <p>Product description with it's associated details</p>
+                <h3 th:style="${'color:' + session.runtimeSettings.themeColor}">30 FRS</h3>
+                <div class="product-action">
+                  <div class="product-count">
+                    <span class="count-btn" th:style="${'background-color:' + session.runtimeSettings.themeColor}">
+                      -
+                    </span>
+                    <span class="count">
+                      2
+                    </span>
+                    <span class="count-btn" th:style="${'background-color:' + session.runtimeSettings.themeColor}">
+                      +
+                    </span>
+                  </div>
+                  <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings?.themeColor2 + ';' + 'border-color:' + session.runtimeSettings?.themeColor2}">Save for Later</button>
+                </div>
+              </div>
+              
+            </div>
+            <div class="product-item">
+              <span class="remove-product">
+                <i class="fas fa-times"></i>
+              </span>
+              <div class="product-image">
+                <img src="https://www.incimages.com/uploaded_files/image/1920x1080/GettyImages-1158242033_411023.jpg" />
+              </div>
+              <div class="product-description">
+                <h4>Fellow Prismo French Black</h4>
+                <p>Product description with it's associated details</p>
+                <h3 th:style="${'color:' + session.runtimeSettings.themeColor}">30 FRS</h3>
+                <div class="product-action">
+                  <div class="product-count">
+                    <span class="count-btn" th:style="${'background-color:' + session.runtimeSettings.themeColor}">
+                      -
+                    </span>
+                    <span class="count">
+                      2
+                    </span>
+                    <span class="count-btn" th:style="${'background-color:' + session.runtimeSettings.themeColor}">
+                      +
+                    </span>
+                  </div>
+                  <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings?.themeColor2 + ';' + 'border-color:' + session.runtimeSettings?.themeColor2}">Save for Later</button>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+          <div class="product-list-total">
+            Sub Total: 108.00 FRS
+          </div>
+        </div>
+        <div class="product-checkout-container">
+          <div class="product-adds">
+            <div class="product-adds-image">
+              <i class="fas fa-truck"></i>
+            </div>
+            <div class="product-adds-container">
+              <h4>Free* Standard Delivery</h4>
+              <p>Faster delivery options available to most countries.</p>
+              <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#">View More</a>
+            </div>
+          </div>
+        </div>
+        <div class="product-checkout-container">
+          <div class="product-adds">
+            <div class="product-adds-image">
+              <i class="fas fa-undo"></i>
+            </div>
+            <div class="product-adds-container">
+              <h4>Easy Returns</h4>
+              <p>Send it back within 30 days of receiving your order.</p>
+              <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#">View More</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="product-checkout-container">
+          <div class="product-checkout-title">
+            <h2>Total</h2>  
+          </div>
+          <div class="product-total-summary">
+            <div class="product-summary-row">
+              <label>Sub-total:</label>
+              <span>78.00 FRS</span>
+            </div>
+            <div class="product-summary-row">
+              <label>Delivery:</label>
+              <span>22.00 FRS</span>
+            </div>
+            <div class="product-summary-row">
+              <label>Tax:</label>
+              <span>8.00 FRS</span>
+            </div>
+            <div class="product-summary-row">
+              <select class="delivery-dropdown">
+                <option>Standard Delivery</option>
+                <option>Express Delivery</option>
+                <option>Prime Delivery</option>
+              </select>
+            </div>
+            <div class="product-summary-total">
+              <label>Gross Total:</label>
+              <span>110 FRS</span>
+            </div>
+          </div>
+          <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}">
+            CHECKOUT
+          </button>
+        </div>
+        <div class="product-checkout-container">
+          <div class="product-checkout-title">
+            <h2>We Accept</h2>  
+          </div>
+          <div class="payment-image">
+            <img src="https://www.tiqypro.com/Content/Custom/images/Payments/payments-integrations-booking-system.png" />
+            <p>Get a discount code. Add it in the next step.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</html>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="account-dashboard-container">
+        <div th:insert="summary::navbar"></div>
+        <div class="container">
+            <div class="account-block-list">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6"
+                         th:unless="${#strings.isEmpty(session.runtimeSettings.currentAccount)}"
+                         th:each="currentAccount : ${session.customerInUse.currentAccount}">
+                        <div class="account-block current-account">
+                            <div class="account-block-header"
+                                 th:style="${'background-color:' + session.runtimeSettings.themeColor}">
+                                <h2 th:text="${session.runtimeSettings.currentAccount}"></h2> | <h2><span
+                                    th:text="${#numbers.formatDecimal(currentAccount.accountBalance, 0, 'COMMA', 0, 'POINT')}+ ' frs'"></span>
+                            </h2>
+                                <!-- <span th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}"></span> -->
+                            </div>
+                            <div class="account-block-body">
+                                <div class="block-parameter-list">
+                                    <div class="block-parameter-item">
+                                        <label>Account Number</label>
+                                        <span>
+                                            <a th:style="${'color:' + session.runtimeSettings.themeColor}"
+                                               th:href="@{/callcenter/{id}(id=${currentAccount.accountNumber})}"
+                                               href="/callcenter">
+                                                <b th:text="${#strings.substring(currentAccount.accountNumber,3,5)} + '-' +${#strings.substring(currentAccount.accountNumber,5,10)} + '-' +${#strings.substring(currentAccount.accountNumber,21,23)}"/>
+                                                <i th:if="${currentAccount.defaultedPayment}">
+                                                    <font size="4" color="red">
+                                                        **
+                                                    </font>
+                                                </i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="block-parameter-item">
+                                        <label>Account Created</label>
+                                        <span th:text="${#dates.format(currentAccount.createdDate, 'dd-MMM-yyyy HH:mm')}"></span>
+                                    </div>
+                                    <div class="block-parameter-item">
+                                        <label>Account Locked</label>
+                                        <span th:text="${currentAccount.active}"></span>
+                                    </div>
+                                    <div class="block-parameter-item"
+                                         th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')} OR ${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}">
+                                        <label>Amount on Hold</label>
+                                        <span th:text="${#numbers.formatDecimal(currentAccount.accountMinBalance, 0, 'COMMA', 0, 'POINT')}"></span>
+                                    </div>
+                                    <!-- <div class="block-parameter-item full-width">
+                                        <label>Description</label>
+                                        <span th:text="${currentAccount.notes}"></span>
+                                    </div> -->
+                                    <span class="alert alert-danger" th:if="${disbursementInfo}"
+                                          th:text="${disbursementInfo}"/><br/>
+
+
+                                    <div th:unless="${#strings.isEmpty(session.runtimeSettings.momoOrgAccount)}"
+                                         class="mobile-money-container">
+                                        <div th:if="${session.runtimeSettings.walletEnabled == 'true'}">
+                                            <div class="mobile-money-section send">
+                                                <h4>
+                                                    <b>Send</b> to <br><span class="mtn-money">MTN</span> or <span
+                                                        class="orange-money">ORANGE</span>
+                                                </h4>
+                                                <form th:action="@{/sendCurrentToMomo}" method="post">
+                                                    <div class="mobile-money-field">
+                                                        <div class="mobile-money-field-haft">
+                                                            <input type="text"
+                                                                   th:value="${session.customerInUse.telephone1}"
+                                                                   required
+                                                                   class="form-control" name="momoNumber"/>
+                                                            <input type="number" placeholder=" e.g 1000"
+                                                                   class="form-control"
+                                                                   name="momoAmount" required/>
+
+                                                        </div>
+                                                        <div class="mobile-money-field-full">
+                                                            <input type="text" placeholder="Enter Notes ... "
+                                                                   class="form-control" name="momoNotes"/>
+                                                            <input type="hidden" name="userId"
+                                                                   th:value="${currentAccount.id}"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mobile-money-btn-row">
+                                                        <button id="currentMomo1" type="submit">
+                                                            <div title="MTN" class="mobile-money-btn mtn-money">
+                                                            <span class="material-symbols-outlined">
+                                                                call_made
+                                                            </span>
+                                                            </div>
+                                                            <div title="ORANGE" class="mobile-money-btn orange-money">
+                                                            <span class="material-symbols-outlined">
+                                                                call_made
+                                                            </span>
+                                                            </div>
+                                                        </button>
+
+                                                    </div>
+
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div class="mobile-money-section receive">
+                                            <h4>
+                                                <b>Receive</b> from <i><span th:text="${session.customerInUse.telephone1}"/></i><br><span class="mtn-money">MTN</span> or <span class="orange-money">ORANGE</span>
+                                            </h4>
+                                            <form th:action="@{/receiveCurrentFromMomo}" method="post">
+                                                <div class="mobile-money-field">
+                                                    <input type="text" placeholder="e.g 10 000" class="form-control" name="momoAmount"/>
+                                                    <input type="hidden" name="userId" th:value="${currentAccount.id}"/><br/><br/>
+                                                </div>
+                                                <div class="mobile-money-btn-row">
+                                                    <button id="receiveFromMomo1" title="MTN" class="mobile-money-btn mtn-money" type="submit">
+                                                        <span class="material-symbols-outlined">
+                                                            south_west
+                                                        </span>
+                                                    </button>
+                                                    <button id="receiveFromMomo2" title="ORANGE" class="mobile-money-btn orange-money" type="submit">
+                                                        <span class="material-symbols-outlined">
+                                                            south_west
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div> -->
+                                    </div>
+
+                                    <span class="transfer-account-icon"
+                                          th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}">
+                                                <a href="#" th:href="@{/transferFromCurrentToCurrentForm}">
+                                                    <img width="15" src="assets/images/b-icon.png"> Make a balaanz account transfer </a>
+                                        </span>
+
+                                    <!-- <div class="momo-container">
+                                        <span class="alert alert-danger" th:if="${disbursementInfo}" th:text="${disbursementInfo}"/><br/>
+                                        <div class="momo-payment">
+                                            <form th:action="@{/sendCurrentToMomo}" method="post">
+                                            <div class="input-group input-group-sm">
+                                                    <input type="text" placeholder="10 000" class="form-control" name="momoAmount"/>
+                                                    <input type="hidden" name="userId" th:value="${currentAccount.id}"/><br/><br/>
+                                                    <div class="input-group-append">
+                                                        <button id="currentMomo" class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">To Orange or Momo</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <img width="70px" th:src="@{/assets/images/mobile-money-logo.png}" />
+                                            <form th:action="@{/receiveCurrentFromMomo}" method="post">
+                                            <div class="input-group input-group-sm">
+                                                    <input type="text" placeholder="10 000" class="form-control" name="momoAmount"/>
+                                                    <input type="hidden" name="userId" th:value="${currentAccount.id}"/><br/><br/>
+                                                    <div class="input-group-append">
+                                                        <button id="receiveFromMomo" class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">From Momo</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                            <div class="account-block-footer">
+                                <a
+                                        class="radius-btn-link current-account-btn" href="#"
+                                        th:href="@{/registerCurrentAccountTransaction/{id}(id=${currentAccount.id})}">
+                                    <span th:text="${session.runtimeSettings.makeAPayment}"/>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6"
+                         th:unless="${#strings.isEmpty(session.runtimeSettings.savingAccount)}"
+                         th:each="savingAccount : ${session.customerInUse.savingAccount}">
+                        <div class="account-block saving-account">
+                            <div class="account-block-header"
+                                 th:style="${'background-color:' + session.runtimeSettings.themeColor}">
+                                <h2 th:text="${savingAccount.accountType.displayName}"></h2> | <h2><span
+                                    th:text="${#numbers.formatDecimal(savingAccount.accountBalance, 0, 'COMMA', 0, 'POINT')} + ' frs'"></span>
+                            </h2>
+                                <!-- <span th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')} OR ${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}"></span> -->
+                            </div>
+                            <div class="account-block-body">
+                                <div class="block-parameter-list">
+                                    <div class="block-parameter-item">
+                                        <label>Account Number</label>
+                                        <span>
+                                            <a th:style="${'color:' + session.runtimeSettings.themeColor}"
+                                               th:href="@{/callcenter/{id}(id=${savingAccount.accountNumber})}"
+                                               href="/callcenter">
+
+                                                    <b th:text="${#strings.substring(savingAccount.accountNumber,3,5)} + ' ' +${#strings.substring(savingAccount.accountNumber,5,10)} + ' ' +${#strings.substring(savingAccount.accountNumber,21,23)}"/>
+                                                    <i th:if="${savingAccount.defaultedPayment}">
+                                                        <font size="4" color="red">
+                                                            **
+                                                        </font>
+                                                    </i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="block-parameter-item">
+                                        <label>Account Created</label>
+                                        <span th:text="${#dates.format(savingAccount.createdDate, 'dd-MMM-yyyy HH:mm')}"></span>
+                                    </div>
+                                    <div class="block-parameter-item"
+                                         th:if="${#strings.isEmpty(session.runtimeSettings.apartmentAccount)}">
+                                        <label>Account Locked</label>
+                                        <span th:text="${savingAccount.accountMinBalanceLocked}"></span>
+                                    </div>
+                                    <div class="block-parameter-item"
+                                         th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')} OR ${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}">
+                                        <label>Amount on Hold</label>
+                                        <span th:text="${#numbers.formatDecimal(savingAccount.accountMinBalance, 0, 'COMMA', 0, 'POINT')}"></span>
+                                    </div>
+                                    <!--                                    <div class="block-parameter-item full-width">-->
+                                    <!--                                        <label>Description</label>-->
+                                    <!--                                        <span th:text="${savingAccount.notes}"></span>-->
+                                    <!--                                    </div>-->
+                                </div>
+                            </div>
+                            <div class="account-block-footer">
+                                <a
+                                        class="radius-btn-link saving-account-btn" href="#"
+                                        th:href="@{/registerSavingAccountTransaction/{id}(id=${savingAccount.id})}">
+                                    <span th:text="${session.runtimeSettings.makeAPayment}"/>
+                                    <!--                                                    Make Payments / View Transations-->
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6"
+                         th:unless="${#strings.isEmpty(session.runtimeSettings.dailySavingAccount)}"
+                         th:each="dailySavingAccount : ${session.customerInUse.dailySavingAccount}">
+                        <div class="account-block daily-account">
+                            <div class="account-block-header"
+                                 th:style="${'background-color:' + session.runtimeSettings.themeColor}">
+                                <h2 th:text="${session.runtimeSettings.dailySavingAccount}"></h2> | <h2>
+                                <span th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}  OR ${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}"
+                                      th:text="${#numbers.formatDecimal(dailySavingAccount.accountBalance, 0, 'COMMA', 0, 'POINT')} + ' frs'"></span>
+                            </h2>
+                            </div>
+                            <div class="account-block-body">
+                                <div class="block-parameter-list">
+                                    <div class="block-parameter-item">
+                                        <label>Account Number</label>
+                                        <span>
+                                            <a th:style="${'color:' + session.runtimeSettings.themeColor}"
+                                               th:href="@{/callcenter/{id}(id=${dailySavingAccount.accountNumber})}"
+                                               href="/callcenter">
+                                                    <b th:text="${#strings.substring(dailySavingAccount.accountNumber,3,5)} + ' ' +${#strings.substring(dailySavingAccount.accountNumber,5,10)} + ' ' +${#strings.substring(dailySavingAccount.accountNumber,21,23)}"/>
+                                                    <i th:if="${dailySavingAccount.defaultedPayment}">
+                                                        <font size="4" color="red">
+                                                            **
+                                                        </font>
+                                                    </i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="block-parameter-item">
+                                        <label>Account Created</label>
+                                        <span th:text="${#dates.format(dailySavingAccount.createdDate, 'dd-MMM-yyyy HH:mm')}"></span>
+                                    </div>
+<!--                                    <div class="block-parameter-item">-->
+<!--                                        <label>Account Type</label>-->
+<!--                                        <span th:text="${dailySavingAccount.accountType.displayName}"></span>-->
+<!--                                    </div>-->
+                                    <div class="block-parameter-item"
+                                         th:if="${#strings.isEmpty(session.runtimeSettings.apartmentAccount)}">
+                                        <label>Account Locked</label>
+                                        <span th:text="${dailySavingAccount.accountMinBalanceLocked}"></span>
+                                    </div>
+                                    <div class="block-parameter-item"
+                                         th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}  OR ${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}">
+                                        <label>Amount on Hold</label>
+                                        <span th:text="${#numbers.formatDecimal(dailySavingAccount.accountMinBalance, 0, 'COMMA', 0, 'POINT')}"></span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="account-block-footer">
+                                <a
+                                        class="radius-btn-link daily-account-btn" href="#"
+                                        th:href="@{/registerDailySavingAccountTransaction/{id}(id=${dailySavingAccount.id})}">
+                                    <span th:text="${session.runtimeSettings.makeAPayment}"/>
+                                    <!--                                                    Make Payments / See Transations-->
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6" th:unless="${#strings.isEmpty(session.runtimeSettings.loanAccount)}"
+                         th:each="loanBilanz : ${session.loanBilanzList.loanBilanzList}">
+                        <div class="account-block loan-account">
+                            <div class="account-block-header"
+                                 th:style="${'background-color:' + session.runtimeSettings.themeColor}">
+                                <h2 th:text="${loanBilanz.accountType}"></h2>
+                                <span th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}  OR ${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}"
+                                      th:text="${loanBilanz.currentBalance}"></span>
+                            </div>
+                            <div class="account-block-body">
+                                <div class="block-parameter-list">
+                                    <div class="block-parameter-item">
+                                        <label>Account Number</label>
+                                        <span>
+                                            <a th:style="${'color:' + session.runtimeSettings.themeColor}"
+                                               th:href="@{/callcenter/{id}(id=${loanBilanz.accountNumber})}"
+                                               href="/callcenter">
+                                                <b th:text="${#strings.substring(loanBilanz.accountNumber,3,5)} + ' ' +${#strings.substring(loanBilanz.accountNumber,5,10)} + ' ' +${#strings.substring(loanBilanz.accountNumber,21,23)}"/>
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="block-parameter-item">
+                                        <label>Account Created</label>
+                                        <span th:text="${loanBilanz.createdDate}"></span>
+                                    </div>
+                                    <!-- <div class="block-parameter-item">
+                                        <label>Account Type</label>
+                                        <span th:text="${loanBilanz.accountType}"></span>
+                                    </div> -->
+                                    <div class="block-parameter-item">
+                                        <label>Interest Due</label>
+                                        <span th:text="${loanBilanz.interestDue}"></span>
+                                    </div>
+                                    <div class="block-parameter-item"
+                                         th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}  OR ${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}">
+                                        <label>Original Amount</label>
+                                        <span th:text="${loanBilanz.initialLoanAmount}"></span>
+                                    </div>
+                                    <div class="block-parameter-item">
+                                        <label>Annual Rate</label>
+                                        <span th:text="${loanBilanz.interestRate}"></span>
+                                    </div>
+                                    <div class="block-parameter-item">
+                                        <label>VAT</label>
+                                        <span th:text="${loanBilanz.vatPercent}"></span>
+                                    </div>
+                                    <div class="block-parameter-item">
+                                        <label>No of Days</label>
+                                        <span th:text="${loanBilanz.noOfDays}"></span>
+                                    </div>
+
+                                    <div class="block-parameter-item full-width">
+                                        <label>Notes</label>
+                                        <span th:text="${loanBilanz.notes}"></span>
+                                    </div>
+                                    <!--                                    <div class="momo-container">-->
+                                    <!--                                        <h6>From this Account</h6>-->
+                                    <!--                                        <div class="momo-payment">-->
+                                    <!--                                            <a href="#">-->
+                                    <!--                                                Send<br/>to Momo-->
+                                    <!--                                                <span class="material-symbols-outlined">-->
+                                    <!--                                                    call_made-->
+                                    <!--                                                </span>-->
+                                    <!--                                            </a>-->
+                                    <!--                                            <img th:src="@{/assets/images/mobile-money-logo.png}" />-->
+                                    <!--                                            <a href="#">-->
+                                    <!--                                                <span class="material-symbols-outlined">-->
+                                    <!--                                                    call_received-->
+                                    <!--                                                </span>-->
+                                    <!--                                                Receive<br/>from Momo-->
+                                    <!--                                            </a>-->
+                                    <!--                                        </div>-->
+                                    <!--                                    </div>-->
+                                </div>
+                            </div>
+                            <div class="account-block-footer">
+                                <a
+                                        class="radius-btn-link loan-account-btn" href="#"
+                                        th:href="@{/registerLoanAccountTransaction/{id}(id=${loanBilanz.loanId})}">
+                                    <span th:text="${session.runtimeSettings.makeAPayment}"/>
+                                    <!--                                    Make Payments / View Transactions-->
+                                </a>
+                                <a
+                                        class="radius-btn-link loan-account-btn" href="#"
+                                        th:href="@{/showLoanAccountBilanz/{accountId}(accountId=${loanBilanz.loanId})}">
+                                    <i class="fas fa-percentage"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6" th:unless="${#strings.isEmpty(session.runtimeSettings.shareAccount)}"
+                         th:each="shareAccount : ${session.customerInUse.shareAccount}">
+                        <div class="account-block shared-account">
+                            <div class="account-block-header"
+                                 th:style="${'background-color:' + session.runtimeSettings.themeColor}">
+                                <h2 th:text="${session.runtimeSettings.shareAccount}"></h2>
+                                <span th:text="${#numbers.formatDecimal(shareAccount.accountBalance, 0, 'COMMA', 0, 'POINT')} + ' frs'"></span>
+                            </div>
+                            <div class="account-block-body">
+                                <div class="block-parameter-list">
+                                    <div class="block-parameter-item">
+                                        <label>Account Number</label>
+                                        <span>
+                                            <a th:style="${'color:' + session.runtimeSettings.themeColor}"
+                                               th:href="@{/shareDetailsAccNumber/{id}(id=${shareAccount.accountNumber})}"
+                                               href="/shareDetails">
+                                                <b th:text="${#strings.substring(shareAccount.accountNumber,3,5)} + ' ' +${#strings.substring(shareAccount.accountNumber,5,10)} + ' ' +${#strings.substring(shareAccount.accountNumber,21,23)}"/>
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="block-parameter-item">
+                                        <label>Account Type</label>
+                                        <span th:text="${shareAccount.accountType}"></span>
+                                    </div>
+                                    <div class="block-parameter-item">
+                                        <label>Unit Value</label>
+                                        <span th:text="${#numbers.formatDecimal(shareAccount.unitSharePrice, 0, 'COMMA', 0, 'POINT')}"></span>
+                                    </div>
+                                    <div class="block-parameter-item">
+                                        <label>Bought</label>
+                                        <span th:text="${shareAccount.quantity}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="account-block-footer">
+                                <a
+                                        class="radius-btn-link shared-account-btn">
+                                    <!-- th:href="@{/shareDetailsAccNumber/{id}(id=${shareAccount.accountNumber})}">-->
+                                    <!--   <i class="fas fa-search"></i>-->
+                                    Contact Your Manager for More Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</div>
+
+</body>
+<div th:insert="blog::navbar"></div>
+
+
+<div th:insert="footer::navbar"></div>
+</html>

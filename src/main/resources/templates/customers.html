@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <div class="container">
+        <span class="alert alert-danger" th:if="${customersInfo}" th:text="${customersInfo}"/>
+        <div class="radius-container">
+            <div class="radius-container-title"
+                 th:style="${'background-color:' + session.runtimeSettings?.themeColor2}">
+                <h2>Accounts</h2>
+                <div class="page-h-link"
+                     th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_CUSTOMER_ACCOUNT'')')}">
+                    <a href="/registerCustomer">Create New <span
+                            th:text="${session.runtimeSettings.contextName}"></span><i class="fas fa-plus"></i></a>
+                </div>
+                <div class="page-h-link"
+                     th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_USER_ACCOUNT'')')}">
+                    <a href="/registerUser">Create New Employee<i class="fas fa-plus"></i></a>
+                </div>
+            </div>
+            <div class="user-list-container">
+                <div class="user-list">
+
+                    <h4 th:style="${'color:' + session.runtimeSettings.themeColor}">Active
+                        <spam th:text="${session.runtimeSettings.contextName}+'s'"></spam>
+                    </h4>
+                    <form action="#" th:action="@{/registerEventForm}" method="post">
+                        <table class="default-list">
+                            <tr>
+                                <th></th>
+                                <th th:unless="${session?.bulkLedgerSelected == null}">
+                                </th>
+                                <th>Username <br/> <span th:text="${session.runtimeSettings.contextName}"/> Since</th>
+                                <th>Email<br/> Firstname Lastname</th>
+                                <th>Account <br/> Status</th>
+                                <th th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MANAGER'')')}">Online
+                                    Banking <br/> Locked
+                                </th>
+                                <th>Creator
+                                    <br/>
+                                    Referral
+                                </th>
+                                <th>Update</th>
+                            </tr>
+                            <tr th:each="user, state : ${customersDTO.allActiveCustomers}">
+                                <td th:utext="${state.count}">count</td>
+                                <td th:unless="${session?.bulkLedgerSelected == null}">
+                                    <input class="form-check-input" type="checkbox" id="bulkCustomer"
+                                           th:value="${user.userName} +' - '+${user.id}" name="bulkCustomer"/>
+                                </td>
+                                <td>
+                                    <span th:text="${user.userName}"/>
+                                    <br/>
+                                    <i><span th:text="${#dates.format(user.created, 'dd-MMM-yyyy HH:mm')}"/></i>
+                                </td>
+                                <td>
+                                    <span th:text="${user.gender} +'. '+${user.firstName} +' '+ ${user.lastName}"/>
+                                    <br/>
+                                    <span th:text="${user.email}"></span>
+                                </td>
+
+                                <td>
+                                    <span th:text="${user.accountStatus?.name}"/>
+                                    <span th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MANAGER'')')}">
+                                    <a class="table-list-icon" th:href="@{/editAccountStatus/{id}(id=${user.id})}">
+                                        <i class="fas fa-pencil-alt" style="font-size:6px"></i>
+                                    </a>
+                                    </span>
+                                </td>
+                                <td th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MANAGER'')')}">
+                                    <a href="#" th:href="@{/lockAccount/{id}(id=${user.id})}"
+                                       th:text="${user.accountLocked}"></a>
+                                </td>
+                                <td>
+                                    <span th:text="${user.createdBy}"/>
+                                    <br/>
+                                    <span th:text="${user.referral}"/>
+                                </td>
+
+                                <td th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ADMIN'')')} OR ${#authorization.expression('hasAnyAuthority(''ROLE_EDIT_USER_ACCOUNT'')')} ">
+                                    <!--                            <div th:unless="${#authorization.expression('hasAnyAuthority(''ROLE_EMPLOYEE'')')}">-->
+                                    <a th:href="@{/updateProfile/{id}(id=${user.id})}">
+                                        Profile
+                                    </a>
+                                    <br/>
+                                    <a th:href="@{/reloadUser/{id}(id=${user.id})}">
+                                        Beneficiary
+                                    </a>
+                                    <!--                    </div>-->
+                                <td th:unless="${#authorization.expression('hasAnyAuthority(''ROLE_ADMIN'')')} OR ${#authorization.expression('hasAnyAuthority(''ROLE_EDIT_USER_ACCOUNT'')')}">
+                                    <a class="table-list-icon" href="">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                    <span class="table-list-icon" title="Requires ROLE_EDIT_USER_ACCOUNT"><i
+                                            class="fas fa-info"></i></span>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <div th:unless="${session?.bulkLedgerSelected == null}">
+                            <button class="btn btn-orange"
+                                    th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}"
+                                    type="submit">Create Event
+                            </button>
+                        </div>
+                    </form>
+
+                    <br/>
+                    <h4 th:style="${'color:' + session.runtimeSettings.themeColor}">InActive
+                        <spam th:text="${session.runtimeSettings.contextName}+'s'"></spam>
+                    </h4>
+
+                    <form action="#" th:action="@{/registerEventForm}" method="post">
+                        <table class="default-list">
+                            <tr>
+                                <th>
+                                    <div th:unless="${customerDTO == null}">
+                                        All <input class="form-check-input" type="checkbox" id="bulkCustomersInactive"
+                                                   name="bulkCustomers"/>
+                                    </div>
+                                    Username - Name
+                                </th>
+                                <th>Email</th>
+                                <th>Telephone</th>
+                                <th>Member Since</th>
+                                <th>Status</th>
+                                <th th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MANAGER'')')}">Locked
+                                </th>
+                                <th>Creator</th>
+                                <th>View</th>
+                                <th>Edit</th>
+                            </tr>
+                            <tr th:each="user : ${customersDTO.allInActiveCustomers}">
+                                <td>
+                                    <div th:unless="${customerDTO == null}">
+                                        <input class="form-check-input" type="checkbox" id="bulkCustomerInactiv"
+                                               th:value="${user.userName} +' - '+${user.id}" name="bulkCustomer"/>
+                                    </div>
+                                    <a href="#" th:href="@{/memberStatus/{status}(status=${user.accountStatus.name})}">
+                                        <span th:text="${user.userName}+' - '+ ${user.gender} +'. '+${user.firstName} +' '+ ${user.lastName}"/>
+                                    </a>
+                                </td>
+
+                                <td th:text="${user.email}"></td>
+                                <td th:text="${user.telephone1}"></td>
+                                <td th:text="${#dates.format(user.created, 'dd-MMM-yyyy HH:mm')}"></td>
+                                <td>
+
+                                    <!--                            <a href="#" th:href="@{/memberStatus/{status}(status=${user.accountStatus.name})}">-->
+                                    <span th:text="${user.accountStatus.name}"/>
+                                    <!--                            </a>-->
+                                    <span th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MANAGER'')')}">
+                            <a class="table-list-icon" th:href="@{/editAccountStatus/{id}(id=${user.id})}">
+                                <i class="fas fa-pencil-alt" style="font-size:6px"></i>
+                            </a>
+                            </span>
+
+                                </td>
+                                <td th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MANAGER'')')}">
+                                    <a href="#" th:href="@{/lockAccount/{id}(id=${user.id})}"
+                                       th:text="${user.accountLocked}"></a>
+                                </td>
+                                <td th:text="${user.createdBy}"></td>
+                                <td th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}">
+                                    <a href="#" th:href="@{/showCustomer/{id}(id=${user.id})}"></a>
+                                </td>
+                                <td th:unless="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}">
+                            <span class="table-list-icon" title="Requires ROLE_ACCOUNT_BALANCES">
+                                <i class="fas fa-info"></i>
+                            </span>
+                                </td>
+                                <td th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ADMIN'')')} OR ${#authorization.expression('hasAnyAuthority(''ROLE_EDIT_USER_ACCOUNT'')')} ">
+                                    <a class="table-list-icon" th:href="@{/editUserRole/{id}(id=${user.id})}">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                </td>
+                                <td th:unless="${#authorization.expression('hasAnyAuthority(''ROLE_ADMIN'')')} OR ${#authorization.expression('hasAnyAuthority(''ROLE_EDIT_USER_ACCOUNT'')')}">
+                                    <a class="table-list-icon" href="">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                    <span class="table-list-icon" title="Requires ROLE_EDIT_USER_ACCOUNT"><i
+                                            class="fas fa-info"></i></span>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <div th:unless="${session?.bulkLedgerSelected == null}">
+                            <button class="btn btn-orange"
+                                    th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}"
+                                    type="submit">Create Event
+                            </button>
+                        </div>
+                    </form>
+                    <br/>
+                    <h4 th:style="${'color:' + session.runtimeSettings.themeColor}">Employees</h4>
+                    <table class="default-list">
+                        <tr>
+                            <th></th>
+                            <th>Username - Name</th>
+                            <th>Email</th>
+                            <th>Telephone</th>
+                            <th>Member Since</th>
+                            <th>Status</th>
+                            <th th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MANAGER'')')}">Locked</th>
+                            <th>Creator</th>
+                            <th>View</th>
+                            <th>Edit</th>
+                        </tr>
+
+                        <tr th:each="user, state : ${customersDTO.userList}">
+                            <td th:utext="${state.count}">count</td>
+
+                            <td th:text="${user.userName}+' - '+ ${user.gender} +'. '+${user.firstName} +' '+ ${user.lastName}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td th:text="${user.telephone1}"></td>
+                            <td th:text="${#dates.format(user.created, 'dd-MMM-yyyy HH:mm')}"></td>
+                            <td>
+                                <span th:text="${user.accountStatus?.name}"/>
+                                <span th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MANAGER'')')}">
+                                <a class="table-list-icon" th:href="@{/editAccountStatus/{id}(id=${user.id})}">
+                                    <i class="fas fa-pencil-alt" style="font-size:6px"></i>
+                                </a>
+                                </span>
+                            </td>
+                            <td th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MANAGER'')')}">
+                                <a href="#" th:href="@{/lockAccount/{id}(id=${user.id})}"
+                                   th:text="${user.accountLocked}"></a>
+                            </td>
+                            <td th:text="${user.createdBy}"></td>
+                            <td th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}">
+                                <a href="#" th:href="@{/showCustomer/{id}(id=${user.id})}"></a>
+                            </td>
+                            <td th:unless="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}">
+                            <span class="table-list-icon" title="Requires ROLE_ACCOUNT_BALANCES">
+                                <i class="fas fa-info"></i>
+                            </span>
+                            </td>
+                            <td th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ADMIN'')')} OR ${#authorization.expression('hasAnyAuthority(''ROLE_EDIT_USER_ACCOUNT'')')} ">
+                                <a th:href="@{/updateUserProfile/{id}(id=${user.id})}">
+                                    Edit Profile
+                                </a>
+                                <br/>
+                                <a class="table-list-icon" th:href="@{/editUserRole/{id}(id=${user.id})}">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
+                            </td>
+                            <td th:unless="${#authorization.expression('hasAnyAuthority(''ROLE_ADMIN'')')} OR ${#authorization.expression('hasAnyAuthority(''ROLE_EDIT_USER_ACCOUNT'')')}">
+                                <a class="table-list-icon" href="">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
+                                <span class="table-list-icon" title="Requires ROLE_EDIT_USER_ACCOUNT"><i
+                                        class="fas fa-info"></i></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="footer::navbar"></div>
+</html>

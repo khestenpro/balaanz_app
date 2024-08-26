@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <div class="container">
+        <div class="radius-container">
+            <div class="radius-container-title" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                <h2>INVOICE DETAILS</h2>
+                <a th:href="@{/invoices}">See Invoices <i class="far fa-arrow-alt-circle-right"></i></a>
+            </div>
+            <div class="branch-form-container">
+                <span class="alert alert-info" th:if="${invoiceAccountInfo}" th:text="${invoiceAccountInfo}"/>
+                <form action="#" th:action="@{/registerInvoiceForm}" method="post" th:object="${invoice}">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="invoice">Status:</label>
+                                <select class="form-control" id="invoice" name="aInvoice" th:field="*{invoiceStatus}">
+                                    <option th:each="aInvoice : ${T(com.bitsvalley.micro.utils.InvoiceStatus).values()}"
+                                            th:value="${aInvoice}" th:text="${aInvoice}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="invoiceNumber">Invoice Number:</label>
+                                <input type="text" name="invoiceNumber" id="invoiceNumber" th:field="*{invoiceNumber}"
+                                    class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Due Date:</label>
+                                <input type="date" name="dueDate" th:field="*{dueDate}" id="dueDate"
+                                    placeholder="Due Date:" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Customer Username:</label><div class="error" th:text="${errorInvoice}"/>
+                                <input type="text" name="username" th:field="*{username}" id="username"
+                                    placeholder="Username" class="form-control" required>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="notes">Notes:</label>
+                                <textarea class="form-control" name="notes" th:field="*{notes}" id="notes"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">Create Invoice</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:insert="footer::navbar"></div>
+</html>

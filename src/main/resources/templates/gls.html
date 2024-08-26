@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}" th:text="${accountNameHeader}"></h2>
+                        <span>Enter Start Date and End Date to filter Transactions.</span>
+                        <div th:text="${counterNo}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container ledger-container">
+            <div class="ledger-search">
+                <span class="alert alert-info" th:if="${glLedgerInfo}" th:text="${glLedgerInfo}"/>
+                <form action="#" th:action="@{/filterGenaralLedger}" method="post" th:object="${glSearchDTO}">
+                    <div class="row row-space-10">
+                        <div class="col-md-2">
+                            <label>Ledger</label>
+                            <select name="allLedgerAccount" class="form-control" th:field="*{allLedgerAccount}">
+                                <option value="-1">
+                                    ALL
+                                </option>
+                                <option th:each="i : ${allLedgerAccount}" th:value="${i.id}">
+                                    <span th:text="${i.displayName}" />
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Start Date</label>
+                            <input type="date" name="startDate" th:field="*{startDate}" id="startDate"
+                                placeholder="Start Date:" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>End Date</label>
+                            <input type="date" name="endDate" th:field="*{endDate}" id="endDate"
+                                placeholder="End Date:" class="form-control" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label>User</label>
+                            <select class="form-control" name="allGLEntryUsers" id="allGLEntryUsers"
+                                th:field="*{allGLEntryUsers}">
+                                <option value="-1">ALL</option>
+                                <option th:each="username : ${allGLEntryUsers}" th:value="${username}">
+                                    <span th:text="${username}" />
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-auto">
+                            <label>&nbsp;</label>
+                            <button type="submit" class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}">SEARCH</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="ledger-summary">
+                <div class="count-row">
+                    <div class="count-view red-view">
+                        <label>DEBIT</label>
+                        <span th:if="${generalLedgerBilanz.debitTotal < 0}">
+                            <span th:text="${#numbers.formatDecimal(generalLedgerBilanz.debitTotal*-1, 0, 'COMMA', 0, 'POINT')}">
+                            </span>
+                        </span>
+                        <span th:unless="${generalLedgerBilanz.debitTotal < 0}">
+                            <span th:text="${#numbers.formatDecimal(generalLedgerBilanz.debitTotal, 0, 'COMMA', 0, 'POINT')}">
+                            </span>
+                        </span>
+                    </div>
+                    <div class="count-view green-view">
+                        <label>CREDIT</label>
+                        <span th:if="${generalLedgerBilanz.creditTotal < 0}">
+                            <span th:text="${#numbers.formatDecimal(generalLedgerBilanz.creditTotal*-1, 0, 'COMMA', 0, 'POINT')}"></span>
+                        </span>
+                        <span th:unless="${generalLedgerBilanz.creditTotal < 0}">
+                            <span th:text="${#numbers.formatDecimal(generalLedgerBilanz.creditTotal, 0, 'COMMA', 0, 'POINT')}"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="ledger-list">
+                <table class="default-list">
+                    <tr>
+                        <th>Date<br/>Incurred</th>
+<!--                        <th>Class</th>-->
+                        <th>Ledger - Class<br/>Reference</th>
+                        <th>Notes</th>
+<!--                        <th>Creator<br/>Approved</th>-->
+                        <th>Account Number</th>
+                        <th><a href="#" th:href="@{/findGlByType/{type}(type='DEBIT')}">DEBIT</a></th>
+                        <th><a href="#" th:href="@{/findGlByType/{type}(type='CREDIT')}">CREDIT</a></th>
+                        <th><a href="#" th:href="@{/gl}">Balance</a></th>
+                        <th>Representative <br/>Creator(Approved)</th>
+                        <th></th>
+                    </tr>
+                    <tr th:each="gl : ${generalLedgerBilanz.generalLedgerWeb}">
+                        <td><span class="info" th:text="${#dates.format(gl.createdDate, 'dd-MMM-yyyy HH:mm')}"/><br/>
+                            <span class="info" th:text="${#dates.format(gl.recordedDate, 'dd-MMM-yyyy HH:mm')}"/>
+                        </td>
+<!--                        <td th:text="${gl.glClass}"></td>-->
+                        <td>
+                            <span th:text="${gl?.ledgerAccount?.displayName}"/> - <span th:text="${gl.glClass}"/>
+                            <br/>
+                            <a href="#" th:href="@{/gl/reference/{code}(code=${gl.reference})}">
+                                <span th:text="${gl.reference}" />
+                            </a>
+                            <span th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_GL_ACCOUNT'')')}">
+                                <a href="#" th:href="@{/ref/{code}(code=${gl.reference})}">
+                                    delete
+                                </a>
+                            </span>
+                        </td>
+
+                        <td>
+                            <span th:text="${gl.notes}"/>
+                            <span th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_GL_ACCOUNT'')')}">
+                                <form th:action="@{/updateGLNotes}" method="post">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control" name="glNotes"/>
+                                        <input type="hidden" name="generalLedgerId" th:value="${gl.id}"/>
+                                        <div class="input-group-append">
+                                            <button id="updateEmailId" class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </span>
+
+                        </td>
+<!--                        <td th:text="${gl.createdBy}"></td>-->
+                        <td>
+<!--                            <span th:if="${gl.accountNumber != null}" -->
+<!--                                  th:text="${#strings.substring(gl.accountNumber,0,2)} + ' ' +${#strings.substring(gl.accountNumber,5,10)} + ' ' +${#strings.substring(gl.accountNumber,10,21)} + ' ' +${#strings.substring(gl.accountNumber,21,23)}"></span>-->
+                            <span th:if="${gl.accountNumber != null}">
+                                <span th:if="${#strings.length(gl.accountNumber) >= 23}">
+                                    <span th:text="${#strings.substring(gl.accountNumber, 0, 2)} + ' ' + ${#strings.substring(gl.accountNumber, 5, 10)} + ' ' + ${#strings.substring(gl.accountNumber, 10, 21)} + ' ' + ${#strings.substring(gl.accountNumber, 21, 23)}"></span>
+                                </span>
+                                <span th:if="${#strings.length(gl.accountNumber) == 3}">
+                                    <span th:text="${#strings.substring(gl.accountNumber, 0, 2)} + ' ' + ${#strings.substring(gl.accountNumber, 2, 3)}"></span>
+                                </span>
+                            </span>
+                        </td>
+                        <td class="amount-td" th:style="${'color:' + session.runtimeSettings.themeColor}">
+                            <span th:if="${gl.type == 'DEBIT'}">
+                                <span th:if="${gl.amount < 0}">
+                                    <span th:text="${#numbers.formatDecimal(gl.amount*-1, 0, 'COMMA', 0, 'POINT')}"></span>
+                                </span>
+                                <span th:unless="${gl.amount < 0}">
+                                    <span th:text="${#numbers.formatDecimal(gl.amount, 0, 'COMMA', 0, 'POINT')}"></span>
+                                </span>
+                            </span>
+                        </td>
+                        <td class="amount-td" th:style="${'color:' + session.runtimeSettings.themeColor}">
+                            <span th:if="${gl.type == 'CREDIT'}">
+                                <span th:if="${gl.amount < 0}">
+                                    <span th:text="${#numbers.formatDecimal(gl.amount*-1, 0, 'COMMA', 0, 'POINT')}"></span>
+                                </span>
+                                <span th:unless="${gl.amount < 0}">
+                                    <span th:text="${#numbers.formatDecimal(gl.amount, 0, 'COMMA', 0, 'POINT')}"></span>
+                                </span>
+                            </span>
+                        </td>
+                        <td class="amount-td" th:style="${'color:' + session.runtimeSettings.themeColor}">
+                            <span th:if="${gl.currentTotal < 0}">
+                                <span th:text="${#numbers.formatDecimal(gl.currentTotal*-1, 0, 'COMMA', 0, 'POINT')}"></span>
+                            </span>
+                            <span th:unless="${gl.currentTotal < 0}">
+                                <span th:text="${#numbers.formatDecimal(gl.currentTotal, 0, 'COMMA', 0, 'POINT')}"></span>
+                            </span>
+                        </td>
+                        <td>
+                            <span th:if="${gl.representative != null}">
+                                <span th:text="${gl.representative}" />
+                                </span>
+                                <br/>
+                                <span th:text="${gl.createdBy}"/>
+                            </span>
+                        </td>
+                        <td>
+                            <span th:if="${gl.ledgerAccount.id == setPdfLink}">
+                                <a th:href="@{/printposreceipt/{id}(id=${gl.id})}" >PDF</a>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+<div th:insert="footer::navbar"></div>
+</html>

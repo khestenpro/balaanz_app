@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header" ></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">LOANs PORTFOLIO</h2>
+                        <span>List of Approved Loans </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container">
+            <div class="user-list">
+                <table class="default-list">
+                    <tr>
+                        <th>Created By <br/> Account Number <br/>Created Date</th>
+                        <th>Loan Amount <br/> Current Balance</th>
+                        <th>Loan Owner</th>
+                        <th>Rate(%)</th>
+                        <th>Term <br/>(Months)</th>
+                        <th>Branch</th>
+                        <th>Transactions<br/>Date - Payment - Interest</th>
+                    </tr>
+                    <tr th:each="loan : ${loansList}">
+                        <td>
+                            <span th:text="${loan.createdBy}"/><br/>
+                            <span th:text="${loan.accountNumber}"/><br/>
+                            <span th:text="${#dates.format(loan.createdDate, 'dd-MMM-yyyy HH:mm')}"/>
+                        </td>
+                        <td>
+                            <span th:text="${#numbers.formatDecimal(loan.loanAmount, 0, 'COMMA', 0, 'POINT')}"/> <br/>
+                            <span th:text="${#numbers.formatDecimal(loan.currentLoanAmount, 0, 'COMMA', 0, 'POINT')}"/>
+                        </td>
+                        <td th:text="${loan.user.gender}+'. '+ ${loan.user.firstName} +' '+ ${loan.user.lastName}"></td>
+                        <td th:text="${loan.interestRate}+'%'"></td>
+                        <td th:text="${loan.termOfLoan}"></td>
+                        <td th:text="${loan.branchCode}"></td>
+                        <td>
+                                <span th:each="loanTransaction : ${loan.loanAccountTransaction}">
+                                <span th:text="${#temporals.format(loanTransaction.createdDate,'dd-MM-yyyy HH:mm')} + ' Payment - ' + ${#numbers.formatDecimal(loanTransaction.amountReceived, 0, 'COMMA', 0, 'POINT')} + 'frs (' + ${#numbers.formatDecimal(loanTransaction.interestPaid, 0, 'COMMA', 0, 'POINT')}+')frs'"/> <br/>
+                                </span>
+                        </td>
+
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="footer::navbar"></div>
+</html>

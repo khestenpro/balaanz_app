@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<div class="main-page-container">
+    <div class="container">
+        <div class="welcome-page-container">
+            <div class="row row-space-14">
+                <div class="col-md-6 col-lg-4 col-xl-3" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MAIN_USERS'')')} OR ${#authorization.expression('hasAnyAuthority(''ROLE_ADMIN'')')}">
+                    <div class="content-block-item">
+                        <div class="content-block-header">
+                                <span class="content-block-icon" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                                    <i class="far fa-user"></i>
+                                </span>
+                            <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/findAllCustomers">
+                                <h2 th:style="${'color:' + session.runtimeSettings?.themeColor2}"><span th:text="${session.runtimeSettings.contextName}"/>s/ Employees</h2>
+                            </a>
+                        </div>
+                        <div class="content-block-container">
+                            <p>View existing <span th:text="${session.runtimeSettings.contextName}"/>s/Employees</p>
+                        </div>
+                        <div class="content-block-footer" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_VIEW_ALL_ACCOUNTS'')')}">
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/findAllCustomers">
+                                    <i class="fas fa-external-link-alt fa-fw"></i> See More
+                                </a>
+                            </div>
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/registerCustomer">
+                                    <i class="fas fa-plus fa-fw"></i> <span th:text="${session.runtimeSettings.contextName}"></span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="content-block-footer" th:unless="${#authorization.expression('hasAnyAuthority(''ROLE_VIEW_ALL_ACCOUNTS'')')}">
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/findAllCustomers">
+                                    <i class="fas fa-external-link-alt fa-fw"></i> See More <i title="Requires ROLE_VIEW_ALL_ACCOUNTS" class="fas fa-info-circle fa-fw"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 col-xl-3" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MAIN_USERS'')')} OR ${#authorization.expression('hasAnyAuthority(''ROLE_ADMIN'')')}">
+                    <div class="content-block-item">
+                        <div class="content-block-header">
+                                <span class="content-block-icon" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                                    <i class="far fa-user"></i>
+                                </span>
+                            <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/findAllAgents">
+                                <h2 th:style="${'color:' + session.runtimeSettings?.themeColor2}">View Agents</h2>
+                            </a>
+                        </div>
+                        <div class="content-block-container">
+                            <p>View existing Agents</p>
+                        </div>
+                        <div class="content-block-footer" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_VIEW_ALL_ACCOUNTS'')')}">
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/findAllAgents">
+                                    <i class="fas fa-external-link-alt fa-fw"></i> See More
+                                </a>
+                            </div>
+<!--                            <div class="content-block-link">-->
+<!--                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/registerCustomer">-->
+<!--                                    <i class="fas fa-plus fa-fw"></i> <span th:text="${session.runtimeSettings.contextName}"></span>-->
+<!--                                </a>-->
+<!--                            </div>-->
+                        </div>
+                        <div class="content-block-footer" th:unless="${#authorization.expression('hasAnyAuthority(''ROLE_VIEW_ALL_ACCOUNTS'')')}">
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/findAllAgents">
+                                    <i class="fas fa-external-link-alt fa-fw"></i> See More <i title="Requires ROLE_VIEW_ALL_ACCOUNTS" class="fas fa-info-circle fa-fw"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-6 col-lg-4 col-xl-3" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MAIN_SHARES'')')}">
+                    <div class="content-block-item">
+                        <div class="content-block-header">
+                                <span class="content-block-icon" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                                    <i class="fas fa-handshake"></i>
+                                </span>
+                            <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">Shares</h2>
+                        </div>
+                        <div class="content-block-container">
+                            <p>Shareholders</p>
+                        </div>
+                        <div class="content-block-footer" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_SHARE_APPROVE'')')}">
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/shareAccounts">
+                                    <i class="fas fa-external-link-alt fa-fw"></i> See More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 col-xl-3" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MAIN_LOANS'')')}">
+                    <div class="content-block-item">
+                        <div class="content-block-header">
+                                <span class="content-block-icon" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                                    <i class="fas fa-hand-holding-usd"></i>
+                                </span>
+                            <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">Loans Applications</h2>
+                        </div>
+                        <div class="content-block-container">
+                            <p>See loans pending action</p>
+                        </div>
+                        <div class="content-block-footer">
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/loanPortfolio">
+                                    <i class="fas fa-external-link-alt fa-fw"></i> Loan Portfolio
+                                </a>
+                            </div>
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/loansPendingAction">
+                                    <i class="fas fa-external-link-alt fa-fw"></i> See More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 col-xl-3" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MAIN_BRANCHES'')')}">
+                    <div class="content-block-item">
+                        <div class="content-block-header">
+                                <span class="content-block-icon" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                                    <i class="fas fa-ethernet"></i>
+                                </span>
+                            <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">Branches</h2>
+                        </div>
+                        <div class="content-block-container">
+                            <p>Create and View branches</p>
+                        </div>
+                        <div class="content-block-footer">
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/branches}">
+                                    <i class="fas fa-external-link-alt fa-fw"></i> See Branches
+                                </a>
+                            </div>
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/registerBranch">
+                                    <i class="fas fa-plus fa-fw"></i> Add Branch
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 col-xl-3" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_PRINT_CASH_SELECTION_SITUATION'')')}">
+                    <div class="content-block-item">
+                        <div class="content-block-header">
+                                <span class="content-block-icon" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                                    <i class="fas fa-piggy-bank"></i>
+                                </span>
+                            <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">Bill Selection</h2>
+                        </div>
+                        <div class="content-block-container">
+                            <p>Bill Selection</p>
+                        </div>
+                        <div class="content-block-footer">
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/billSelection">
+                                    <i class="fas fa-plus fa-fw"></i> Add Bill
+                                </a>
+                            </div>
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/billSelection">
+                                    <i class="fas fa-external-link-alt fa-fw"></i> See More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 col-xl-3" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MAIN_GL_ACCOUNTS'')')}">
+                    <div class="content-block-item">
+                        <div class="content-block-header">
+                                <span class="content-block-icon" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                                    <i class="fas fa-clipboard"></i>
+                                </span>
+                            <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/newLedgerAccount">
+                                <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">GL Accounts</h2>
+                            </a>
+                        </div>
+                        <div class="content-block-container">
+<!--                            <p>General Ledger Accounts</p>-->
+<!--                            <form th:action="@{/import}" method="post" enctype="multipart/form-data">-->
+<!--                                <input type="file" th:name="file" />-->
+<!--                                <input th:type="submit" value="Import" />-->
+<!--                            </form>-->
+                        </div>
+                        <div class="content-block-footer">
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/newCobacLedgerAccount">
+                                    <i class="fas fa-plus fa-fw"></i>COBAC GL
+                                </a>
+
+                            </div>
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/newLedgerAccount">
+                                    <i class="fas fa-plus fa-fw"></i>Custom GL
+                                </a>
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/registerAccountType">
+                                    New Account Type
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 col-xl-3" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MAIN_GENERAL_LEDGER'')')}">
+                    <div class="content-block-item">
+                        <div class="content-block-header">
+                                <span class="content-block-icon" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                                    <i class="fas fa-book"></i>
+                                </span>
+                            <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/gl">
+                                <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">General Ledger</h2>
+                            </a>
+                        </div>
+                        <div class="content-block-container">
+                            <p>Ledger Transactions </p>
+                        </div>
+
+                        <div class="content-block-footer">
+
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/gl">
+                                    <i class="fas fa-plus fa-fw"></i>See More
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 col-xl-3" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_AUDITOR'')')}">
+                    <div class="content-block-item">
+                        <div class="content-block-header">
+                                <span class="content-block-icon" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                                    <i class="fas fa-balance-scale"></i>
+                                </span>
+                            <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/trialBalance">
+                                <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">Income Expense</h2>
+                            </a>
+                        </div>
+                        <div class="content-block-container">
+                            <p>Trial balance and Journal entries</p>
+                        </div>
+                        <div class="content-block-footer">
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/trialBalance">
+                                    <i class="fas fa-external-link-alt fa-fw"></i> See More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4 col-xl-3" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MAIN_INVOICE'')')} ">
+                    <div class="content-block-item">
+                        <div class="content-block-header">
+                                <span class="content-block-icon" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                                    <i class="fas fa-file-invoice-dollar"></i>
+                                </span>
+                            <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/invoices}">
+                                <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">Invoice Management</h2>
+                            </a>
+                        </div>
+                        <div class="content-block-container">
+                            <p>Invoice Management</p>
+                        </div>
+                        <div class="content-block-footer">
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/invoices}">
+                                    <i class="fas fa-external-link-alt fa-fw"></i> View Invoice
+                                </a>
+                            </div>
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/registerInvoice}">
+                                    <i class="fas fa-plus fa-fw"></i> Create Invoice
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 col-xl-3" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MAIN_ISSUES'')')} ">
+                    <div class="content-block-item">
+                        <div class="content-block-header">
+                                <span class="content-block-icon" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                                    <i class="fas fa-bug"></i>
+                                </span>
+                            <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/issues}">
+                                <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">Issue Management</h2>
+                            </a>
+                        </div>
+                        <div class="content-block-container">
+                            <p>Issue Management</p>
+                        </div>
+                        <div class="content-block-footer">
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/issues}">
+                                    <i class="fas fa-external-link-alt fa-fw"></i> View Issue
+                                </a>
+                            </div>
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/registerIssue}">
+                                    <i class="fas fa-plus fa-fw"></i> Create Issue
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4 col-xl-3" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MAIN_REPORTS'')')} ">
+                    <div class="content-block-item">
+                        <div class="content-block-header">
+                                <span class="content-block-icon" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                                    <i class="fas fa-file"></i>
+                                </span>
+                            <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/reports}">
+                                <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">Reports </h2>
+                            </a>
+                        </div>
+                        <div class="content-block-container">
+                            <p>View Payment Reports</p>
+                        </div>
+                        <div class="content-block-footer">
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/reports}">
+                                    <i class="fas fa-file"></i> View Reports
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 col-xl-3" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MAIN_CALL_CENTER'')')} ">
+                    <div class="content-block-item">
+                        <div class="content-block-header">
+                                <span class="content-block-icon" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                                    <i class="fas fa-question-circle"></i>
+                                </span>
+                            <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/callcenter}">
+                                <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">Dashboard </h2>
+                            </a>
+                        </div>
+                        <div class="content-block-container">
+                            <p>Dashboard Reports</p>
+                        </div>
+                        <div class="content-block-footer">
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/callcenter}">
+                                    <i class="fas fa-question-circle"></i> View CallCenter Logs
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-6 col-lg-4 col-xl-3" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MAIN_POS'')')} ">
+                    <div class="content-block-item">
+                        <div class="content-block-header">
+                                <span class="content-block-icon" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                                    <i class="fas fa-cash-register"></i>
+                                </span>
+                            <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/posCategoryProducts}">
+                                <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">Point Of Sale </h2>
+                            </a>
+                        </div>
+                        <div class="content-block-container">
+                            <p>Point Of Sale, Products and Checkout</p>
+                               <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/registerShopProduct}">
+<!--                                   <i class='fas fa-cash-register' style='color:red'></i> -->
+                                   Products(+)
+                               </a>
+                        </div>
+                        <div class="content-block-footer">
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/registerProductCategory}">
+                                    <i class="fas fa-external-link-alt fa-fw"></i> Category
+                                </a>
+
+                            </div>
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/registerWarehouseLocation}">
+                                    <i class="fas fa-external-link-alt fa-fw"></i> Warehouse
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-6 col-lg-4 col-xl-3" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MAIN_ECOMMERCE'')')} ">
+                    <div class="content-block-item">
+                        <div class="content-block-header">
+                                <span class="content-block-icon" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                                    <i class="fas fa-cash-register"></i>
+                                </span>
+                            <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/ecommerceCheckout}">
+                                <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">eCommerce </h2>
+                            </a>
+                        </div>
+                        <div class="content-block-container">
+                            <p>eCommerce, Products and Checkout</p>
+                        </div>
+                        <div class="content-block-footer">
+                            <div class="content-block-link">
+                                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/ecommerceCheckout}">
+                                    <i class='fas fa-cash-register' style='color:red'></i> eCommerce
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<div th:insert="blog::navbar"></div>
+<div th:insert="footer::navbar"></div>
+</html>

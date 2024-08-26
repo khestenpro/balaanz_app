@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="navbar">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>bitsvalley - bala@nz</title>
+        <!-- Favicon  -->
+        <link rel="icon" type="image/x-icon" th:href="@{/assets/images/favicon/faviconn.ico}">
+        <!--Bootstrap-->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+        <!--Fontawesome-->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/all.min.css}">
+        <!--Owl-carousel-->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/owl.carousel.min.css}">
+        <!--Owl Carousel theme-->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/owl.theme.default.min.css}">
+        <!--Animate-->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/animate.min.css}">
+        <!-- magnific CSS -->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/magnific-popup.css}">
+        <!-- Mmenu CSS -->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/slicknav.min.css}">
+        <!--Style-->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/style.css}">
+        <!-- Responsive -->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/responsive.css}">
+
+        <style>
+
+        input.largerCheckbox {
+            width: 20px;
+            height: 20px;
+        }
+
+        table, th, td {
+/* <!--          border: 0px solid #BF360C;--> */
+          align: center;
+          padding-right: 0px;
+          margin: 10px;
+        }
+        table.center {
+          margin-left: auto;
+          margin-right: auto;
+        }
+          tr:nth-child(even) {background-color: #84c0d5;}
+
+        .error {
+            color: red;
+            font-size: 25px;
+        }
+
+#filtersubmit {
+    position: relative;
+    z-index: 1;
+    left: -25px;
+    top: 1px;
+    color: #7B7B7B;
+    cursor:pointer;
+    width: 0;
+}
+
+.select {
+  width: 100%;
+  height: 700px;
+  font-size: 100%;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 0;
+  background-color: #6a8c98;
+  border: none;
+  border-bottom: 2px solid #80635b;
+  color: white;
+  padding: 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 10px;
+}
+
+.selectMedium {
+  /* width: 10%; */
+<!--  height: 25px;-->
+  font-size: 150%;
+  background-color: #6a8c98;
+  padding: 5px;
+  border-radius: 5;
+
+/* <!--  font-weight: bold;-->
+<!--  cursor: pointer;-->
+<!--  border: none;-->
+<!--  border-bottom: 2px solid #80635b;-->
+<!--  color: white;-->
+<!--  appearance: none;-->
+<!--  -webkit-appearance: none;-->
+<!--  -moz-appearance: none;-->
+<!--  padding: 10px;--> */
+}
+
+.selectLarge50 {
+  height: 100px;
+  font-size: 150%;
+  padding: 10px;
+}
+
+.selectNormal {
+  height: 60px;
+  font-size: 125%;
+  padding: 10px;
+}
+
+.selectNormal100 {
+  height: 60px;
+  font-size: 125%;
+  width: 70px;
+  padding: 10px;
+}
+
+.selectNormal125 {
+  height: 60px;
+  font-size: 100%;
+  width: 250px;
+  padding: 10px;
+}
+
+.selectNormalPerc {
+  height: 60px;
+  font-size: 100%;
+  width: 100%;
+  padding: 10px;
+}
+
+.selectSearch {
+  height: 40px;
+  font-size: 150%;
+  width: 350px;
+  padding: 5px;
+}
+
+.selectAmount {
+  height: 40px;
+  width: 250px;
+  font-size: 250%;
+}
+
+.selectSmall {
+  height: 40px;
+  width: 70px;
+  font-size: 150%;
+}
+
+        </style>
+    </head>
+    <header class="app-header">
+        <div class="container">
+            <div class="inner-header">
+                <div class="logo">
+                    <img width="40px" th:src="'/assets/images/'+${businessInfo.bid}+'.png'"/>
+                    <h4 th:style="${'color:' + businessInfo.themeColor}">Pay to <span th:text="${businessInfo.businessName}"/></h4>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+</div>
+<section class="main-page-container">
+
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container payment-status-modal">
+            <span class="status-icon success" th:unless='${error}'><i class="far fa-check-circle"></i></span>
+            <span class="status-icon error" th:if='${error}'><i class="far fa-times-circle"></i></span>
+            <form th:action="@{/charge}" method='POST' id='checkout-form'>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 th:style="${'color:' + businessInfo?.themeColor}"><span th:text="'$'+${#numbers.formatDecimal(amount, 0, 'COMMA', 0, 'POINT')}"/></h4>
+
+                        <div class="payment-status-content" th:if='${error}'>
+                            <b>TRANSACTION UNSUCCESSFUL</b>
+                            <p th:text='${error}'></p>
+                        </div>
+                        <div class="payment-status-content" th:unless='${error}'>
+                            <b>TRANSACTION SUCCESSFUL</b>
+                            <p>Thank you for making a payment</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <a class="radius-btn-link" th:style="${'color:' + businessInfo?.themeColor + '; border-color:' + businessInfo?.themeColor}" th:href="@{/pay/ilabs}">
+                            Home/ Go Back
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<div th:insert="footer::navbar"></div>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header" >  </div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">CREATE A NEW WAREHOUSE LOCATION
+                        </h2>
+                        <span>Create a new warehouse location.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container branch-form-container">
+            <form action="#" th:action="@{/registerWarehouseLocationForm}" method="post" th:object="${warehouseLocation}">
+                <span class="alert alert-info" th:if="${warehouseLocationInfo}" th:text="${warehouseLocationInfo}"></span>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" name="name" th:field="*{name}" id="name"
+                                       class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="description">Description:</label>
+                            <input type="text" name="description" th:field="*{description}" id="description"
+                                   class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="warehouseLocation">Parent:</label>
+                            <select class="form-control" name="warehouseLocation" id="warehouseLocation"
+                                    th:field="*{name}">
+                                <option value="">NONE</option>
+                                <option th:each="warehouseLocation: ${warehouses}"
+                                        th:text="${warehouseLocation.name}"
+                                        th:value="${warehouseLocation.id}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">Create Warehouse</button>
+                    </div>
+                </div>
+            </form>
+            <br/>
+            <br/>
+            <h3>Warehouses</h3>
+            <table>
+                <tr>
+                    <td>Name</td>
+<!--                    <td>Bin</td>-->
+                    <td>Description</td>
+<!--                    <td>Parent</td>-->
+                </tr>
+                <tr th:each="warehouse : ${warehouses}">
+                    <td th:text="${warehouse.name}"></td>
+<!--                    <td th:text="${warehouse.binNumber}"></td>-->
+                    <td th:text="${warehouse.description}"></td>
+<!--                    <td th:text="${warehouse.parentID}"></td>-->
+                </tr>
+            </table>
+
+        </div>
+    </div>
+</section>
+<div th:insert="footer::navbar">  </div>
+</html>

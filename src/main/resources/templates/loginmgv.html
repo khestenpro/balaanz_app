@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menka Green Valley Credit Union</title>
+    <!-- Favicon  -->
+    <link rel="icon" type="image/x-icon" th:href="@{assets/images/favicon/faviconn.ico}">
+    <link rel="stylesheet" th:href="@{../css/main.css}" type="text/css}"/>
+
+    <!--Bootstrap-->
+    <link rel="stylesheet" type="text/css" th:href="@{../assets/css/bootstrap.min.css}">
+    <!--Fontawesome-->
+    <link rel="stylesheet" type="text/css" th:href="@{../assets/css/all.min.css}">
+    <!--Owl-carousel-->
+    <link rel="stylesheet" type="text/css" th:href="@{../assets/css/owl.carousel.min.css}">
+    <!--Owl Carousel theme-->
+    <link rel="stylesheet" type="text/css" th:href="@{../assets/css/owl.theme.default.min.css}">
+    <!--Animate-->
+    <link rel="stylesheet" type="text/css" th:href="@{../assets/css/animate.min.css}">
+    <!-- magnific CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{../assets/css/magnific-popup.css}">
+    <!-- Mmenu CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{../assets/css/slicknav.min.css}">
+    <!--Style-->
+    <link rel="stylesheet" type="text/css" th:href="@{../assets/css/style.css}">
+    <!-- Responsive -->
+    <link rel="stylesheet" type="text/css" th:href="@{../assets/css/responsive.css}">
+    <!-- Material Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+
+    <style type="text/css">
+        body { min-height: 100vh; display: flex; flex-direction: column; }
+        .inner-header .logo img { max-height: 100px; }
+        .header { background: #ffffff; }
+        .header .inner-header { background: #ffffff; padding-top: 10px; padding-bottom: 10px; }
+        .banner { background: #019831; }
+        .header .login-section form input { background: #f0f0f0; color: #333333; }
+        .header .login-section form input::placeholder { color: #999999; }
+        .header .login-section form input:-ms-input-placeholder { color: #999999; }
+        .header .login-section form input::-ms-input-placeholder { color: #999999; }
+        .header .login-section form input#username { border-color: #cdcdcd; }
+        .header .login-section form .login-button { background: #019831; }
+        .banner .inner-banner .banner-slide .btn-row button.primary-button { background: #001850; }
+        .header .nav-bar .nav-bar-btn { color: #333333; }
+        .banner .inner-banner .banner-slide .btn-row button.secondary-button { background: rgba(255,255,255,0.2); }
+        footer.footer-area-start { background: #ff7b00; }
+        .project-title-content span:before, .project-title-content span:after { background: #ff7b00; }
+        .single-choosen-content h4 { color: #ff7b00; }
+        .single-choosen-content:after { background: rgba(0,0,0,0.3); }
+        .slider-area-start.owl-carousel { overflow: hidden; }
+        .login-banner-container {
+            width: 100%;
+            flex-grow: 3;
+            background: #019831;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .login-banner-container h4 { font-size: 18px; color: #ffffff; font-weight: 300; }
+        .login-banner-container h2 { position: relative; font-size: 30px; color: #ffffff; font-weight: bold; color: 500; }
+        .login-banner-container p { font-size: 14px; color: #ffffff; font-weight: 400; }
+
+        .header .login-section form input#username,
+        .header .login-section form input#password {
+            border:1px solid #cdcdcd !important;
+            background: #ffffff;
+            color: #000000;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .header .login-section form input#username::placeholder,
+        .header .login-section form input#password::placeholder {
+            color: #666666;
+            font-weight: 400;
+        }
+
+        .header .login-section form input#password {
+            border-left: none;
+            border: 1px solid #a7a7a7;
+            border-right: 1px solid #a7a7a7;
+        }
+    </style>
+</head>
+
+<header class="header">
+    <div class="container">
+        <div class="inner-header">
+            <div class="logo">
+                <a href="/mgv"><img src="/assets/images/mgvLogo.jpg" /></a>
+            </div>
+            <div class="login-section">
+                <form class="login-form" name='f' action="login" method='POST'>
+                    <input type="text" name="username" id="username" required placeholder="Username" />
+                    <input type="password" name="password" id="password" required placeholder="Password" />
+                    <button type="submit" class="login-button">
+                        <span class="material-symbols-outlined">
+                            lock
+                        </span>
+                        Login
+                    </button>
+                </form>
+            </div>
+            <!-- <div class="nav-bar">
+                <button class="nav-bar-btn">
+                    <span class="material-symbols-outlined">
+                        menu
+                    </span>
+                </button>
+            </div> -->
+        </div>
+    </div>
+</header>
+<section class="login-banner-container">
+    <div class="container">
+        <h4>MGVCCUL</h4>
+        <h2>MENKA GREEN VALLEY COOPERATIVE CREDIT UNION</h2>
+        <p>
+            Affiliated To CamCCUL Ltd
+        </p>
+    </div>
+
+</section>
+
+
+<!--jQuery-->
+<script src="/assets/js/jquery-3.5.1.min.js"></script>
+<!--Bootstrap-->
+<script src="/assets/js/bootstrap.min.js"></script>
+<!-- Waypoint js -->
+<script src="/assets/js/jquery.waypoints.js"></script>
+<!-- Counter Up -->
+<script src="/assets/js/jquery.counterup.min.js"></script>
+<!--Owl-Carousel-->
+<script src="/assets/js/owl.carousel.min.js"></script>
+<!--Parallax-->
+<script src="/assets/js/parallax.min.js"></script>
+<!-- Isotope JS -->
+<script src="/assets/js/isotope.pkgd.min.js"></script>
+<!-- MMenu JS -->
+<script src="/assets/js/jquery.slicknav.min.js"></script>
+<!-- magnific Js -->
+<script src="/assets/js/jquery.magnific-popup.min.js"></script>
+<!-- Progress Bar -->
+<script src="/assets/js/jquery.lineProgressbar.js"></script>
+<!-- Countdown Js -->
+<script src="/assets/js/jquery.countdown.min.js"></script>
+<!--Custom Js-->
+<script src="/assets/js/custom.js"></script>
+
+<!-- </div> -->
+
+
+</body>
+
+</html>

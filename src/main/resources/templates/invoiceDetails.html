@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <!-- <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">INVOICE DETAILS
+                        </h2>
+                        <span>Fill up form to create a new <a href="#" th:href="@{/registerInvoice/{id}(id=${invoice.id})}"> Line Item  </a>. <a href="#" th:href="@{/invoices}"> See Invoices  </a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container ">
+            <div class="radius-container-title" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                <h2>INVOICE DETAILS</h2>
+                <a th:href="@{/registerInvoice/{id}(id=${invoice.id})}">Line Item <i class="far fa-arrow-alt-circle-right"></i></a>
+                <a th:href="@{/invoices}">See Invoices <i class="far fa-arrow-alt-circle-right"></i></a>
+            </div>
+            <div class="branch-form-container">
+                <form action="#" th:action="@{/updateInvoiceNotesForm}" method="post" th:object="${invoice}">
+                    <input type="hidden" th:name="invoiceId" th:value="${invoice.id}">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="invoice">Status:</label>
+                                <select class="form-control" id="invoice" name="aInvoice" th:field="*{invoiceStatus}">
+                                    <option th:each="aInvoice : ${T(com.bitsvalley.micro.utils.InvoiceStatus).values()}"
+                                            th:value="${aInvoice}" th:text="${aInvoice}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="invoiceNumber">Invoice Number:</label>
+                                <input type="text" name="invoiceNumber" id="invoiceNumber" th:field="*{invoiceNumber}"
+                                        class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Due Date:</label>
+                                <input type="date" name="dueDate" th:field="*{dueDate}" id="dueDate"
+                                        placeholder="Due Date:" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Create Invoice To:</label>
+                                <input type="text" name="username" th:field="*{username}" id="username"
+                                        placeholder="Username" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="notes">Notes:</label>
+                                <textarea class="form-control" name="notes" th:field="*{notes}" id="notes"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">Update Invoice Details</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="invoice-item-container">
+                <h4 class="section-title" th:style="${'color:' + session.runtimeSettings.themeColor}">Invoice Line Items</h3>
+                <div class="invoice-item-form">
+                    <form action="#" th:action="@{/registerInvoiceLineItemForm}" method="post" th:object="${invoiceLineItemDetail}">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="description">Description:</label>
+                                    <input type="text" name="description" id="description" th:field="*{description}"
+                                        class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Quantity:</label>
+                                    <input type="text" name="quantity" th:field="*{quantity}" id="quantity"
+                                        class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Unit Price:</label>
+                                    <input type="text" name="unitPrice" th:field="*{unitPrice}" id="unitPrice"
+                                        placeholder="unitPrice:" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">Add a Line Item To Invoice</button>
+                            </div>
+                        </div>
+                        <input type="hidden"  id="hidden" th:name="invoiceId" th:value="${invoice.id}">
+                    </form>
+                </div>
+                <div class="invoice-item-list">
+                    <table class="default-list">
+                        <tr>
+                            <th>Description</th>
+                            <th>Unit Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th class="text-right">
+                                <a class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/printInvoice/{id}(id=${invoice.id})}">
+                                    <i class="far fa-file-pdf"></i>
+                                </a>
+                            </th>
+                        </tr>
+                        <tr th:each="lineItem : ${invoice.invoiceLineItemDetail}">
+                            <td th:text="${lineItem.description}"></td>
+                            <td th:text="${lineItem.unitPrice}"></td>
+                            <td th:text="${lineItem.quantity}"></td>
+                            <td th:text="${lineItem.total}"></td>
+                            <td class="text-right"><a class="table-list-button-icon default-list-icon" th:href="@{/deleteInvoiceLineItem/{id}(id=${lineItem.id})}"> <i class='fas fa-trash-alt' style="color: red;"></i></a></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:insert="footer::navbar"></div>
+</html>

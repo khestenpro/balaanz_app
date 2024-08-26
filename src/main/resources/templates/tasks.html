@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header" ></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">TASKS</h2> <br/>
+                        <span>TASKS for </span>  <span th:text="${issue.title}"/> <span th:text="${issue.createdBy}"/><span th:text="${issue.createdDate}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container">
+            <div class="user-list">
+                <table class="default-list">
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Prority</th>
+                        <th>Assigned To</th>
+                        <th>Created By</th>
+                        <th>Created Date</th>
+                        <th></th>
+                    </tr>
+                    <tr th:each="task : ${tasks}">
+                        <td th:text="${task.title}"></td>
+                        <td th:text="${task.comment}"></td>
+                        <td th:text="${task.ticketStatus}"></td>
+                        <td th:text="${task.priority}"></td>
+                        <td th:text="${task.assignedTo}"></td>
+                        <td th:text="${task.createdBy}"></td>
+                        <td th:text="${#dates.format(task.createdDate, 'dd-MMM-yyyy HH:mm')}"></td>
+                        <td>
+                            <a class="table-list-button-icon" href="#" th:href="@{/taskDetails/{id}(id=${task.id})}"><i class="fas fa-ellipsis-h"></i></a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="footer::navbar"></div>
+</html>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <div class="container">
+        <div class="radius-container">
+            <div class="radius-container-title" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                <h2>COBAC ACCOUNTING CLASSES</h2>
+                <span>Select Sub-sub-Class to proceed.</span>
+            </div>
+            <div class="gl-account-container">
+                <div class="gl-account-form" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_GL_ACCOUNT'')')}">
+                    <h2>CREATE LEDGER ACCOUNT</h2>
+                    <span class="alert alert-info" th:if="${ledgerAccountInfo}" th:text="${ledgerAccountInfo}"/>
+                    <form action="#" th:action="@{/saveCobacGLAccount}" method="post" th:object="${ledgerAccount}">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Name:</label>
+                                    <input type="text" name="name" th:field="*{name}" id="name"
+                                            placeholder="e.g NFC BANK" class="form-control" required/>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Balaanz Code:</label>
+                                    <input type="text" name="code" th:field="*{code}" id="code"
+                                            placeholder="e.d 4004" class="form-control" required/>
+                                    <input type="hidden" name="category" th:field="*{category}">
+                                    <input type="hidden" name="cobacCode" id="cobacCode" th:field="*{displayName}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{status}" type="checkbox" id="active" name="status"
+                                            th:value="*{status}"
+                                            checked>
+                                        <label class="form-check-label" for="active">Active</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{creditBalance}" type="checkbox" id="creditBalance"
+                                            name="creditBalance" th:value="*{creditBalance}"
+                                            checked>
+                                        <label class="form-check-label" for="creditBalance">Credit Balance</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{cashAccountTransfer}" type="checkbox"
+                                            id="cashAccountTransfer" name="cashAccountTransfer" th:value="*{cashAccountTransfer}"
+                                            checked>
+                                        <label class="form-check-label" for="cashAccountTransfer">Cash Account Transfers</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{interAccountTransfer}" type="checkbox"
+                                            id="interAccountTransfer" name="interAccountTransfer"
+                                            th:value="*{interAccountTransfer}"
+                                            checked>
+                                        <label class="form-check-label" for="interAccountTransfer">Inter Account Transfer</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">CREATE LEDGER ACCOUNT</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="cobac-accounting">
+                    <h4 class="section-title" th:style="${'color:' + session.runtimeSettings.themeColor}">THIRD PARTY ACCOUNTS AND ACCRUALS- CLASS 4</h4>
+                    <table class="default-list">
+                        <thead>
+                            <tr>
+                                <!-- <th colspan="2" class="capital-accounts">CLASSES</th> -->
+                                <th colspan="2">SUB-CLASSES</th>
+                                <th>SUB-SUB-CLASSES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <!-- <td width="10%" rowspan="10">CLASS 1</td>
+                                <td width="17%" rowspan="10" class="capital-accounts"><h6>CAPITAL ACCOUNTS</h6></td> -->
+                                <td>40</td>
+                                <td>TRADE ACCOUNTS PAYABLE</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="1" name="class4" onclick=updateSelectedLabel()  value="401">
+                                            <label for="1"><strong> 401- Accounts receivable, debts in account</strong> </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="2" name="class4" onclick=updateSelectedLabel()  value="402">
+                                            <label for="2"><strong>402- Accounts receivable, instruments to be paid </strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="3" name="class4" onclick=updateSelectedLabel()  value="102">
+                                            <label for="3"><strong>403- Accounts receivable, bills not received </strong> </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="4" name="class4" onclick=updateSelectedLabel()  value="409">
+                                            <label for="4"> <strong>409- Accounts receivable in debit</strong> </label>
+                                        </li>
+                                        
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>41</td>
+                                <td>PAYMENT INSTRUMENTS AT COLLECTION</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="5" name="class4" onclick=updateSelectedLabel()  value="411">
+                                            <label for="5"><strong>411- Payment instruments to be recovered </strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="6" name="class4" onclick=updateSelectedLabel()  value="412">
+                                            <label for="6"><strong>412- Cash receipt accounts </strong> </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="7" name="class4" onclick=updateSelectedLabel()  value="419">
+                                            <label for="7"><strong>419 Securities unpaid upon presentation</strong> </label>
+                                        </li>
+                                        
+                                    </ul>
+                                </td>
+                            </tr> 
+                            <tr> 
+                                <td>42</td>
+                                <td>PERSONNEL</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="8" name="class4" onclick=updateSelectedLabel()  value="421">
+                                            <label for="8"> <strong> 421- Monthly advances on salaries</strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="9" name="class4" onclick=updateSelectedLabel()  value="422">
+                                            <label for="9"><strong> 422- Salaries and benefits owed</strong> </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="10" name="class4" onclick=updateSelectedLabel()  value="423">
+                                            <label for="10"> <strong>  423- Adverse claims on salaries and wages </strong> </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="11" name="class4" onclick=updateSelectedLabel()  value="424">
+                                            <label for="11"><strong> 424- Paid leave </strong></label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="12" name="class4" onclick=updateSelectedLabel()  value="425">
+                                            <label for="12"><strong> 425- Others </strong> </label>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>43</td>
+                                <td>THE STATE, PUBLIC AUTHORITIES AND INTERNATIONAL ORGANIZATIONS</td>
+                                <td>
+                                    <ul> 
+                                        <li>
+                                            <input type="radio" id="13" name="class4" onclick=updateSelectedLabel()  value="132">
+                                            <label for="13">430- State, taxes and dues</label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="14" name="class4" onclick=updateSelectedLabel()  value="431">
+                                            <label for="14">431- State, expenses to pay or proceeds to receive </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="15" name="class4" onclick=updateSelectedLabel()  value="432">
+                                            <label for="15">432- Public authorities </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="16" name="class4" onclick=updateSelectedLabel()  value="433">
+                                            <label for="16">433- International organizations  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="17" name="class4" onclick=updateSelectedLabel()  value="434">
+                                            <label for="17">434- Subsidies and endowment funds to be received </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="18" name="class4" onclick=updateSelectedLabel()  value="435">
+                                            <label for="18">435- Trust funds to be received</label>
+                                        </li> 
+                                        
+                                        
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>44</td>
+                                <td>ASSOCIATES AND SHAREHOLDERS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="19" name="class4" onclick=updateSelectedLabel()  value="441">
+                                            <label for="19"> 441- Members and shareholders, capital operations  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="20" name="class4" onclick=updateSelectedLabel()  value="442">
+                                            <label for="20">442- Members and shareholders, live accounts </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="21" name="class4" onclick=updateSelectedLabel()  value="443">
+                                            <label for="21">443- Shareholders, dividends payable </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="22" name="class4" onclick=updateSelectedLabel()  value="445">
+                                            <label for="22">445- Members and shareholders, session allowances and other benefits </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="23" name="class4" onclick=updateSelectedLabel()  value="447">
+                                            <label for="23">447- Members and shareholders, subsidy to be received  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="24" name="class4" onclick=updateSelectedLabel()  value="448">
+                                            <label for="24">448- Members and shareholders, attached claims </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="25" name="class4" onclick=updateSelectedLabel()  value="449">
+                                            <label for="25">449- Members and shareholders, attached debts</label>
+                                        </li>  
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>45</td>
+                                <td>RECIPROCAL ACCOUNTS</td>
+                                <td>
+                                    <ul> 
+                                        <li>
+                                            <input type="radio" id="26" name="class4" onclick=updateSelectedLabel()  value="451">
+                                            <label for="26"> <strong>451-Headquarters and local branches/apex bodies and affiliated MFIs </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="27" name="class4" onclick=updateSelectedLabel()  value="45100">
+                                            <label for="27">45100- Reciprocal operations, Headquarters and branches </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="28" name="class4" onclick=updateSelectedLabel()  value="45119">
+                                            <label for="28">45119- Reciprocal operations, apex bodies and affiliated MFIs</label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="29" name="class4" onclick=updateSelectedLabel()  value="45200">
+                                            <label for="29">45200-Reciprocal operations between branches outside the network </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="30" name="class4" onclick=updateSelectedLabel()  value="1611">
+                                            <label for="30">45209-Reciprocal operations between affiliated MFIs  </label>
+                                        </li>  
+                                        
+                                        <li>
+                                            <input type="radio" id="31" name="class4" onclick=updateSelectedLabel()  value="459">
+                                            <label for="31"> <strong>459- Fund movements and other internal transfers</strong> </label>
+                                        </li>  
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>46</td>
+                                <td>OTHER DEBIT AND CREDIT ACCOUNTS</td>
+                                <td>
+                                    <ul>
+                                        
+                                        <li>
+                                            <input type="radio" id="32" name="class4" onclick=updateSelectedLabel()  value="460">
+                                            <label for="32">460- Subsidies and endowment funds to be received (other than from the state and public organizations)  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="33" name="class4" onclick=updateSelectedLabel()  value="461">
+                                            <label for="33"> 461- Insurance and capitalization companies  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="34" name="class4" onclick=updateSelectedLabel()  value="462">
+                                            <label for="34">462- Insurance and social security bodies  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="35" name="class4" onclick=updateSelectedLabel()  value="463">
+                                            <label for="35"> 463- Errors, thefts and misappropriations  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="36" name="class4" onclick=updateSelectedLabel()  value="464">
+                                            <label for="36"> 464- Bondholders, operations on estimated debenture borrowings  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="37" name="class4" onclick=updateSelectedLabel()  value="465">
+                                            <label for="37">465- Outstanding payments on portfolio securities (credit)  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="38" name="class4" onclick=updateSelectedLabel()  value="466">
+                                            <label for="38">466- Claims on capital disposal  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="39" name="class4" onclick=updateSelectedLabel()  value="467">
+                                            <label for="39">467- Claims on securities </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="40" name="class4" onclick=updateSelectedLabel()  value="468">
+                                            <label for="40"> 468- Other accounts payable and receivable  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="41" name="class4" onclick=updateSelectedLabel()  value="469">
+                                            <label for="41">469- Disputatious or doubtful accounts payable</label>
+                                        </li>   
+                                        
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>47</td>
+                                <td>ACCRUALS</td>
+                                <td>
+                                    
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="42" name="class4" onclick=updateSelectedLabel()  value="471">
+                                            <label for="42">471-Live accrual accounts  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="43" name="class4" onclick=updateSelectedLabel()  value="472">
+                                            <label for="43">472-Accrual liability accounts  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="44" name="class4" onclick=updateSelectedLabel()  value="473">
+                                            <label for="44">473-Subsidies and endowment funds obtained, but not yet cashed </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="45" name="class4" onclick=updateSelectedLabel()  value="474">
+                                            <label for="45">474- Trust funds obtained, not yet cashed  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="46" name="class4" onclick=updateSelectedLabel()  value="475">
+                                            <label for="46"> 475- Exchange position  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="46" name="class4" onclick=updateSelectedLabel()  value="477">
+                                            <label for="46">477- Foreign currencies adjustment account (debit or credit balance)</label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="47" name="class4" onclick=updateSelectedLabel()  value="47">
+                                            <label for="47"> 47- Differed computers </label>
+                                        </li> 
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>48</td>
+                                <td>SUNDRY OUTSTANDING CLAIMS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="48" name="class4" onclick=updateSelectedLabel()  value="480">
+                                            <label for="48"><strong>480- Overdue advance payments to suppliers of goods and services </strong></label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="49" name="class4" onclick=updateSelectedLabel()  value="481">
+                                            <label for="49"> <strong>481- Overdue securities at encashment </strong> </label>
+                                        </li>  
+                                        
+                                        <li>
+                                            <input type="radio" id="50" name="class4" onclick=updateSelectedLabel()  value="482">
+                                            <label for="50"><strong>482- Overdue advances to staff</strong> </label>
+                                        </li>    
+                                        <li>
+                                            <input type="radio" id="51" name="class4" onclick=updateSelectedLabel()  value="483">
+                                            <label for="51"> 483- Overdue claims on sundry debtors  </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="52" name="class4" onclick=updateSelectedLabel()  value="485">
+                                            <label for="52"><strong> 485- Outstanding operations between headquarters and branches</strong></label>
+                                        </li> 
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>49</td>
+                                <td>PROVISIONS FOR DEPRECIATION OF THIRD-PARTY ACCOUNTS</td>
+                                <td>
+                                    <ul>
+                                           
+                                        <li>
+                                            <input type="radio" id="53" name="class4" onclick=updateSelectedLabel()  value="490">
+                                            <label for="53"> <strong> 490- Provisions for depreciation of debtor accounts payable</strong> </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="54" name="class4" onclick=updateSelectedLabel()  value="491">
+                                            <label for="54"><strong> 491- Provisions for depreciation of collection accounts</strong>  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="55" name="class4" onclick=updateSelectedLabel()  value="493">
+                                            <label for="55"> <strong> 493- Provisions for depreciation of sundry debtor accounts </strong> </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="56" name="class4" onclick=updateSelectedLabel()  value="495">
+                                            <label for="56"> <strong> 495- Provisions for depreciation of reciprocal accounts</strong>  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="57" name="class4" onclick=updateSelectedLabel()  value="49999">
+                                            <label for="57"><strong> 49999- Provisions for depreciation of other third-party network accounts</strong> </label>
+                                        </li>  
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="cobac-footer" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_GL_ACCOUNT'')')}">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">CREATE LEDGER ACCOUNT</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function updateSelectedLabel(){
+        document.getElementById('cobacCode').value = document.querySelector('input[name="class4"]:checked + label').innerText;
+    }
+</script>
+<div th:insert="footer::navbar"></div>
+</html>

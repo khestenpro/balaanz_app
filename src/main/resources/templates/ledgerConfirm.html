@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:insert="header::navbar" class="sticky-header" ></div>
+
+
+
+<section class="main-page-container">
+    <!--Project title area start-->
+    <!-- <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}" th:text="${glAddEntryTitle}"></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container">
+            <div class="radius-container-title" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                <h2 th:text="${glAddEntryTitle}"></h2>
+            </div>
+            <div class="confirm-box-container">
+
+<!--                <font size="5px" color="orange"><span th:text="${ledgerConfirmInfo}"></span></font>-->
+
+                <div class="highlight-label" th:text="*{ledgerAccount.creditOrDebit}"></div>
+                <div class="row">
+
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <i class='fas fa-check' style='font-size:96px;color:green'></i>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>From:</label>
+                            <span th:text="${originLedgerAccount.name}"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Destination:</label>
+                            <span th:text="${destinationLedgerAccounts.name}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Transfer Successful</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Ledger Amount:</label>
+                            <span th:text="${#numbers.formatDecimal(ledgerAccount.ledgerAmount, 0, 'COMMA', 2, 'POINT')}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Notes:</label>
+                            <span th:text="*{ledgerAccount.notes}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <a class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" th:href="@{/welcomeGlobal}">Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:insert="footer::navbar"></div>
+</html>

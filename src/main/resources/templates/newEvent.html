@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:insert="header::navbar" class="sticky-header" ></div>
+<br/>
+<br/>
+<br/>
+<!--<div th:insert="summary::navbar"></div>-->
+
+<div class="container">
+
+<!--    &lt;!&ndash; Contact form area start &ndash;&gt;-->
+<!--    <section class="main-page-container">-->
+
+        <form action="#" th:action="@{/saveEventReview}" method="post" th:object="${eventDTO}">
+            <table class="center" width="100%" border="0">
+                <tr>
+                    <td align="center">
+                        <h4>NEW EVENT </h4><br/>
+                        <span th:text="${session.bulkLedgerSelected.displayName}"/><br/>
+                        <font size="6px" color="#fd7e14"> <span th:text="${newEventInfo}"/></font>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2">
+
+                       <input type="text" placeholder="Describe event" name="eventDescription" id="eventDescription" class="form-control" required>
+                        <label>Enter Amount:</label> <input class="selectAmount" name="eventAmount" type="number"  />
+
+                        <br/>
+<!--                  -->
+<!--                        <textarea class="selectNormal" placeholder="Notes here ..." id="loanNotes" rows="3" cols="30" th:field="*{notes}">-->
+<!--                        </textarea>-->
+
+                        <br/>
+                        <br/>
+                    <td align="center" colspan="2">
+
+                        <button type="submit" class="btn btn-success">
+                            Save
+                        </button>
+                </td>
+                        <br/>
+
+                    </td>
+                </tr>
+            </table>
+        </form>
+<!--    </section>-->
+</div>
+<div th:insert="footer::navbar"></div>
+</html>

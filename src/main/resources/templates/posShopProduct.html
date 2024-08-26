@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}"
+                            th:text="${editingButtonName} != null ? ${editingButtonName.toUpperCase()}+ ' A PRODUCT' : 'CREATE A NEW PRODUCT'">
+                        </h2>
+                        <span
+                            th:text="${editingButtonName} != null
+                            ? 'Fill up form to ' +${editingButtonName}+ ' a product'
+                            : 'Fill up form to create new product.'">
+                            ${editingButtonName}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Project title area end-->
+    <div class="container">
+        <span class="alert alert-info" th:if="${shopProductInfo}" th:text="${shopProductInfo}"></span>
+        <div class="radius-container branch-form-container">
+            <form action="#"
+                  th:action="${editingButtonName} == null ? '/registerShopProductForm' : '/updateShopProduct'"
+                  method="post"
+                  th:object="${shopProduct}"
+                  onsubmit="return validateFileSize()"
+                  enctype="multipart/form-data"
+                  id="myForm">
+                <div class="row">
+                    <input type="hidden" name="id" th:field="*{id}" id="id"
+                           class="form-control">
+                    <input type="hidden" name="orgId" th:field="*{orgId}" id="orgId"
+                           class="form-control">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" name="name" th:field="*{name}" id="name"
+                                   class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="active">Active:</label>
+                            <select class="form-control" name="active" id="active">
+                                <option value="True">True</option>
+                                <option value="False">False</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="active">Online Active:</label>
+                            <select class="form-control" name="online" id="online">
+                                <option value="True">True</option>
+                                <option value="False">False</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Unit Price:</label>
+                            <input type="text" name="unitPrice" th:field="*{unitPrice}" id="unitPrice"
+                                   placeholder="unitPrice:" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Bulk Price:</label>
+                            <input type="text" name="bulkPrice" th:field="*{bulkPrice}" id="bulkPrice"
+                                   placeholder="bulkPrice:" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Purchase Price:</label>
+                            <input type="text" name="purchasePrice" th:field="*{purchasePrice}" id="purchasePrice"
+                                   placeholder="purchasePrice:" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <br/>
+                <br/>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="shortDescription">Short Product Description:</label>
+                            <input type="text" name="shortDescription" th:field="*{shortDescription}"
+                                   id="shortDescription" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label for="longDescription">Long Product Description:</label>
+                            <input type="text" name="shortDescription" th:field="*{longDescription}"
+                                   id="longDescription" class="form-control">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="stockAmount">Quantity In Stock:</label>
+                            <input type="text" name="contact" th:field="*{stockAmount}" id="stockAmount"
+                                   class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="requisitionLevel">Requisition Level:</label>
+                            <input type="text" name="requisitionLevel" th:field="*{requisitionLevel}"
+                                   id="requisitionLevel"
+                                   class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="productCode">Product Code:</label>
+                            <input type="text" name="productCode" th:field="*{productCode}" id="productCode"
+                                   class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="barcode">Barcode:</label>
+                            <input type="text" name="contact" th:field="*{barcode}" id="barcode"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="sku">SKU:</label>
+                            <input type="text" name="sku" th:field="*{sku}" id="sku"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="expiry">Expiry:</label>
+                            <input type="date" name="expiry" th:field="*{expiry}" id="expiry"
+                                   class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <br/>
+                <br/>
+                <br/>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Category:</label>
+                            <select class="form-control" name="category" id="category"
+                                    th:field="*{productCategory}">
+                                <option value="">UNASSIGNED</option>
+                                <option th:each="category: ${categories}"
+                                        th:text="${category.name}"
+                                        th:value="${category.id}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Warehouse:</label>
+                            <select class="form-control" name="category" id="warehouse"
+                                    th:field="*{warehouseLocation}">
+                                <option value="">UNASSIGNED</option>
+                                <option th:each="warehouse: ${warehouses}"
+                                        th:text="${warehouse.name}"
+                                        th:value="${warehouse.id}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="image1">Logo:</label>
+
+                                <input type="file" name="image1" id="image1"
+                                       accept=".jpg, .jpeg, .png"
+                                       th:attr="required=${shopProduct.imageUrl1 == null || shopProduct.imageUrl1 == ''}"
+                                      >
+                            <label th:text="*{imageUrl1}" id="imageUrl1" class="text-break text-muted" th:value="*{imageUrl1}"
+                                   style="font-size:0.70em"></label>
+                            <input type="hidden" th:field="*{imageUrl1}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Image 2:</label>
+                            <input type="text" name="imageUrl2" th:field="*{imageUrl2}" id="imageUrl2"
+                                   placeholder="Upload Image" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Image 3:</label>
+                            <input type="text" name="imageUrl3" th:field="*{imageUrl3}" id="imageUrl3"
+                                   placeholder="Upload Image" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Image 4:</label>
+                            <input type="text" name="imageUrl4" th:field="*{imageUrl4}" id="imageUrl4"
+                                   placeholder="Upload Image " class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <button class="btn btn-orange"
+                                th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}"
+                                type="submit"
+                        th:text="${editingButtonName} != null ? ${editingButtonName}+ ' Product' : 'Create Product'"></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <br/>
+        <div class="radius-container branch-form-container">
+        <h3>Products</h3>
+
+        <table class="default-list" border="1">
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Stock Amt</th>
+                <th>Lowest Amt</th>
+                <th>Price</th>
+                <th>Purchase Price</th>
+                <th>Bulk Price</th>
+                <th>Online Active</th>
+                <th>Active</th>
+                <th>Barcode</th>
+                <th>SKU</th>
+                <th scope="col">EXPIRY</th>
+                <th>Edit</th>
+            </tr>
+            <tr th:each="shopProduct, state : ${shopProducts}">
+
+                <td th:utext="${state.count}" >count</td>
+                <td> <b><span th:text="${shopProduct.name}"/></b> </td>
+                <td> <span th:text="${shopProduct.productCategory?.name}"/> </td>
+                <td th:text="${shopProduct.stockAmount}"></td>
+                <td th:text="${shopProduct.requisitionLevel}"></td>
+
+                <td><span th:text="${#numbers.formatDecimal(shopProduct.unitPrice, 0, 'COMMA', 0, 'POINT')}"></span></td>
+                <td><span th:text="${#numbers.formatDecimal(shopProduct.purchasePrice, 0, 'COMMA', 0, 'POINT')}"></span></td>
+                <td><span th:text="${#numbers.formatDecimal(shopProduct.bulkPrice, 0, 'COMMA', 0, 'POINT')}"></span></td>
+
+                <td th:text="${shopProduct.online}"></td>
+                <td th:text="${shopProduct.active}"></td>
+                <td th:text="${shopProduct.barcode}"></td>
+                <td th:text="${shopProduct.sku}"></td>
+                <td th:text="${shopProduct.expiry}" class="text-nowrap"></td>
+                <td>
+                    <a class="table-list-icon" th:href="@{/editShopProduct/{id}(id=${shopProduct.id})}">
+                        <i class="fas fa-pencil-alt" style="font-size:12px"></i>
+                    </a>
+                </td>
+            </tr>
+        </table>
+        </div>
+    </div>
+</section>
+<div th:insert="footer::navbar"></div>
+<script th:inline="javascript">
+    function validateFileSize() {
+        return fileInput.checkValidity(); // Check validity of the file input
+    }
+
+    let fileInput = document.getElementById('image1');
+    fileInput.addEventListener('input', function (event) {
+        let file = this.files[0]; // in bytes
+        let maxSize = 2 * 1024 * 1024; // 2 MB
+
+        if (file.size > maxSize) {
+            this.setCustomValidity('File size exceeds 2 MB limit.');
+        } else{
+            const allowedFormats = ['.jpg', '.jpeg', '.png'];
+            const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+            if (!allowedFormats.includes(fileExtension)) {
+                this.setCustomValidity('File format not supported. Please upload a .jpg, .jpeg, or .png file.');
+            }else {
+                this.setCustomValidity('');
+            }
+        }
+    });
+
+</script>
+</html>

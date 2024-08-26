@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header">  </div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">ADD A SETTING PROPERTY</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Project title area end -->
+    <div class="container">
+        <div class="radius-container setting-container">
+            <form action="#" th:action="@{/registerSettingForm}" method="post" th:object="${settingProperty}">
+                <span class="alert alert-info" th:if="${settingInfo}" th:text="${settingInfo}"></span>
+                <span class="alert alert-danger" th:if="${error}"><b th:text="${error}"></b><a href="#" th:href="@{/initSettings}"> See Settings </a></span>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Property:</label>
+                            <input type="text" name="propertyName" th:field="*{propertyName}" id="propertyName"
+                                       class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Value:</label>
+                            <input type="text" name="propertyValue" th:field="*{propertyValue}" id="propertyValue"
+                                       class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center pad-t-20">
+                        <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">CREATE PROPERTY</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<div th:insert="footer::navbar"> </div>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header" ></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">SHARE DETAILS</h2>
+                        <!-- <span>Kindly review share details and accordingly approve or reject.</span> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container loan-details-container">
+            <div class="loan-details-action" th:if="${share.accountStatus.name == 'ACTIVE' || share.accountStatus.name == 'PENDING_APPROVAL' || share.accountStatus.name == 'APPROVED'}">
+                <span th:if="${share.accountStatus.name == 'ACTIVE'}">
+                    <a class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/printShareDetail/{id}(id=${share.id})}">
+                        <i class="far fa-file-pdf"></i>
+                    </a>
+                </span>
+                <span th:if="${share.accountStatus.name == 'PENDING_APPROVAL'}">
+                    <a class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/approveShareAccount/{id}(id=${share.id})}">APPROVE THIS SHARE PURCHASE</a>
+                    <br/>
+                    <span class="alert alert-danger" th:if="${shareApproveInfo}" th:text="${shareApproveInfo}"/>
+
+                </span>
+                <span class="loan-transfer-details">
+                    <span class="alert alert-success" th:if="${shareDetailsInfo}" th:text="${shareDetailsInfo}"/>
+                    <span th:if="${share.accountStatus.name == 'PENDING_APPROVAL'}">
+                        <p>
+                            Make share payment(
+                            <span th:text="${#numbers.formatDecimal(share.quantity*share.unitSharePrice, 0, 'COMMA', 0, 'POINT')}"/>) to <span
+                                    th:text="${share.user.lastName}"/>'s share account
+                        </p>
+                    </span>
+                    <span th:if="${share.accountStatus.name == 'APPROVED'}">
+                        <p>
+                            This Share was APPROVED by <span th:text="${share.approvedBy}"/> on <span
+                                th:text="${#dates.format(share.approvedDate, 'dd-MMM-yyyy HH:mm')}"/>
+                        </p>
+                    </span>
+                </span>
+            </div>
+            <div class="loan-details-data">
+                <div class="row vertical-space-20">
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Share Owner</label>
+                            <span>
+                                <span th:text="${share.user.gender}"/>.
+                                <span th:text="${share.user.firstName}"/> 
+                                <span th:text="${share.user.lastName}"/>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Account Number</label>
+                            <span th:text="${share.accountNumber}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Nunber of Shares</label>
+                            <span th:text="${share.quantity}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Created</label>
+                            <span th:text="${#dates.format(share.createdDate, 'dd-MMM-yyyy HH:mm')}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Share Amount</label>
+                            <span th:text="${#numbers.formatDecimal(share.unitSharePrice*share.quantity, 0, 'COMMA', 0, 'POINT')}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Share Unit Price</label>
+                            <span class="snippet-status" th:text="${#numbers.formatDecimal(share.unitSharePrice, 0, 'COMMA', 0, 'POINT')}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Share Account Status</label>
+                            <span th:text="${share.accountStatus.name}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Country/ Branch Created</label>
+                            <span>
+                                <span th:text="${share.country}"/>/
+                                <span th:text="${share.branchCode}"/>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="share-holder-form" th:if="${showTransferBilanzSection}">
+                <h2>PURCHASE SHARES FROM <spam th:text="${session.runtimeSettings.contextName}"/> </h2>
+                <form action="#" th:action="@{/transferFromCurrentToShareAccountsFormReview}" method="post"
+          th:object="${transferBilanz}">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Account Owner:</label>
+                                <span class="field-value" th:text="${session.customerInUse.gender +' '+session.customerInUse.firstName +' '+session.customerInUse.lastName }"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>From <spam th:text="${session.runtimeSettings.contextName}"/>:</label>
+                                <select class="form-control" th:field="*{transferFromAccount}">
+                                    <option th:each="i : ${session.customerInUse.currentAccount}"
+                                            th:value="${i.accountNumber}"
+                                            th:text="' Balance: ' + ${#numbers.formatDecimal(i.accountBalance, 0, 'COMMA', 0, 'POINT')}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Amount:</label>
+                                <select class="form-control" th:field="*{transferAmount}">
+                                    <option
+                                            th:value="${share.accountBalance}"
+                                            th:text="${#numbers.formatDecimal(share.accountBalance, 0, 'COMMA', 0, 'POINT')}">
+                                    </option>
+                                </select>
+                                <input type="hidden" name="shareId" th:value="${share.id}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Notes:</label>
+                                <textarea class="form-control" placeholder="Notes here ...." id="notes" rows="3" cols="70"
+                              th:field="*{notes}">
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">SUBMIT TRANSFER AND BUY SHARES</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="footer::navbar"></div>
+</html>

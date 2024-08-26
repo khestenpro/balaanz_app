@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<head>
+  <title>Sticky Footer Row in Table</title>
+  <style>
+
+        tbody.ct {
+            display: block;
+            height: 300px; /* Set a specific height for scrolling */
+            overflow: auto;
+        }
+
+        tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        th, td {
+            padding: 8px;
+            vertical-align: middle;
+            min-width: 1%; /* Minimum width */
+            max-width: 200px; /* Maximum width */
+            word-wrap: break-word; /* Allows text to wrap */
+            white-space: normal; /* Allows text to break and wrap */
+            overflow: hidden; /* Hides any overflow */
+            text-overflow: ellipsis; /* Adds ellipsis (...) if text is too long */
+        }
+
+        th span, td span {
+            display: inline-block;
+            width: 100%;
+            font-size: 1em; /* Default font size */
+        }
+
+        /* Adjust the font size if the text is too long */
+        th.small-font span, td.small-font span {
+            font-size: 1em; /* Adjust as needed */
+        }
+
+        tfoot {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+            position: sticky;
+            bottom: 0;
+            background-color: #f1f1f1; /* Optional: Different background for the sticky row */
+        }
+
+        /* Highlighted row style */
+        .highlighted {
+            border: 2px solid #4CAF50; /* Green border for selected rows */
+            background-color: #f0f8f0; /* Light green background for selected rows */
+        }
+  </style>
+</head>
+<section class="main-page-container">
+  <div class="container">
+    <span class="alert alert-danger" th:if="${customersInfo}" th:text="${customersInfo}"/>
+    <div class="radius-container">
+      <div class="radius-container-title" th:style="${'background-color:' + session.runtimeSettings?.themeColor2}">
+        <h2>Statistics</h2>
+      </div>
+      <div class="user-list-container">
+        <div class="user-list">
+          <h4>Today's report</h4>
+            <table class="default-list">
+              <tr>
+
+                <th>Total Collection Today </th>
+                <th>Total Disburse Today</th>
+
+              </tr>
+              <tr>
+                <td>
+                  <span th:if="${dailyStats != null && dailyStats.size() > 0 && dailyStats[0].withdrawDeposit == 1}" th:text="${dailyStats[0].savingAmount}"
+                         style="color: green;"/>
+                </td>
+                <td>
+                  <span th:if="${dailyStats != null && dailyStats.size() > 1 && dailyStats[1].withdrawDeposit == -1}" th:text="${dailyStats[1].savingAmount}"
+                         style="color: red;"/>
+                </td>
+              </tr>
+            </table>
+            <h4>Latest Transactions</h4>
+          <form action="#" th:action="@{/submitRemittanceConfirmation(id=${agentId})}" method="post">
+            <table class="default-list">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th class="small-font"><span>Created Date</span></th>
+                  <th class="small-font"><span>AccountId <br/> Account Owner</span></th>
+                  <th class="small-font"><span>Reference No.</span></th>
+                  <th class="small-font"><span>Amount<br/>Transaction Status</span></th>
+                  <th class="small-font"><span>Credit/Debit</span></th>
+                  <th class="small-font"><span>Balance</span></th>
+                  <th class="small-font"><span>Made by</span></th>
+                  <th class="small-font"
+                      th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MANAGER'')')} ">
+                      <span>Remittance <br/> Confirmation</span></th>
+                </tr>
+              </thead>
+              <tbody class="ct">
+                <tr th:each="transaction, state : ${dailySavingAccountTransactions}">
+                  <td th:text="${state.index + 1}"
+                      style="text-align: center; vertical-align: middle; width=5%"
+                  class="small-font">1</td>
+                  <td class="small-font">
+                    <span th:text="${transaction.createdDate}"/>
+                  </td>
+                  <td class="small-font">
+                    <span th:text="${transaction.dailySavingAccountId}"></span>
+                    <br/>
+                    <span th:text="${transaction.accountOwner}"/>
+                  </td>
+                  <td class="small-font">
+                    <span th:text="${transaction.reference}"/>
+                  </td>
+                  <td>
+                    <span th:text="${transaction.savingAmount}"/>
+                  <br/>
+                    <span th:text="${transaction.transActionStatus}"/>
+                  </td>
+                  <td class="small-font">
+                    <span th:text="${transaction.transactionType}"/>
+                  </td>
+                  <td class="small-font">
+                    <span th:text="${transaction.accountBalance}"/>
+                  </td>
+                  <td class="small-font">
+                    <span th:text="${transaction.createdBy}"/>
+                  </td>
+                  <td style="text-align: center; vertical-align: middle;"
+                      th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MANAGER'')')} ">
+                    <input type="checkbox" name="selectedItems"
+                           th:value="${transaction.id}" onclick="toggleSubmitButton()">
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MANAGER'')')} ">
+                <tr>
+                  <td colspan="3" style="text-align: right; vertical-align: middle;">
+                    <button class="btn btn-secondary" type="submit"
+                            id="submitButton" disabled>Submit (0) Remittance Confirmation</button>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </form>
+            <br/>
+          <br/>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div th:insert="footer::navbar"></div>
+
+<script>
+  function toggleSubmitButton() {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      const submitButton = document.getElementById('submitButton');
+      let checkedCount = 0
+      checkboxes.forEach(checkbox => {
+                const row = checkbox.closest('tr');
+                if (checkbox.checked) {
+                    row.classList.add('highlighted');
+                    checkedCount++;
+                } else {
+                    row.classList.remove('highlighted');
+                }
+            });
+
+      submitButton.disabled = checkedCount === 0;
+      submitButton.textContent = `Submit (${checkedCount}) Remittance Confirmation`;
+  }
+</script>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">SHARE APPLICATIONS IN PROGRESS
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container share-account-container">
+            <div class="share-account-list">
+                <table class="default-list">
+                    <tr>
+                        <th>
+                            Owner
+                        </th>
+                        <th>
+                            Account Number
+                        </th>
+                        <th>
+                            Total Value
+                        </th>
+                        <th>
+                            Unit Value
+                        </th>
+                        <th>
+                            Quantity
+                        </th>
+                        <th>
+                            Created
+                        </th>
+                        <th>
+                            Creator
+                        </th>
+                        <th>
+                            Share
+                        </th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr th:each="share : ${shareAccountsList}">
+                        <td th:text="${share.user.gender} + ' ' + ${share.user.firstName} + ' ' + ${share.user.lastName}"></td>
+                        <td th:text="${share.accountNumber}"></td>
+                        <td th:text="${#numbers.formatDecimal(share.unitSharePrice*share.quantity, 0, 'COMMA', 0, 'POINT')}"></td>
+                        <td th:text="${#numbers.formatDecimal(share.unitSharePrice, 0, 'COMMA', 0, 'POINT')}"></td>
+                        <td th:text="${#numbers.formatDecimal(share.quantity, 0, 'COMMA', 0, 'POINT')}"></td>
+                        <td th:text="${#dates.format(share.createdDate, 'dd-MMM-yyyy HH:mm')}"></td>
+                        <td th:text="${share.createdBy}"></td>
+                        <td><span th:text="${share.branchCode}"/>,<span th:text="${share.country}"/></td>
+                        <td>
+                            <span th:if="${share.accountStatus.name == 'PENDING_APPROVAL'}">
+                                <span class="table-list-status">Pending Approval</span>
+                            </span>
+                            <span th:if="${share.accountStatus.name == 'PENDING_PAYOUT'}">
+                                <span class="table-list-status">Approved</span>
+                            </span>
+                        </td>
+                        <td>
+                            <a class="table-list-button-icon" href="#" th:href="@{/shareDetails/{id}(id=${share.id})}"><i class="fas fa-ellipsis-h"></i></a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:insert="footer::navbar"></div>
+
+</html>

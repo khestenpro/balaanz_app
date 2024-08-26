@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container payment-status-modal">
+            <span class="status-icon success" th:unless='${error}'><i class="far fa-check-circle"></i></span>
+            <span class="status-icon error" th:if='${error}'><i class="far fa-times-circle"></i></span>
+            <form th:action="@{/disbursementStatus}" class="payment-result" method='POST' id='checkout-form'>
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="money-btn-two">
+                            <div class="mtn-money">
+                                <span class="material-symbols-outlined">
+
+                                </span>
+                            </div>
+                            <div  class="orange-money">
+                                <span class="material-symbols-outlined">
+
+                                </span>
+                            </div>
+                        </div>
+
+                        <h4 th:style="${'color:' + businessInfo?.themeColor}"><span th:text='${amountSent}'/> frs CFA</h4>
+
+                        <div class="payment-status-content" th:if='${statusInfo}'>
+                            <b><span th:text='${statusInfo}'/></b><br/>
+                            <span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy HH:mm')}"></span>
+                            <b>
+                                <h4><label>To:</label> <span th:text='${session.disbursementCustomerName}'></span> (<span th:text='${session.disbursementRequest.recipientPhoneNumber}'></span>)</h4>
+                            </b>
+                            <p>Thank you for making a payment</p>
+
+<!--                            <button type="submit" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" class="btn btn-orange">Check Transaction Status</button>-->
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <a class="radius-btn-link"
+                           th:style="${'color:' + session.runtimeSettings?.themeColor + '; border-color:' + session.runtimeSettings?.themeColor}"
+                           th:href="@{/welcomeGlobal}">
+                            My Account/ Go Back
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<div th:insert="footer::navbar"></div>
+</html>

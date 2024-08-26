@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">Dashboard Notifications, Warnings or
+                            Information</h2>
+                        <span>Enter Start Date and End Date to filter Notifications, Warnings or Information.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container ledger-container">
+
+            <span  th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MAIN_REPORTS'')')}">
+            <div class="ledger-search">
+                <form action="#" th:action="@{/filterCallCenter}" method="post" th:object="${glSearchDTO}">
+                    <div class="row row-space-10">
+                        <div class="col-md-3">
+                            <label>Start Date</label>
+                            <input type="date" name="startDate" th:field="*{startDate}" id="startDate"
+                                placeholder="Start Date:" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>End Date</label>
+                            <input type="date" name="endDate" th:field="*{endDate}" id="endDate"
+                                placeholder="End Date:" class="form-control" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label>User</label>
+                            <select class="form-control" name="allGLEntryUsers" id="allGLEntryUsers"
+                                    th:field="*{allGLEntryUsers}">
+                                <option value="-1">ALL</option>
+                                <option th:each="username : ${allGLEntryUsers}" th:value="${username}">
+                                    <span th:text="${username}"/>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-auto">
+                            <label>&nbsp;</label>
+                            <button type="submit" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" class="btn btn-orange">SEARCH</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            </span>
+
+
+            <div class="ledger-list">
+                <table class="default-list">
+                    <tr>
+                        <th>Date</th>
+                        <th>User</th>
+                        <th>Notes</th>
+                        <th>Account No.</th>
+                    </tr>
+                    <tr th:each="callCenter : ${callCenterList}">
+                        <td th:text="${#dates.format(callCenter.date, 'dd-MMM-yyyy HH:mm')}"></td>
+                        <td th:text="${callCenter.userName}"></td>
+                        <td th:text="${callCenter.notes}"></td>
+                        <td th:text="${callCenter.accountNumber}"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+<div th:insert="footer::navbar"></div>
+</html>

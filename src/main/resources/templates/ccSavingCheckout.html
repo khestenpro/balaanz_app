@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div th:insert="summary::navbar"></div>
+    <div class="container">
+    <div class="account-diposit-container">
+
+        <div class="account-diposit-info">
+            <div class="diposit-info-cell">
+                <label>Account Type</label>
+                <span>Current - 20</span>
+            </div>
+            <div class="diposit-info-cell">
+                <label>Account Number</label>
+                <a th:style="${'color:' + session.runtimeSettings?.themeColor2}" href="#"
+                   th:href="@{/showCustomer/{userid}(userid=${savingAccountTransaction.savingAccount.user.id})}">
+                    <span th:text="${#strings.substring(savingAccountTransaction.savingAccount.accountNumber,5,10)} + ' ' +${#strings.substring(savingAccountTransaction.savingAccount.accountNumber,21,23)}"/>
+                </a>
+            </div>
+            <div class="diposit-info-cell">
+                <label>Member Since</label>
+                <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="#"
+                   th:href="@{/showCustomer/{userid}(userid=${savingAccountTransaction.savingAccount.user.id})}">
+                    <span th:text="${#dates.format(savingAccountTransaction.savingAccount.user.created, 'dd-MMM-yyyy HH:mm')}"/>
+                </a>
+            </div>
+            <div class="diposit-info-cell">
+                <label>Rate</label>
+                <span th:text="${savingAccountTransaction.savingAccount.interestRate}"></span>
+            </div>
+            <div class="diposit-info-cell">
+                <label>Min. Balance</label>
+                <span th:text="${#numbers.formatDecimal(savingAccountTransaction.savingAccount.accountMinBalance, 0, 'COMMA', 0, 'POINT')}"></span>
+            </div>
+            <div class="diposit-info-cell">
+                <label>Balance</label>
+                <span th:text="${#numbers.formatDecimal(savingAccountTransaction.savingAccount.accountBalance, 0, 'COMMA', 0, 'POINT')}"></span>
+            </div>
+            <div class="diposit-info-cell">
+                <label>Notes</label>
+                <span th:text="${savingAccountTransaction.savingAccount.notes}"></span>
+            </div>
+        </div>
+        <div class="account-diposit-form">
+            <h2 th:style="${'color:' + session.runtimeSettings?.themeColor2}">CONFIRM CREDIT CARD AMOUNT <br>
+                <span class="account-diposit-sub-title">Your club account will be credited with $<span th:text='${amount}'/></span>
+            </h2>
+            <!--Project title area end-->
+            <form th:action="@{/chargeCCSaving}" method='POST' id='checkout-form'>
+                <div class="row">
+                    <div class="col-md-4">
+                        <span class="card-logo-image">
+                            <img width="200px" th:src="@{/assets/images/visaLogo.png}"/>
+                        </span>
+                    </div>
+                    <div class="col-md-8">
+                        <input type='hidden' th:value='${amount*100}' name='amount'/>
+                        <input type='hidden' th:value='${savingAccountTransaction.savingAccount.id}' name='accountId'/>
+                        <input type='hidden' th:value='SAVING' name='accountType'/>
+                        <div class="confirm-payment-btn-row">
+                            <div class="amount-view-lable">
+                                <label>Amount:</label>
+                                <strong th:style="${'color:' + session.runtimeSettings?.themeColor2}">$<span th:text='${amount}' /></strong>
+                            </div>
+                            <script
+                                src='https://checkout.stripe.com/checkout.js'
+                                class='stripe-button'
+                                th:attr='data-key=${stripePublicKey},
+                    data-amount=${amount*100},
+                    data-currency=${currency}'
+                                data-name='Balaanz'
+                                data-description='BITSVALLEY PAYMENT CHECKOUT'
+                                data-image
+                                        ='https://balaanz.com/assets/images/bvLogo.png'
+                                data-locale='auto'
+                                data-zip-code='false'>
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</section>
+<div th:insert="footer::navbar"></div>
+</html>

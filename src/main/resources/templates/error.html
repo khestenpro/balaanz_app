@@ -1,0 +1,303 @@
+ <!DOCTYPE html>
+        <html xmlns:th="http://www.thymeleaf.org"
+              xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Bitsvalley Payments</title>
+            <!-- Favicon  -->
+            <link rel="icon" type="image/x-icon" th:href="@{assets/images/favicon/faviconn.ico}">
+            <link rel="stylesheet" th:href="@{../css/main.css}" type="text/css}"/>
+
+            <!--Bootstrap-->
+            <link rel="stylesheet" type="text/css" th:href="@{../assets/css/bootstrap.min.css}">
+            <!--Fontawesome-->
+            <link rel="stylesheet" type="text/css" th:href="@{../assets/css/all.min.css}">
+            <!--Owl-carousel-->
+            <link rel="stylesheet" type="text/css" th:href="@{../assets/css/owl.carousel.min.css}">
+            <!--Owl Carousel theme-->
+            <link rel="stylesheet" type="text/css" th:href="@{../assets/css/owl.theme.default.min.css}">
+            <!--Animate-->
+            <link rel="stylesheet" type="text/css" th:href="@{../assets/css/animate.min.css}">
+            <!-- magnific CSS -->
+            <link rel="stylesheet" type="text/css" th:href="@{../assets/css/magnific-popup.css}">
+            <!-- Mmenu CSS -->
+            <link rel="stylesheet" type="text/css" th:href="@{../assets/css/slicknav.min.css}">
+            <!--Style-->
+            <link rel="stylesheet" type="text/css" th:href="@{../assets/css/style.css}">
+            <!-- Responsive -->
+            <link rel="stylesheet" type="text/css" th:href="@{../assets/css/responsive.css}">
+        </head>
+
+        <header class="app-header">
+            <div class="container">
+                <div class="inner-header">
+                    <div class="logo" style="flex-grow: 3;">
+                        <a href="/login">
+                            <!--                    <img width="100px" th:src="@{/getLogoImage}"/>-->
+                            <!--                    <img src="assets/images/balaanz.png">-->
+                        </a>
+                    </div>
+                    <div class="user-action">
+                        Please, Login with correct credentials. </a>
+
+                        <div class="login-btn" th:style="${'background-color:' + session?.runtimeSettings?.themeColor}">
+                            <a href="#" data-toggle="modal" data-target="#exampleModal">
+                                Secure Login
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+
+        <!--Slider area start-->
+        <section class="slider-area-start owl-carousel">
+            <div class="banner-slide">
+                <div class="banner-slide-content">
+                    <div class="banner-inner-content">
+<!--                        <h2>Bala@nz</h2>-->
+                        <h4>Bala@nz Technology. Lightweight! Secure!</h4>
+                        <p> Innovation in Microfinance will
+                            reduce costs, improve efficiency,
+                            and increase outreach, many MFI’s
+                            still find it difficult to harness the
+                            potential and avoid the pitfalls!</p>
+                    </div>
+                    <div class="banner-slide-device">
+                        <img src="/assets/images/main-slider/banner-device.png" />
+                    </div>
+                </div>
+                <div class="banner-slide-image" style="background-image: url('assets/images/main-slider/slider-2.jpg')"></div>
+            </div>
+            <div class="banner-slide">
+                <div class="banner-slide-content">
+                    <div class="banner-inner-content">
+                        <h2>Bala@nz</h2>
+                        <h4>Meet our finance Experts</h4>
+                        <p>Saving is Silver, Investment is Gold.</p>
+                    </div>
+                    <div class="banner-slide-device">
+                        <img src="/assets/images/main-slider/banner-device.png" />
+                    </div>
+                </div>
+                <div class="banner-slide-image" style="background-image: url('assets/images/main-slider/pineapple.png')"></div>
+            </div>
+        </section>
+        <!--Slider area end-->
+        <br/>
+        <!--Choosen area start-->
+
+        <!--Project title area start-->
+        <div class="project-title-area text-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="project-title-content">
+                            <h3>Why you choose bala@nz?</h3>
+                            <span><i class="fas fa-crosshairs"></i></span>
+                            <p>We innovate and consult with our financial team and the result is bala@nz.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Project title area end-->
+
+        <!--Choosen main area start-->
+        <div class="choosen-main-area-start">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="single-choosen-content box-pad shadow text-center">
+                            <img src="assets/images/choosen/advisor.svg" alt="choosen-image">
+                            <h4>Expert Advisor</h4>
+                            <p>A team of financial experts is on your side. All the time.</p>
+                        </div>
+                    </div>
+                    <!--Single choosen area end-->
+                    <div class="col-md-4 mt-sm-5 mb-sm-5 mt-md-0 mb-md-0">
+                        <div class="single-choosen-content box-pad shadow text-center">
+                            <img src="assets/images/choosen/pc.svg" alt="choosen-image">
+                            <h4>Financial Market Research</h4>
+                            <p>We create financial community awareness.</p>
+                        </div>
+                    </div>
+                    <!--Single choosen area end-->
+                    <div class="col-md-4">
+                        <div class="single-choosen-content box-pad shadow text-center">
+                            <img src="assets/images/choosen/consultant.svg" alt="choosen-image">
+                            <h4>Customer Insights</h4>
+                            <div>We go to our customers no matter where they are.</div>
+                        </div>
+                    </div>
+                    <!--Single choosen area end-->
+                </div>
+            </div>
+        </div>
+        <!--Choosen main area end-->
+        <br/>
+        <!--Choosen area end-->
+        <!--Blog area start-->
+        <!--Project title area start-->
+        <div class="project-title-area text-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="project-title-content">
+                            <h3>Our Services</h3>
+                            <span><i class="fas fa-crosshairs"></i></span>
+                            <p>Cross agency Co-ordination, Clean water rural, promising development turmoil inclusive
+                                education transformative community.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Project title area end-->
+
+        <div th:insert="blog::navbar"></div>
+
+        <!--Blog area end-->
+
+        <!--<div th:insert="footer::navbar">  </div>-->
+
+
+
+        <div th:fragment="navbar" class="app-footer">
+
+            <table width="100%" class="center" border="0"><tr><td>
+
+                <!--Footer area start-->
+                <footer class="footer-area-start">
+
+                    <!--Footer content area start-->
+                    <div class="footer-content-area-start">
+                        <div class="container">
+                            <div class="row">
+                                <!--Single footer widget start-->
+                                <div class="col-md-3 mb-sm-5 mb-md-0">
+                                    <div class="single-footer-widget">
+                                        <div class="logo-area">
+                                        </div>
+                                        <p>The financial institution on your side. We will consult with you on a one on one basis?</p>
+                                        <div class="team-member-social-icon">
+                                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                            <a href="#"><i class="fab fa-dribbble"></i></a>
+                                            <a href="#"><i class="fab fa-instagram"></i></a>
+                                            <a href="#"><i class="fab fa-twitter"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Single footer widget end-->
+
+                                <!--Single footer widget footer menu start-->
+                                <div class="col-md-2 mb-sm-5 mb-md-0">
+                                    <div class="single-footer-widget">
+                                        <h5>Features</h5>
+                                        <ul class="footer-menu">
+                                            <li><a href="#">Home</a></li>
+                                            <!--                                    <li><a href="#">About</a></li>-->
+                                            <li><a href="#">Portfolio</a></li>
+                                            <!--                                    <li><a href="#">Help</a></li>-->
+                                            <!--                                    <li><a href="#">Policy</a></li>-->
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!--Single footer widget footer menu end-->
+
+                                <!--Single footer widget footer menu start-->
+                                <div class="col-md-4 mb-sm-5 mb-md-0">
+                                    <div class="single-footer-widget">
+                                        <h5>Recent News</h5>
+                                        <div class="media">
+                                            <div class="media-body">
+                                                <p>Cameroon’s microfinance institutions are still largely concentrated in the cities, although 60% of the total populatio a growing share of ACEP Cameroun’s activity.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Single footer widget footer menu end-->
+
+                                <!--Single footer widget footer menu start-->
+                                <div class="col-md-3">
+                                    <div class="single-footer-widget">
+
+                                    </div>
+                                </div>
+                                <!--Single footer widget footer menu end-->
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!--Footer area end-->
+
+            </td></tr></table>
+
+            <!--jQuery-->
+            <script src="/assets/js/jquery-3.5.1.min.js"></script>
+            <!--Bootstrap-->
+            <script src="/assets/js/bootstrap.min.js"></script>
+            <!-- Waypoint js -->
+            <script src="/assets/js/jquery.waypoints.js"></script>
+            <!-- Counter Up -->
+            <script src="/assets/js/jquery.counterup.min.js"></script>
+            <!--Owl-Carousel-->
+            <script src="/assets/js/owl.carousel.min.js"></script>
+            <!--Parallax-->
+            <script src="/assets/js/parallax.min.js"></script>
+            <!-- Isotope JS -->
+            <script src="/assets/js/isotope.pkgd.min.js"></script>
+            <!-- MMenu JS -->
+            <script src="/assets/js/jquery.slicknav.min.js"></script>
+            <!-- magnific Js -->
+            <script src="/assets/js/jquery.magnific-popup.min.js"></script>
+            <!-- Progress Bar -->
+            <script src="/assets/js/jquery.lineProgressbar.js"></script>
+            <!-- Countdown Js -->
+            <script src="/assets/js/jquery.countdown.min.js"></script>
+            <!--Custom Js-->
+            <script src="/assets/js/custom.js"></script>
+
+        </div>
+        <!--Footer area end-->
+
+        <table>
+            <tr>
+                <td>Date</td>
+                <td th:text="${timestamp}"/>
+            </tr>
+            <tr>
+                <td>Path</td>
+                <td th:text="${path}"/>
+            </tr>
+            <tr>
+                <td>Error</td>
+                <td th:text="${error}"/>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td th:text="${status}"/>
+            </tr>
+            <tr>
+                <td>Message</td>
+                <td th:text="${message}"/>
+            </tr>
+            <tr>
+                <td>Exception</td>
+                <td th:text="${exception}"/>
+            </tr>
+            <tr>
+                <td>Trace</td>
+                <td>
+                    <pre th:text="${trace}"/>
+                </td>
+            </tr>
+        </table>
+
+
+        </body>
+
+        </html>

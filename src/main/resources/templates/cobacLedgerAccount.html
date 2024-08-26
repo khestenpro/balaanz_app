@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+  <!--Project title area start-->
+  <!-- <div class="project-title-area text-center">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="page-title">
+                      <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">EXISTING LEDGER ACCOUNTS</h2>
+                      <span>To Record Revenue and Expenses</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div> -->
+  <!--Project title area end-->
+  <div class="container">
+    <div class="radius-container">
+      <div class="radius-container-title" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+        <h2>EXISTING LEDGER ACCOUNTS</h2>
+        <span>To Record Revenue and Expenses</span>
+      </div>
+      <div class="gl-account-container">
+        <div class="gl-account-form" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_GL_ACCOUNT'')')}">
+          <h2>CREATE LEDGER ACCOUNT</h2>
+          <span class="alert alert-info" th:if="${ledgerAccountInfo}" th:text="${ledgerAccountInfo}"/>
+          <form action="#" th:action="@{/generalLedgerClass}" method="post">
+            <div class="row radio-selection-list">
+              <!-- <div class="col-md-12">
+                  <div class="form-group">
+                      <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" id="1">
+                          <label class="form-check-label" for="1">CAPITAL ACCOUNTS (1000 – 1999)</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" id="2">
+                          <label class="form-check-label" for="2">FIXED ASSET ACCOUNTS (2000 – 2999)</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" id="3">
+                          <label class="form-check-label" for="3">CUSTOMER ACCOUNTS (3000 – 3999)</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" id="4">
+                          <label class="form-check-label" for="4">THIRD PARTY ACCOUNTS AND ACCRUALS(4000 – 4999)</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" id="5">
+                          <label class="form-check-label" for="5">TREASURY AND INTERBANK OPERATIONS (5000 – 5999)</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" id="6">
+                          <label class="form-check-label" for="6">EXPENSE ACCOUNTS (6000 – 6999)</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" id="7">
+                          <label class="form-check-label" for="7">REVENUE ACCOUNTS (7000 – 7999)</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" id="8">
+                          <label class="form-check-label" for="8">INTERMEDIATE MANAGEMENT ACCOUNTS (8000 – 8999)</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" id="9">
+                          <label class="form-check-label" for="9">OFF BALANCE SHEET ACCOUNTS</label>
+                      </div>
+                  </div>
+              </div> -->
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="1" name="ledgerAccount"
+                           onclick="updateSelectedLabel(this)">
+                    <label class="form-check-label" for="1">CAPITAL ACCOUNTS (1000 – 1999)</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="2" name="ledgerAccount"
+                           onclick="updateSelectedLabel(this)">
+                    <label class="form-check-label" for="2">FIXED ASSET ACCOUNTS (2000 – 2999)</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="3" name="ledgerAccount"
+                           onclick="updateSelectedLabel(this)">
+                    <label class="form-check-label" for="3">CUSTOMER ACCOUNTS (3000 – 3999)</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="4" name="ledgerAccount"
+                           onclick="updateSelectedLabel(this)">
+                    <label class="form-check-label" for="4">THIRD PARTY ACCOUNTS AND ACCRUALS(4000 – 4999)</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="5" name="ledgerAccount"
+                           onclick="updateSelectedLabel(this)">
+                    <label class="form-check-label" for="5">TREASURY AND INTERBANK OPERATIONS (5000 – 5999)</label>
+                  </div>
+                  <input type="hidden" id="selectedLabel" name="selectedLabel" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="6" name="ledgerAccount"
+                           onclick="updateSelectedLabel(this)">
+                    <label class="form-check-label" for="6">EXPENSE ACCOUNTS (6000 – 6999)</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="7" name="ledgerAccount"
+                           onclick="updateSelectedLabel(this)">
+                    <label class="form-check-label" for="7">REVENUE ACCOUNTS (7000 – 7999)</label>
+                  </div>
+                  <!--          UNCOMMENT ONCE DATA IS AVAILABLE        -->
+                  <!--<div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="8" name="ledgerAccount"
+                           onclick="updateSelectedLabel(this)">
+                    <label class="form-check-label" for="8">INTERMEDIATE MANAGEMENT ACCOUNTS (8000 – 8999)</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="9" name="ledgerAccount"
+                           onclick="updateSelectedLabel(this)">
+                    <label class="form-check-label" for="9">OFF BALANCE SHEET ACCOUNTS</label>
+                  </div>-->
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 text-center">
+                <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">INIT ACCOUNT CREATION</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <h4 class="section-title" th:style="${'color:' + session.runtimeSettings.themeColor}">Active List</h4>
+        <div class="gl-account-list">
+          <table class="default-list" border="1">
+            <tr>
+              <th>Update<br/>Event</th>
+              <th>COBAC Code<br/>Balaanz Code</th>
+              <th>Category</th>
+              <th>Account Status</th>
+              <th>Credit Balance</th>
+              <th>Cash Account Transfer</th>
+              <th>Inter-account Transfer</th>
+              <th>Cash From - To</th>
+            </tr>
+            <tr th:each="aLedgerAccount : ${activeAccount}">
+              <td class="col-field">
+                                <span th:if="${#authorization.expression('hasAnyAuthority(''ROLE_UPDATE_GL_ACCOUNT_NAME'')')}">
+                                    <form th:action="@{/updateLedgerAccountForm}" method="post">
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" name="accountName"/>
+                                            <input type="hidden" name="aLedgerAccountId" th:value="${aLedgerAccount.id}"/>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </span>
+
+              </td>
+
+              <td>
+                <!--                            <span th:text="${aLedgerAccount.name}"/><br/>-->
+                <font size="3" th:style="${'color:' + session.runtimeSettings.themeColor}">
+                  <span th:text="${aLedgerAccount.displayName}"/></font><br/>
+
+                <span th:if="${#authorization.expression('hasAnyAuthority(''ROLE_UPDATE_GL_ACCOUNT_NAME'')')}">
+                                    <a class="text-ellipsis" title="" th:href="@{/updateAccountLedger/{id}(id=${aLedgerAccount.id})}" th:text="${aLedgerAccount.code}"></a>
+                                </span>
+                <span  th:unless="${#authorization.expression('hasAnyAuthority(''ROLE_UPDATE_GL_ACCOUNT_NAME'')')}">
+                                    <span class="text-ellipsis" th:text="${aLedgerAccount.code}"/>
+                                </span>
+                <br/>
+                <a th:href="@{/bulkLedgerAccount/{id}(id=${aLedgerAccount.id})}"> Create a Event</a>
+
+              </td>
+              <td th:text="${aLedgerAccount.category}"></td>
+              <td>
+                <span th:text="${aLedgerAccount.status}"></span>
+                <a class="table-list-icon" th:href="@{/editLedgerAccountStatus/{id}(id=${aLedgerAccount.id})}">
+                  <i class="fas fa-pencil-alt" style="font-size:6px"></i>
+                </a>
+              </td>
+              <td th:text="${aLedgerAccount.creditBalance}"></td>
+              <td th:text="${aLedgerAccount.cashAccountTransfer}"></td>
+              <td th:text="${aLedgerAccount.interAccountTransfer}"></td>
+              <td>
+                                <span th:if="${aLedgerAccount.cashAccountTransfer == 'true'}">
+                                    <a class="table-list-button-icon" href="#" th:href="@{/cashToLedgerAccount/{id}(id=${aLedgerAccount.id})}">
+                                        Cash_GL
+                                    </a><br/>
+                                </span>
+                <span th:if="${#authorization.expression('hasAnyAuthority(''ROLE_GL_ACCOUNT_EXPENSE_ENTRY'')')} OR ${#authorization.expression('hasAnyAuthority(''ROLE_GL_ACCOUNT_REVENUE_ENTRY'')')}">
+                                    <span th:if="${aLedgerAccount.interAccountTransfer == 'true'}">
+                                        <a class="table-list-button-icon" href="#" th:href="@{/addGeneralLedgerEntry/{id}(id=${aLedgerAccount.id})}">
+                                            GL_GL
+                                        </a><br/>
+                                    </span>
+                                </span>
+                <span th:if="${aLedgerAccount.cashAccountTransfer == 'true'}"><br/>
+                                    <a class="table-list-button-icon" href="#" th:href="@{/cashFromLedgerAccount/{id}(id=${aLedgerAccount.id})}">
+                                        GL_Cash
+                                    </a><br/>
+                                </span>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <br/>
+
+        <h4 class="section-title" th:style="${'color:' + session.runtimeSettings.themeColor}">Inactive List</h4>
+        <div class="gl-account-list">
+          <table class="default-list">
+            <tr>
+              <th>Update</th>
+              <th>COBAC Code<br/>Balaanz Code</th>
+              <th>Category</th>
+              <th>Account Status</th>
+              <th>Credit Balance</th>
+              <th>Cash Account Transfer</th>
+              <th>Inter-account Transfer</th>
+              <th>Cash From - To</th>
+            </tr>
+            <tr th:each="aLedgerAccount : ${ledgerAccountList}">
+              <td class="col-field">
+                                <span th:if="${#authorization.expression('hasAnyAuthority(''ROLE_UPDATE_GL_ACCOUNT_NAME'')')}">
+
+                                    <form th:action="@{/updateLedgerAccountForm}" method="post">
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" name="accountName"/>
+                                            <input type="hidden" name="aLedgerAccountId" th:value="${aLedgerAccount.id}"/>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </span>
+              </td>
+              <td>
+                <!--                            <span th:text="${aLedgerAccount.name}"/><br/>-->
+                <span th:text="${aLedgerAccount.displayName}"/>
+                <br/>
+                <span th:if="${#authorization.expression('hasAnyAuthority(''ROLE_UPDATE_GL_ACCOUNT_NAME'')')}">
+                                    <a class="text-ellipsis" title="" th:href="@{/updateAccountLedger/{id}(id=${aLedgerAccount.id})}" th:text="${aLedgerAccount.code}"></a>
+                                </span>
+                <span  th:unless="${#authorization.expression('hasAnyAuthority(''ROLE_UPDATE_GL_ACCOUNT_NAME'')')}">
+                                    <span class="text-ellipsis" th:text="${aLedgerAccount.code}"/>
+                                </span>
+                <br/>
+                <a th:href="@{/deleteGL/{id}(id=${aLedgerAccount.id})}"> Delete GL</a>
+              </td>
+              <td th:text="${aLedgerAccount.category}"></td>
+              <td>
+                <span th:text="${aLedgerAccount.status}"></span>
+                <a class="table-list-icon" th:href="@{/editLedgerAccountStatus/{id}(id=${aLedgerAccount.id})}">
+                  <i class="fas fa-pencil-alt" style="font-size:6px"></i>
+                </a>
+              </td>
+              <td th:text="${aLedgerAccount.creditBalance}"></td>
+              <td th:text="${aLedgerAccount.cashAccountTransfer}"></td>
+              <td th:text="${aLedgerAccount.interAccountTransfer}"></td>
+              <td>
+                                <span th:if="${aLedgerAccount.cashAccountTransfer == 'true'}">
+                                    <a class="table-list-button-icon" href="#" th:href="@{/cashToLedgerAccount/{id}(id=${aLedgerAccount.id})}">
+                                         Cash to GL
+                                    </a><br/>
+                                </span>
+                <span th:if="${#authorization.expression('hasAnyAuthority(''ROLE_GL_ACCOUNT_EXPENSE_ENTRY'')')} OR ${#authorization.expression('hasAnyAuthority(''ROLE_GL_ACCOUNT_REVENUE_ENTRY'')')}">
+                                    <span th:if="${aLedgerAccount.interAccountTransfer == 'true'}">
+                                        <a class="table-list-button-icon" href="#" th:href="@{/addGeneralLedgerEntry/{id}(id=${aLedgerAccount.id})}">
+                                            GL_GL
+                                        </a><br/>
+                                    </span>
+                                </span>
+                <span th:if="${aLedgerAccount.cashAccountTransfer == 'true'}">
+                                   <br/>
+                                    <a class="table-list-button-icon" href="#" th:href="@{/cashFromLedgerAccount/{id}(id=${aLedgerAccount.id})}">
+                                        GL_Cash
+                                    </a><br/>
+                                </span>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div th:insert="footer::navbar"></div>
+<script>
+    function updateSelectedLabel(radioButton){
+        document.getElementById('selectedLabel').value = document.querySelector('input[name="ledgerAccount"]:checked + label').innerText;
+    }
+</script>
+</html>

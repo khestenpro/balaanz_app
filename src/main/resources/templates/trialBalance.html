@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}" th:text="${accountNameHeader}"></h2>
+                        <span>Enter Start Date and End Date to filter Transactions.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container ledger-container">
+            <div class="ledger-search">
+                <form action="#" th:action="@{/filterTrialBalance}" method="post" th:object="${glSearchDTO}">
+                    <div class="row row-space-10">
+                        <div class="col-md-3">
+                            <label>Start Date</label>
+                            <input type="date" name="startDate" th:field="*{startDate}" id="startDate"
+                                         class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>End Date</label>
+                            <input type="date" name="endDate" th:field="*{endDate}" id="endDate"
+                                       class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>&nbsp;</label>
+                            <button type="submit" class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}">SEARCH</button>
+                            <a class="download-pdf-button" th:style="${'color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/createTrialBalanzReport}">
+                                Download <i class="far fa-file-pdf"></i>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="ledger-summary">
+                <div class="count-row">
+                    <div class="data-range">
+                        <div class="data">
+                            <label th:text="${startDate}"></label> - 
+                        </div>
+                        <div class="data">
+                            <label th:text="${endDate}"></label>
+                        </div>
+                    </div>
+                    <div class="count-view red-view">
+                        <label>DEBIT</label>
+                        <span th:if="${trialBalanceBilanz.debitTotal == 0}">
+                            0
+                        </span>
+                        <span th:if="${trialBalanceBilanz.debitTotal > 0}">
+                            <span th:text="${#numbers.formatDecimal(trialBalanceBilanz.debitTotal, 0, 'COMMA', 2, 'POINT')}"/>
+                        </span>
+                        <span th:if="${trialBalanceBilanz.debitTotal < 0}">
+                            <span th:text="${#numbers.formatDecimal(trialBalanceBilanz.debitTotal*-1, 0, 'COMMA', 2, 'POINT')}"/>
+                        </span>
+                    </div>
+                    <div class="count-view green-view">
+                        <label>CREDIT</label>
+                        <span th:if="${trialBalanceBilanz.creditTotal == 0}">
+                            0
+                        </span>
+                        <span th:if="${trialBalanceBilanz.creditTotal > 0}">
+                            <span th:text="${#numbers.formatDecimal(trialBalanceBilanz.creditTotal, 0, 'COMMA', 2, 'POINT')}"/>
+                        </span>
+                        <span th:if="${trialBalanceBilanz.creditTotal < 0}">
+                            <span th:text="${#numbers.formatDecimal(trialBalanceBilanz.creditTotal*-1, 0, 'COMMA', 2, 'POINT')}"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="ledger-list">
+                <table class="default-list">
+                    <tr>
+                        <th>Account Name</th>
+                        <th>Account Category</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                    </tr>
+                    <tr th:each="tb : ${trialBalanceBilanz.trialBalanceWeb}">
+                        <td th:text="${tb.name}"></td>
+                        <td th:text="${tb.type}"></td>
+                        <td class="amount-td" th:style="${'color:' + session.runtimeSettings.themeColor}">
+                            <span th:if="${tb.creditBalance == 'false'}">
+                                <span th:if="${tb.totalDifference > 0}">
+                                    <span th:text="${#numbers.formatDecimal(tb.totalDifference, 0, 'COMMA', 2, 'POINT')}"/>
+                                </span>
+                                <span th:if="${tb.totalDifference < 0}">
+                                    <span th:text="${#numbers.formatDecimal(tb.totalDifference*-1, 0, 'COMMA', 2, 'POINT')}"/>
+                                </span>
+                            </span>
+                            <span th:if="${tb.creditBalance == 'true'}">
+                                0
+                            </span>
+                        </td>
+                        <td class="amount-td" th:style="${'color:' + session.runtimeSettings.themeColor}">
+                            <span th:if="${tb.creditBalance == 'true'}">
+                                <span th:if="${tb.totalDifference < 0}">
+                                    <span th:text="${#numbers.formatDecimal(tb.totalDifference*-1, 0, 'COMMA', 2, 'POINT')}"/>
+                                </span>
+                                <span th:if="${tb.totalDifference > 0}">
+                                    <span th:text="${#numbers.formatDecimal(tb.totalDifference, 0, 'COMMA', 2, 'POINT')}"/>
+                                </span>
+                            </span>
+                            <span th:if="${tb.creditBalance == 'false'}">
+                                0
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+<div th:insert="footer::navbar"></div>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <div class="container">
+        <div class="radius-container">
+            <div class="radius-container-title" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                <h2>COBAC ACCOUNTING CLASSES</h2>
+                <span>Select Sub-sub-Class to proceed.</span>
+            </div>
+            <div class="gl-account-container">
+                <div class="gl-account-form" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_GL_ACCOUNT'')')}">
+                    <h2>CREATE LEDGER ACCOUNT</h2>
+                    <span class="alert alert-info" th:if="${ledgerAccountInfo}" th:text="${ledgerAccountInfo}"/>
+                    <form action="#" th:action="@{/saveCobacGLAccount}" method="post" th:object="${ledgerAccount}">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Name:</label>
+                                    <input type="text" name="name" th:field="*{name}" id="name"
+                                            placeholder="e.g NFC BANK" class="form-control" required/>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Balaanz Code:</label>
+                                    <input type="text" name="code" th:field="*{code}" id="code"
+                                            placeholder="e.d 4004" class="form-control" required/>
+                                    <input type="hidden" name="category" th:field="*{category}">
+                                    <input type="hidden" name="cobacCode" id="cobacCode" th:field="*{displayName}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{status}" type="checkbox" id="active" name="status"
+                                            th:value="*{status}"
+                                            checked>
+                                        <label class="form-check-label" for="active">Active</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{creditBalance}" type="checkbox" id="creditBalance"
+                                            name="creditBalance" th:value="*{creditBalance}"
+                                            checked>
+                                        <label class="form-check-label" for="creditBalance">Credit Balance</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{cashAccountTransfer}" type="checkbox"
+                                            id="cashAccountTransfer" name="cashAccountTransfer" th:value="*{cashAccountTransfer}"
+                                            checked>
+                                        <label class="form-check-label" for="cashAccountTransfer">Cash Account Transfers</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{interAccountTransfer}" type="checkbox"
+                                            id="interAccountTransfer" name="interAccountTransfer"
+                                            th:value="*{interAccountTransfer}"
+                                            checked>
+                                        <label class="form-check-label" for="interAccountTransfer">Inter Account Transfer</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">CREATE LEDGER ACCOUNT</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="cobac-accounting">
+                    <h4 class="section-title" th:style="${'color:' + session.runtimeSettings.themeColor}">CUSTOMER ACCOUNTS - CLASS 3</h4>
+                    <table class="default-list">
+                        <thead>
+                            <tr>
+                                <!-- <th colspan="2" class="capital-accounts">CLASSES</th> -->
+                                <th colspan="2">SUB-CLASSES</th>
+                                <th>SUB-SUB-CLASSES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <!-- <td width="10%" rowspan="10">CLASS 1</td>
+                                <td width="17%" rowspan="10" class="capital-accounts"><h6>CAPITAL ACCOUNTS</h6></td> -->
+                                <td>30/31</td>
+                                <td>LONG TERM LOANS (LTL) MEDIUM TERM LOANS (MTL)</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="1" name="class3" onclick=updateSelectedLabel()  value="301/311">
+                                            <label for="1">301/311- LT/MT real estate investment loans </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="2" name="class3" onclick=updateSelectedLabel()  value="302/312">
+                                            <label for="2">302/312 - LT/MT housing loans </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="3" name="class3" onclick=updateSelectedLabel()  value="303/313">
+                                            <label for="3">303/313 - LT/MT equipment loans </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="4" name="class3" onclick=updateSelectedLabel()  value="304/314">
+                                            <label for="4">304/314 - LT/MT moratoria or consolidated loans on the State </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="5" name="class3" onclick=updateSelectedLabel()  value="305/315">
+                                            <label for="5">305/315 - LT/MT moratoria seasonal loans </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="6" name="class3" onclick=updateSelectedLabel()  value="306/316">
+                                            <label for="6">306/316 - LT/MT consumer loans </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="7" name="class3" onclick=updateSelectedLabel()  value="307/317">
+                                            <label for="7">307/317 - LT/MT financial leases </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="8" name="class3" onclick=updateSelectedLabel()  value="308/318">
+                                            <label for="8">308/318 – Other LT/MT loans </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="9" name="class3" onclick=updateSelectedLabel()  value="309/319">
+                                            <label for="9">309/319 – Claims attached to LT/MT loans</label>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>32</td>
+                                <td>RESERVES</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="10" name="class3" onclick=updateSelectedLabel()  value="320">
+                                            <label for="10"><strong>320 – Discounted cheques or cheques with immediate credit </strong> </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="11" name="class3" onclick=updateSelectedLabel()  value="321">
+                                            <label for="11"><strong> 321 – Moratoria or consolidated loans owed the State</strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="12" name="class3" onclick=updateSelectedLabel()  value="322">
+                                            <label for="12"><strong> 322 – Cash advances </strong> </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="13" name="class3" onclick=updateSelectedLabel()  value="132">
+                                            <label for="13"> <strong>323 – Equipment loans</strong> </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="14" name="class3" onclick=updateSelectedLabel()  value="324">
+                                            <label for="14"><strong>324 – Public contracts support credit </strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="15" name="class3" onclick=updateSelectedLabel()  value="325">
+                                            <label for="15"><strong>325 – Seasonal loans and facilities </strong></label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="16" name="class3" onclick=updateSelectedLabel()  value="326">
+                                            <label for="16"> <strong> 326 – Consumer lending</strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="17" name="class3" onclick=updateSelectedLabel()  value="327">
+                                            <label for="17"><strong> 327 – ST financial lease</strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="18" name="class3" onclick=updateSelectedLabel()  value="328">
+                                            <label for="18"> <strong>328 – Other ST loans </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="19" name="class3" onclick=updateSelectedLabel()  value="329">
+                                            <label for="19"><strong>329 – Claims attached to ST loans</strong></label>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr> 
+                            <tr> 
+                                <td>33</td>
+                                <td>BAD DEBTS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="20" name="class3" onclick=updateSelectedLabel()  value="331">
+                                            <label for="20"> <strong>331 – Default loans/debts </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="21" name="class3" onclick=updateSelectedLabel()  value="332">
+                                            <label for="21"> <strong>332 – Non performing loans </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="22" name="class3" onclick=updateSelectedLabel()  value="333">
+                                            <label for="22"><strong>333 – Doubtful loans secured by State guarantee </strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="23" name="class3" onclick=updateSelectedLabel()  value="334">
+                                            <label for="23"><strong>334 – Doubtful loans secured by collateral </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="24" name="class3" onclick=updateSelectedLabel()  value="335">
+                                            <label for="24"> <strong>335 – Other doubtful debts </strong> </label>
+                                        </li>  
+                                        
+                                        <li>
+                                            <input type="radio" id="25" name="class3" onclick=updateSelectedLabel()  value="336">
+                                            <label for="25"><strong>336 – Unpaid debts on lease financing  </strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="26" name="class3" onclick=updateSelectedLabel()  value="337">
+                                            <label for="26"> <strong>337 – Doubtful debts on lease financing</strong> </label>
+                                        </li>   
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>34</td>
+                                <td>OTHER OPERATIONS UNDERTAKEN ON BEHALF OF CUSTOMERS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="27" name="class3" onclick=updateSelectedLabel()  value="340">
+                                            <label for="27">340 – Inventory of merchandise </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="28" name="class3" onclick=updateSelectedLabel()  value="341">
+                                            <label for="28"><strong>341 – Other related operations undertaken on behalf of customers</strong></label>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>35</td>
+                                <td>SPECIAL DEPOSIT ACCOUNTS</td>
+                                <td>
+                                    <ul> 
+                                        <li>
+                                            <input type="radio" id="29" name="class3" onclick=updateSelectedLabel()  value="350">
+                                            <label for="29">350 – Deposits of MFIs affiliated to an apex body </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="30" name="class3" onclick=updateSelectedLabel()  value="351">
+                                            <label for="30"> <strong>351 – Savings bonds </strong> </label>
+                                        </li>  
+                                        
+                                        <li>
+                                            <input type="radio" id="31" name="class3" onclick=updateSelectedLabel()  value="352">
+                                            <label for="31">352 – Certificates of deposit  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="32" name="class3" onclick=updateSelectedLabel()  value="353">
+                                            <label for="32">353 – Housing savings accounts and schemes  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="33" name="class3" onclick=updateSelectedLabel()  value="354">
+                                            <label for="33">354 – Retirement savings schemes  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="34" name="class3" onclick=updateSelectedLabel()  value="355">
+                                            <label for="34">355 – Other special savings accounts </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="35" name="class3" onclick=updateSelectedLabel()  value="359">
+                                            <label for="35"><strong>359 – Attached debts </strong></label>
+                                        </li>  
+                                        
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>36</td>
+                                <td>FIXED TERM DEPOSIT ACCOUNTS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="36" name="class3" onclick=updateSelectedLabel()  value="361">
+                                            <label for="36">361 – Fixed term deposits </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="37" name="class3" onclick=updateSelectedLabel()  value="369">
+                                            <label for="37"><strong>369 – Attached debts</strong> </label>
+                                        </li>   
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>37</td>
+                                <td>OVERDRAFTS AND DEMAND ACCOUNTS RECEIVABLE</td>
+                                <td>
+                                    <ul> 
+                                         
+                                        <li>
+                                            <input type="radio" id="38" name="class3" onclick=updateSelectedLabel()  value="371">
+                                            <label for="38"><strong>371 – Current accounts</strong> </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="39" name="class3" onclick=updateSelectedLabel()  value="372">
+                                            <label for="39"><strong> 372 – Checking accounts</strong> </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="40" name="class3" onclick=updateSelectedLabel()  value="373">
+                                            <label for="40"><strong> 373 – Passbook accounts</strong>  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="41" name="class3" onclick=updateSelectedLabel()  value="163">
+                                            <label for="41"><strong>374 – Security deposits</strong>  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="42" name="class3" onclick=updateSelectedLabel()  value="375">
+                                            <label for="42"> <strong>375 – Term deposit advances </strong> </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="43" name="class3" onclick=updateSelectedLabel()  value="377">
+                                            <label for="43">377 – Security deposits on financial lease and related operations </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="44" name="class3" onclick=updateSelectedLabel()  value="378">
+                                            <label for="44"><strong>378 - Attached claims </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="45" name="class3" onclick=updateSelectedLabel()  value="379">
+                                            <label for="45"><strong>379 - Attached debts</strong>  </label>
+                                        </li> 
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>38</td>
+                                <td>OTHER TRADE ACCOUNTS</td>
+                                <td>
+                                    <ul>
+                                       
+                                        <li>
+                                            <input type="radio" id="46" name="class3" onclick=updateSelectedLabel()  value="381">
+                                            <label for="46">381 – Willingness to pay </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="47" name="class3" onclick=updateSelectedLabel()  value="382">
+                                            <label for="47"><strong>382 – Blocked accounts</strong> </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="48" name="class3" onclick=updateSelectedLabel()  value="383">
+                                            <label for="48">383 – Holdings under prescription  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="49" name="class3" onclick=updateSelectedLabel()  value="384">
+                                            <label for="49"><strong>384 – Other amounts due for clients </strong></label>
+                                        </li>  
+                                        
+                                        <li>
+                                            <input type="radio" id="50" name="class3" onclick=updateSelectedLabel()  value="386">
+                                            <label for="50">386 – Other amounts due by clients </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="51" name="class3" onclick=updateSelectedLabel()  value="387">
+                                            <label for="51">387 – Uncharged securities </label>
+                                        </li>     
+                                        <li>
+                                            <input type="radio" id="51" name="class3" onclick=updateSelectedLabel()  value="388">
+                                            <label for="51">388 – Other trade accounts of affiliated MFIs</label>
+                                        </li>     
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>18</td>
+                                <td>OTHER PERMANENT RESOURCES</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="52" name="class3" onclick=updateSelectedLabel()  value="391">
+                                            <label for="52">391 – Provisions on bad debts covered by State guarantee</label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="53" name="class3" onclick=updateSelectedLabel()  value="392">
+                                            <label for="53">392 – Provisions on bad debts covered by collateral  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="54" name="class3" onclick=updateSelectedLabel()  value="393">
+                                            <label for="54">393 – Provisions on other bad debts </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="55" name="class3" onclick=updateSelectedLabel()  value="394">
+                                            <label for="55">394 – Provisions on bad debts on financial lease  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="56" name="class3" onclick=updateSelectedLabel()  value="397">
+                                            <label for="56">397 – Provisions on inventory depreciation </label>
+                                        </li>    
+                                    </ul>
+                                </td>
+                            </tr>
+                             
+                        </tbody>
+                    </table>
+                </div>
+                <div class="cobac-footer" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_GL_ACCOUNT'')')}">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">CREATE LEDGER ACCOUNT</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function updateSelectedLabel(){
+        document.getElementById('cobacCode').value = document.querySelector('input[name="class3"]:checked + label').innerText;
+    }
+</script>
+<div th:insert="footer::navbar"></div>
+</html>

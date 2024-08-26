@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:insert="header::navbar" class="sticky-header"></div>
+<div th:insert="summary::navbar"></div>
+<div class="page-container">
+    <div class="container">
+        <form class="form-bootstrap" action="#" th:action="@{/registerCurrentAccountForm}" method="post" th:object="${currentAccount}">
+            <div class="form-sections">
+                <h3 th:style="${'color:' + session.runtimeSettings.themeColor2}">CREATE A <span th:text="${session.runtimeSettings.currentAccount}"/></h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="currentType">Account Type:</label>
+                            <select class="form-control" name="currentType" id="currentType" th:field="*{productCode}">
+                                <option value="20"><span th:text="${session.runtimeSettings.currentAccount}"></span></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="notes">Notes:</label>
+                            <textarea class="form-control" placeholder="Notes..." id="notes" rows="3" th:field="*{notes}">
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">Create <span th:text="${session.runtimeSettings.currentAccount}"/></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div th:insert="footer::navbar">  </div>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header" >  </div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">REGISTER A NEW CATEGORY
+                        </h2>
+                        <span>Fill up form to register new category.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container branch-form-container">
+            <form action="#" th:action="@{/registerProductCategoryForm}" method="post" th:object="${productCategory}">
+                <span class="alert alert-info" th:if="${productCategoryInfo}" th:text="${productCategoryInfo}"></span>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" name="name" th:field="*{name}" id="name"
+                                       class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="parentCategory">Parent Category:</label>
+                            <select class="form-control" name="parentCategory" id="parentCategory"
+                                    th:field="*{parentID}">
+                                <option value="">NONE</option>
+                                <option th:each="category: ${categories}"
+                                        th:text="${category.name}"
+                                        th:value="${category.id}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">Create Category</button>
+                    </div>
+                </div>
+            </form>
+
+            <h3>Categories</h3>
+
+            <table>
+                <tr>
+                    <td>Name</td>
+                    <td>Description</td>
+                    <td>Parent</td>
+<!--                    <td>See Products</td>-->
+                </tr>
+                <tr th:each="category : ${productCategories}">
+                    <td th:text="${category.name}"></td>
+                    <td th:text="${category.description}"></td>
+                    <td th:text="${category.parentID}"></td>
+<!--                    <td><a href="#" th:href="@{/showCategoryProducts}">See Products</a></td>-->
+                </tr>
+            </table>
+
+        </div>
+    </div>
+</section>
+<div th:insert="footer::navbar">  </div>
+</html>

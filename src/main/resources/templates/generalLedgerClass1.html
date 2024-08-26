@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <div class="container">
+        <div class="radius-container">
+            <div class="radius-container-title" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                <h2>COBAC ACCOUNTING CLASSES</h2>
+                <span>Select Sub-sub-Class to proceed.</span>
+            </div>
+            <div class="gl-account-container">
+                <div class="gl-account-form" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_GL_ACCOUNT'')')}">
+                    <h2>CREATE LEDGER ACCOUNT</h2>
+                    <span class="alert alert-info" th:if="${ledgerAccountInfo}" th:text="${ledgerAccountInfo}"/>
+                    <form action="#" th:action="@{/saveCobacGLAccount}" method="post" th:object="${ledgerAccount}">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Name:</label>
+                                    <input type="text" name="name" th:field="*{name}" id="name"
+                                            placeholder="e.g NFC BANK" class="form-control" required/>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Balaanz Code:</label>
+                                    <input type="text" name="code" th:field="*{code}" id="code"
+                                            placeholder="e.d 4004" class="form-control" required/>
+                                    <input type="hidden" name="category" th:field="*{category}">
+                                    <input type="hidden" name="cobacCode" id="cobacCode" th:field="*{displayName}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{status}" type="checkbox" id="active" name="status"
+                                            th:value="*{status}"
+                                            checked>
+                                        <label class="form-check-label" for="active">Active</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{creditBalance}" type="checkbox" id="creditBalance"
+                                            name="creditBalance" th:value="*{creditBalance}"
+                                            checked>
+                                        <label class="form-check-label" for="creditBalance">Credit Balance</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{cashAccountTransfer}" type="checkbox"
+                                            id="cashAccountTransfer" name="cashAccountTransfer" th:value="*{cashAccountTransfer}"
+                                            checked>
+                                        <label class="form-check-label" for="cashAccountTransfer">Cash Account Transfers</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{interAccountTransfer}" type="checkbox"
+                                            id="interAccountTransfer" name="interAccountTransfer"
+                                            th:value="*{interAccountTransfer}"
+                                            checked>
+                                        <label class="form-check-label" for="interAccountTransfer">Inter Account Transfer</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">CREATE LEDGER ACCOUNT</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="cobac-accounting">
+                    <h4 class="section-title" th:style="${'color:' + session.runtimeSettings.themeColor}">CAPITAL ACCOUNTS - CLASS 1</h4>
+                    <table class="default-list">
+                        <thead>
+                            <tr>
+                                <!-- <th colspan="2" class="capital-accounts">CLASSES</th> -->
+                                <th colspan="2">SUB-CLASSES</th>
+                                <th>SUB-SUB-CLASSES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <!-- <td width="10%" rowspan="10">CLASS 1</td>
+                                <td width="17%" rowspan="10" class="capital-accounts"><h6>CAPITAL ACCOUNTS</h6></td> -->
+                                <td>10</td>
+                                <td>CAPITAL, PARTNERSHIP SHARES AND ALLOCATIONS TO A PROVISION</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="1" name="class1" onclick=updateSelectedLabel() value="100" >
+                                            <label for="1">100 - Partnership shares subscribed and paid in</label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="2" name="class1" onclick=updateSelectedLabel() value="101">
+                                            <label for="2">101 - Corporate capital</label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="3" name="class1" onclick=updateSelectedLabel() value="102">
+                                            <label for="3">102 - Endowment fund </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="4" name="class1" onclick=updateSelectedLabel() value="103">
+                                            <label for="4">103 - Shareholders, subscribed capital paid in  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="5" name="class1" onclick=updateSelectedLabel() value="104">
+                                            <label for="5">104 - Premiums linked to corporate capital</label>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>11</td>
+                                <td>RESERVES</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="6" name="class1" onclick=updateSelectedLabel() value="111">
+                                            <label for="6">111 - Legal reserve </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="7" name="class1" onclick=updateSelectedLabel() value="112">
+                                            <label for="7">112 - Obligatory and regulatory reserves </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="8" name="class1" onclick=updateSelectedLabel() value="113">
+                                            <label for="8">113 - Statutory and contractual reserves </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="9" name="class1" onclick=updateSelectedLabel() value="114">
+                                            <label for="9">114 - Optional reserves</label>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr> 
+                            <tr> 
+                                <td>12</td>
+                                <td>RETAINED<br/> EARNINGS/ACCUMULATED<br/> LOSSES</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="10" name="class1" onclick=updateSelectedLabel() value="121">
+                                            <label for="10">121 Accumulated profits </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="11" name="class1" onclick=updateSelectedLabel() value="122">
+                                            <label for="11">122 - Deficit</label>
+                                        </li> 
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>13</td>
+                                <td>ANNUAL SURPLUS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="12" name="class1" onclick=updateSelectedLabel() value="131">
+                                            <label for="12">131 - Annual profit </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="13" name="class1" onclick=updateSelectedLabel() value="132">
+                                            <label for="13">132 - Annual loss</label>
+                                        </li> 
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>14</td>
+                                <td>REGULATED PROVISIONS AND RESERVES </td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="14" name="class1" onclick=updateSelectedLabel() value="141">
+                                            <label for="14"><strong>141 - REGULATED PROVISIONS</strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="15" name="class1" onclick=updateSelectedLabel() value="1410">
+                                            <label for="15">1410 - Overriding amortizations</label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="16" name="class1" onclick=updateSelectedLabel() value="1411">
+                                            <label for="16">1411 - Reval. Variance of amort. assets </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="17" name="class1" onclick=updateSelectedLabel() value="1412">
+                                            <label for="17">1412 - Revaluation variance of claims </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="18" name="class1" onclick=updateSelectedLabel() value="1413">
+                                            <label for="18">1413 - Capital gains to be reinvested 1414 - Other regulated provisions</label>
+                                        </li> 
+                                        
+                                        <li>
+                                            <input type="radio" id="19" name="class1" onclick=updateSelectedLabel() value="142">
+                                            <label for="19"><strong>142 - REGULATED RESERVES </strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="20" name="class1" onclick=updateSelectedLabel() value="1420">
+                                            <label for="20">1420 - Reval. variance of non amort. assets</label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="21" name="class1" onclick=updateSelectedLabel() value="1421">
+                                            <label for="21">1421 - Other regulated reserves. </label>
+                                        </li>   
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>15</td>
+                                <td>INVESTMENT GRANT</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="22" name="class1" onclick=updateSelectedLabel() value="151">
+                                            <label for="22"><strong>151 - CAPITAL ASSISTANCE PAYMENTS </strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="23" name="class1" onclick=updateSelectedLabel() value="15110">
+                                            <label for="23">15110 - Out-of-network equipment subsidies </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="24" name="class1" onclick=updateSelectedLabel() value="15119">
+                                            <label for="24">15119 - Network equipment subsidies; </label>
+                                        </li>  
+                                        
+                                        <li>
+                                            <input type="radio" id="25" name="class1" onclick=updateSelectedLabel() value="152">
+                                            <label for="25"><strong>152 - OTHER CAPITAL ASSISTANCE PAYMENTS </strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="26" name="class1" onclick=updateSelectedLabel() value="15210">
+                                            <label for="26">15210 - Other out-of-network equipment subsidies; </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="27" name="class1" onclick=updateSelectedLabel() value="15219">
+                                            <label for="27">15219 - Other network equipment subsidies</label>
+                                        </li>   
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>16</td>
+                                <td>FINANCING AND<br/> GUARANTEE FUNDS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="28" name="class1" onclick=updateSelectedLabel() value="60">
+                                            <label for="28"><strong>60 - REGULATORY SOLIDARITY FUND  </strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="29" name="class1" onclick=updateSelectedLabel() value="161">
+                                            <label for="29"><strong>161 - FUNDS ASSIGNED ON OWN RESOURCES </strong></label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="30" name="class1" onclick=updateSelectedLabel() value="1611">
+                                            <label for="30">1611 - Assigned interest subsidy funds </label>
+                                        </li>  
+                                        
+                                        <li>
+                                            <input type="radio" id="31" name="class1" onclick=updateSelectedLabel() value="1612">
+                                            <label for="31">1612 - Assigned fund of guarantee </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="32" name="class1" onclick=updateSelectedLabel() value="1613">
+                                            <label for="32">1613 - Assigned funds of financing of studies </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="33" name="class1" onclick=updateSelectedLabel() value="1614">
+                                            <label for="33">1614 - Assigned fund of participation funding </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="34" name="class1" onclick=updateSelectedLabel() value="16109">
+                                            <label for="34">16109 - Assigned funds of own network resources  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="35" name="class1" onclick=updateSelectedLabel() value="162">
+                                            <label for="35"><strong>162 - ENDOWMENT FUNDS ON EXTERNAL RESOURCES </strong></label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="36" name="class1" onclick=updateSelectedLabel() value="1621">
+                                            <label for="36">1621 - Assigned funds of interest subsidies </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="37" name="class1" onclick=updateSelectedLabel() value="1622">
+                                            <label for="37">1622 - Assigned funds of guarantees </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="38" name="class1" onclick=updateSelectedLabel() value="1623">
+                                            <label for="38">1623 - Assigned funds of financing of studies </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="39" name="class1" onclick=updateSelectedLabel() value="1624">
+                                            <label for="39">1624 - Assigned funds of participation funding </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="40" name="class1" onclick=updateSelectedLabel() value="16209">
+                                            <label for="40">16209 - Assigned funds on external network resources </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="41" name="class1" onclick=updateSelectedLabel() value="163">
+                                            <label for="41">163 - Guarantee funds and mutual insurance  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="42" name="class1" onclick=updateSelectedLabel() value="16300">
+                                            <label for="42">16300 - Assigned fund of out-of-network mutual insurance guarantee </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="43" name="class1" onclick=updateSelectedLabel() value="16309">
+                                            <label for="43">16309 - Guarantee fund and network mutual insurance </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="44" name="class1" onclick=updateSelectedLabel() value="164">
+                                            <label for="44">164 - Provisions for general risks </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="45" name="class1" onclick=updateSelectedLabel() value="1640">
+                                            <label for="45">1640 - Prov. for general banking risks  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="46" name="class1" onclick=updateSelectedLabel() value="1641">
+                                            <label for="46">1641 - Prov. for other general risks.</label>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>17</td>
+                                <td>BONDED DEBTS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="47" name="class1" onclick=updateSelectedLabel() value="171">
+                                            <label for="47">171 - Bonded debts subscribed </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="48" name="class1" onclick=updateSelectedLabel() value="172">
+                                            <label for="48">172 - Mature bonds to be repaid  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="49" name="class1" onclick=updateSelectedLabel() value="174">
+                                            <label for="49">174 -Debts attached to bonded liabilities </label>
+                                        </li>  
+                                        
+                                        <li>
+                                            <input type="radio" id="50" name="class1" onclick=updateSelectedLabel() value="17909">
+                                            <label for="50">17909 - Network bonded debts.</label>
+                                        </li>    
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>18</td>
+                                <td>OTHER PERMANENT RESOURCES</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="51" name="class1" onclick=updateSelectedLabel() value="182/183">
+                                            <label for="51">- the amount disbursed (182 or 183)</label>
+                                        </li>   
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>19</td>
+                                <td>PROVISIONS FOR RISKS AND EXPENSES</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="52" name="class1" onclick=updateSelectedLabel() value="191">
+                                            <label for="52"><strong> 191 - PROVISIONS FOR EXPENSES</strong></label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="53" name="class1" onclick=updateSelectedLabel() value="1911">
+                                            <label for="53">1911 - Provisions for ongoing litigation </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="54" name="class1" onclick=updateSelectedLabel() value="1912">
+                                            <label for="54">1912 - Provisions for losses on futures markets </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="55" name="class1" onclick=updateSelectedLabel() value="1913/1914">
+                                            <label for="55">1913 - Provisions for exchange losses 1914 - Provisions for the execution of backing and credit guarantees </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="56" name="class1" onclick=updateSelectedLabel() value="1915">
+                                            <label for="56">1915 - Provisions of own insurer </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="57" name="class1" onclick=updateSelectedLabel() value="1913">
+                                            <label for="57">1913 - Provisions for heavy repairs </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="58" name="class1" onclick=updateSelectedLabel() value="1913">
+                                            <label for="58">1913 - Provisions related to personnel  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="59" name="class1" onclick=updateSelectedLabel() value="19199">
+                                            <label for="59">19199 - Provisions for network expenses </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="60" name="class1" onclick=updateSelectedLabel() value="192">
+                                            <label for="60"><strong>192 - PROVISIONS ON FINANCIAL LEASE AND SIMILAR OPERATIONS </strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="61" name="class1" onclick=updateSelectedLabel() value="1921">
+                                            <label for="61">1921 - Provisions for unrealized losses </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="62" name="class1" onclick=updateSelectedLabel() value="1922">
+                                            <label for="62">1922 - Provisions for risk of non-collection of rents  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="63" name="class1" onclick=updateSelectedLabel() value="193">
+                                            <label for="63"><strong>193 - OTHER PROVISIONS  </strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="64" name="class1" onclick=updateSelectedLabel() value="19300">
+                                            <label for="64">19300 - Other out-of-network provisions </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="65" name="class1" onclick=updateSelectedLabel() value="19399">
+                                            <label for="65">19399 - Other network provisions</label>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="cobac-footer" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_GL_ACCOUNT'')')}">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">CREATE LEDGER ACCOUNT</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function updateSelectedLabel(){
+        document.getElementById('cobacCode').value = document.querySelector('input[name="class1"]:checked + label').innerText;
+    }
+</script>
+<div th:insert="footer::navbar"></div>
+</html>

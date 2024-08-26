@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header" ></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">Invoice Line Item</h2> <br/>
+                        <span>TASKS for </span>  <span th:text="${invoice.invoiceNumber}"/> <span th:text="${invoice.createdBy}"/><span th:text="${invoice.createdDate}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container">
+            <div class="user-list">
+                <table class="default-list">
+                    <tr>
+                        <th>Description</th>
+                        <th>Unit Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th></th>
+                    </tr>
+                    <tr th:each="task : ${invoiceLineItemDetail}">
+                        <td th:text="${task.notes}"></td>
+                        <td th:text="${task.unitPrice}"></td>
+                        <td th:text="${task.quantity}"></td>
+                        <td th:text="${task.total}"></td>
+                        <td>
+<!--                            <a class="table-list-button-icon" href="#" th:href="@{/taskDetails/{id}(id=${task.id})}"><i class="fas fa-ellipsis-h"></i></a>-->
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="footer::navbar"></div>
+</html>

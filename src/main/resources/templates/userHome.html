@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="account-dashboard-container">
+        <div th:insert="summary::navbar"></div>
+        <div class="container">
+
+            <!--            <div class="add-account-icon" th:if="${createCurrentAccountEligible}">-->
+            <div th:unless="${#strings.isEmpty(session.runtimeSettings.currentAccount)}">
+                <div class="account-item">
+                    <div class="account-title">
+                        <h2>
+                            <span th:text="${session.runtimeSettings.currentAccount}"/>
+                        </h2>
+                        <span class="add-account-icon" th:if="${createCurrentAccountEligible}">
+                            <a href="#" th:href="@{/registerCurrentAccount}">
+                                <i class="fas fa-plus"></i>
+                            </a>
+                        </span>
+                        <!-- Current Account -->
+                        <div th:if="${not #lists.isEmpty(session.customerInUse.currentAccount)}">
+
+                        <span class="transfer-account-icon"
+                              th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER_ACCOUNT_TYPE_TRANSFERS'')')}">
+                            <a href="#" th:href="@{/transferFromCurrentToCurrentForm}">
+                                <i class="fas fa-exchange-alt"></i> <span style='font-size:12px;'
+                                                                          th:text="${session.runtimeSettings.currentAccount}"/> to <span
+                                    style='font-size:12px;' th:text="${session.runtimeSettings.currentAccount}"/>
+                            </a>
+                        </span>
+
+                            <!-- Saving Account -->
+                            <span class="transfer-account-icon"
+                                  th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER_ACCOUNT_TYPE_TRANSFERS'')')}">
+                            <a href="#" th:href="@{/transferFromCurrentToDebitForm}">
+                                <i class="fas fa-exchange-alt"></i> <span style='font-size:12px;'
+                                                                          th:text="${session.runtimeSettings.currentAccount}"/> to <span
+                                    style='font-size:12px;'> SAVING ACCOUNT </span>
+                            </a>
+                        </span>
+
+                            <span class="transfer-account-icon"
+                                  th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER_ACCOUNT_TYPE_TRANSFERS'')')}">
+                            <a href="#" th:href="@{/transferFromCurrentToLoanAccountsForm}">
+                                <i class="fas fa-exchange-alt"></i> <span style='font-size:12px;'>LOAN RE-PAYMENT</span>
+                            </a>
+                        </span>
+
+                            <span class="transfer-account-icon"
+                                  th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER_ACCOUNT_TYPE_TRANSFERS'')')}">
+                            <a href="#" th:href="@{/glAddEntryFromCurrentAccount}">
+                                <i class="fas fa-exchange-alt"></i> <span style='font-size:12px;'>ACCOUNT TO GL Transfers</span>
+                            </a>
+                        </span>
+                        </div>
+                    </div>
+                    <div th:if="${not #lists.isEmpty(session.customerInUse.currentAccount)}">
+                        <div class="account-body">
+                            <div class="res-list">
+                                <div class="res-list-header-row">
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            Account Number<br/>
+                                            <span>Date Created</span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column"
+                                         th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}">
+                                        <div class="res-list-label">
+                                            Account Balance<br/>
+                                            On Hold
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            Locked
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            Description
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            &nbsp;
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="res-list-row"
+                                     th:each="currentAccount : ${session.customerInUse.currentAccount}">
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Account Number, Date Created</label>
+
+                                            <a th:style="${'color:' + session.runtimeSettings.themeColor}"
+                                               th:href="@{/callcenter/{id}(id=${currentAccount.accountNumber})}"
+                                               href="/callcenter">
+                                                <b th:text="${#strings.substring(currentAccount.accountNumber,3,5)} + '-' +${#strings.substring(currentAccount.accountNumber,5,10)} + '-' +${#strings.substring(currentAccount.accountNumber,21,23)}"/>
+                                                <i th:if="${currentAccount.defaultedPayment}">
+                                                    <font size="4" color="red">
+                                                        **
+                                                    </font>
+                                                </i>
+                                            </a>
+
+                                            <br/>
+                                            <span th:text="${#dates.format(currentAccount.createdDate, 'dd-MMM-yyyy HH:mm')}"/>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column"
+                                         th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Account Balance/ Amount On Hold</label>
+                                            <span th:style="${'color:' + session.runtimeSettings.themeColor}"
+                                                  th:text="${#numbers.formatDecimal(currentAccount.accountBalance, 0, 'COMMA', 0, 'POINT')}"></span><br/>
+                                            <span th:style="${'color:' + session.runtimeSettings.themeColor}"
+                                                  th:text="${#numbers.formatDecimal(currentAccount.accountMinBalance, 0, 'COMMA', 0, 'POINT')}"></span>
+
+                                            <span th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_USER_ACCOUNT'')')}">
+                                                <form th:action="@{/updateMinCBalance}" method="post">
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="text" class="form-control"
+                                                               name="minCurrentBalance"/>
+                                                        <input type="hidden" name="cBalanceId"
+                                                               th:value="${currentAccount.id}"/>
+                                                        <div class="input-group-append">
+                                                            <button id="updateMinCBalanceId" class="btn btn-orange"
+                                                                    th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}"
+                                                                    type="submit">Submit</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Locked</label>
+                                            <span th:text="${currentAccount.active}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Description</label>
+                                            <span th:text="${currentAccount.notes}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column res-aling-right">
+                                        <div class="res-list-label whitespace-nowrap">
+                                            <a th:style="${'color:' + session.runtimeSettings.themeColor + '; border-color:' + session.runtimeSettings.themeColor}"
+                                               class="radius-btn-link" href="#"
+                                               th:href="@{/registerCurrentAccountTransaction/{id}(id=${currentAccount.id})}">
+                                                <span th:text="${session.runtimeSettings.makeAPayment}"/>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--            </div>-->
+            <!--            <div class="add-account-icon" th:if="${createSavingAccountEligible}">-->
+            <div th:unless="${#strings.isEmpty(session.runtimeSettings.savingAccount)}">
+                <div class="account-item">
+                    <div class="account-title">
+                        <h2>
+                            <span th:text="${session.runtimeSettings.savingAccount}"/>
+                        </h2>
+                        <span class="add-account-icon" th:if="${createSavingAccountEligible}">
+                            <a href="#" th:href="@{/registerSavingAccount}">
+                                <i class="fas fa-plus"></i>
+                            </a>
+                        </span>
+                        <!-- Current Account/ Transfer features if not empty -->
+                        <div th:if="${not #lists.isEmpty(session.customerInUse.savingAccount)}">
+
+                        <span class="transfer-account-icon"
+                              th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER_ACCOUNT_TYPE_TRANSFERS'')')}">
+                            <a href="#" th:href="@{/transferFromDebitToDebitForm}">
+                                <i class="fas fa-exchange-alt"></i> <span style='font-size:12px;'>SAVING ACCOUNT to SAVING ACCOUNT</span>
+                            </a>
+                        </span>
+
+                            <span class="transfer-account-icon"
+                                  th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER_ACCOUNT_TYPE_TRANSFERS'')')}">
+                            <a href="#" th:href="@{/transferFromDebitToCurrentForm}">
+                                <i class="fas fa-exchange-alt"></i> <span
+                                    style='font-size:12px;'>SAVING ACCOUNT to</span> <span style='font-size:12px;'
+                                                                                           th:text="${session.runtimeSettings.currentAccount}"/>
+                            </a>
+                        </span>
+
+                            <span class="transfer-account-icon"
+                                  th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER_ACCOUNT_TYPE_TRANSFERS'')')}">
+                            <a href="#" th:href="@{/userHomeLedgerEntry}">
+                                <i class="fas fa-exchange-alt"></i> <span style='font-size:12px;'>GL to Account Transfers </span>
+                            </a>
+                        </span>
+                            <!-- Account to GL Transfer -->
+                            <span class="transfer-account-icon"
+                                  th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER_ACCOUNT_TYPE_TRANSFERS'')')}">
+                            <a href="#" th:href="@{/glAddEntryFromSavingAccount}">
+                                <i class="fas fa-exchange-alt"></i> <span style='font-size:12px;'>Account TO GL Transfers </span>
+                            </a>
+                        </span>
+                        </div>
+
+                    </div>
+
+                    <div th:if="${not #lists.isEmpty(session.customerInUse.savingAccount)}">
+                        <div class="account-body">
+                            <div class="res-list">
+                                <div class="res-list-header-row">
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            Account Number<br/>
+                                            <span>Date Created</span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            Account Type
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column"
+                                         th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')} OR ${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}">
+                                        <div class="res-list-label">
+                                            Account Balance<br/>
+                                            <span>Amount On Hold</span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column"
+                                         th:if="${#strings.isEmpty(session.runtimeSettings.apartmentAccount)}">
+                                        <div class="res-list-label">
+                                            Locked
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            Description
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            &nbsp;
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="res-list-row"
+                                     th:each="savingAccount : ${session.customerInUse.savingAccount}">
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Account Number, Date Created</label>
+                                            <a th:style="${'color:' + session.runtimeSettings.themeColor}"
+                                               th:href="@{/callcenter/{id}(id=${savingAccount.accountNumber})}"
+                                               href="/callcenter">
+
+                                                <b th:text="${#strings.substring(savingAccount.accountNumber,3,5)} + ' ' +${#strings.substring(savingAccount.accountNumber,5,10)} + ' ' +${#strings.substring(savingAccount.accountNumber,21,23)}"/>
+                                                <i th:if="${savingAccount.defaultedPayment}">
+                                                    <font size="4" color="red">
+                                                        **
+                                                    </font>
+                                                </i>
+                                            </a>
+                                            <br/>
+                                            <span th:text="${#dates.format(savingAccount.createdDate, 'dd-MMM-yyyy HH:mm')}"/>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Account Type</label>
+                                            <span th:text="${savingAccount.accountType.displayName}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column"
+                                         th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')} OR ${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Account Balance, Minimum</label>
+                                            <span th:style="${'color:' + session.runtimeSettings.themeColor}"
+                                                  th:text="${#numbers.formatDecimal(savingAccount.accountBalance, 0, 'COMMA', 0, 'POINT')}"/><br/>
+                                            <span th:text="${#numbers.formatDecimal(savingAccount.accountMinBalance, 0, 'COMMA', 0, 'POINT')}"/><br/>
+
+                                            <span th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_USER_ACCOUNT'')')}">
+                                                <form th:action="@{/updateMinSBalance}" method="post">
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="text" class="form-control"
+                                                               name="minSavingBalance"/>
+                                                        <input type="hidden" name="sBalanceId"
+                                                               th:value="${savingAccount.id}"/>
+                                                        <div class="input-group-append">
+                                                            <button id="updateMinSBalanceId" class="btn btn-orange"
+                                                                    th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}"
+                                                                    type="submit">Submit</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column"
+                                         th:if="${#strings.isEmpty(session.runtimeSettings.apartmentAccount)}">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Locked</label>
+                                            <span th:text="${savingAccount.accountMinBalanceLocked}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Description</label>
+                                            <span th:text="${savingAccount.notes}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column res-aling-right">
+                                        <div class="res-list-label whitespace-nowrap">
+                                            <a th:style="${'color:' + session.runtimeSettings.themeColor + '; border-color:' + session.runtimeSettings.themeColor}"
+                                               class="radius-btn-link" href="#"
+                                               th:href="@{/registerSavingAccountTransaction/{id}(id=${savingAccount.id})}">
+                                                <span th:text="${session.runtimeSettings.makeAPayment}"/>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <!--            </div>-->
+
+            <!--            <div class="add-account-icon" th:if="${createDailySavingAccountEligible}">-->
+            <div th:unless="${#strings.isEmpty(session.runtimeSettings.dailySavingAccount)}">
+                <div class="account-item">
+                    <div class="account-title">
+                        <h2>
+                            <span th:text="${session.runtimeSettings.dailySavingAccount}"/>
+                        </h2>
+                        <span class="add-account-icon" th:if="${createDailySavingAccountEligible}">
+                            <a href="#" th:href="@{/registerDailySavingAccount}">
+                                <i class="fas fa-plus"></i>
+                            </a>
+                        </span>
+                    </div>
+                    <div th:if="${not #lists.isEmpty(session.customerInUse.dailySavingAccount)}">
+                        <div class="account-body">
+                            <div class="res-list">
+                                <div class="res-list-header-row">
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            Account Number<br/>
+                                            <span>Date Created</span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            Account Type
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column"
+                                         th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}">
+                                        <div class="res-list-label">
+                                            Account Balance<br/>
+                                            <span>Minimum</span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column"
+                                         th:if="${#strings.isEmpty(session.runtimeSettings.apartmentAccount)}">
+                                        <div class="res-list-label">
+                                            Locked
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            Description
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            &nbsp;
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="res-list-row"
+                                     th:each="dailySavingAccount : ${session.customerInUse.dailySavingAccount}">
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Account Number, Date Created</label>
+                                            <a th:style="${'color:' + session.runtimeSettings.themeColor}"
+                                               th:href="@{/callcenter/{id}(id=${dailySavingAccount.accountNumber})}"
+                                               href="/callcenter">
+                                                <b th:text="${#strings.substring(dailySavingAccount.accountNumber,3,5)} + ' ' +${#strings.substring(dailySavingAccount.accountNumber,5,10)} + ' ' +${#strings.substring(dailySavingAccount.accountNumber,21,23)}"/>
+                                                <i th:if="${dailySavingAccount.defaultedPayment}">
+                                                    <font size="4" color="red">
+                                                        **
+                                                    </font>
+                                                </i>
+                                            </a>
+                                            <br/>
+                                            <span th:text="${#dates.format(dailySavingAccount.createdDate, 'dd-MMM-yyyy HH:mm')}"/>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Account Type</label>
+                                            <span th:text="${dailySavingAccount.accountType.displayName}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column"
+                                         th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Account Balance, Minimum</label>
+                                            <span th:style="${'color:' + session.runtimeSettings.themeColor}"
+                                                  th:text="${#numbers.formatDecimal(dailySavingAccount.accountBalance, 0, 'COMMA', 0, 'POINT')}"/>
+                                            <br/>
+                                            <span th:text="${#numbers.formatDecimal(dailySavingAccount.accountMinBalance, 0, 'COMMA', 0, 'POINT')}"/>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column"
+                                         th:if="${#strings.isEmpty(session.runtimeSettings.apartmentAccount)}">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Locked</label>
+                                            <span th:text="${dailySavingAccount.accountMinBalanceLocked}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Description</label>
+                                            <span th:text="${dailySavingAccount.notes}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column res-aling-right">
+                                        <div class="res-list-label whitespace-nowrap">
+                                            <a th:style="${'color:' + session.runtimeSettings.themeColor + '; border-color:' + session.runtimeSettings.themeColor}"
+                                               class="radius-btn-link" href="#"
+                                               th:href="@{/registerDailySavingAccountTransaction/{id}(id=${dailySavingAccount.id})}">
+                                                <span th:text="${session.runtimeSettings.makeAPayment}"/>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--            </div>-->
+            <span class="error" th:text="${loanMustBeInActiveState}"/>
+            <!--            <div class="add-account-icon" th:if="${createLoanAccountEligible}">-->
+            <div th:unless="${#strings.isEmpty(session.runtimeSettings.loanAccount)}">
+                <div class="account-item">
+                    <div class="account-title">
+                        <h2>
+                            <span th:text="${session.runtimeSettings.loanAccount}"/>
+                        </h2>
+                        <span class="add-account-icon" th:if="${createLoanAccountEligible}">
+                            <a href="#" th:href="@{/registerLoanAccount}">
+                                <i class="fas fa-plus"></i>
+                            </a>
+                        </span>
+                    </div>
+                    <div th:if="${not #lists.isEmpty(session.customerInUse.loanAccount)}">
+                        <div class="account-body">
+                            <div class="res-list">
+                                <div class="res-list-header-row">
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            Account Number<br/>
+                                            <span>Date Created</span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            Account Type <br/> Notes
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column"
+                                         th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}">
+                                        <div class="res-list-label">
+                                            Original<br/>
+                                            <span>Current</span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            Annual Rate<br/>
+                                            <span>VAT</span>
+                                        </div>
+                                    </div>
+                                    <!--                                <div class="res-list-column">-->
+                                    <!--                                    <div class="res-list-label">-->
+                                    <!--                                        Notes-->
+                                    <!--                                    </div>-->
+                                    <!--                                </div>-->
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            No of Days<br/>
+                                            <span>Interest Due</span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            &nbsp;
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="res-list-row"
+                                     th:each="loanBilanz : ${session.loanBilanzList.loanBilanzList}">
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Account Number, Date Created</label>
+                                            <a th:style="${'color:' + session.runtimeSettings.themeColor}"
+                                               th:href="@{/callcenter/{id}(id=${loanBilanz.accountNumber})}"
+                                               href="/callcenter">
+                                                <b th:text="${#strings.substring(loanBilanz.accountNumber,3,5)} + ' ' +${#strings.substring(loanBilanz.accountNumber,5,10)} + ' ' +${#strings.substring(loanBilanz.accountNumber,21,23)}"/>
+                                            </a>
+                                            <br/>
+                                            <span th:text="${loanBilanz.createdDate}"/>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Account Type</label>
+                                            <span th:text="${loanBilanz.accountType}"></span> <br/>
+                                            <span th:text="${loanBilanz.notes}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column"
+                                         th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Original, Current</label>
+                                            <span th:text="${loanBilanz.initialLoanAmount}"></span>
+                                            <br/>
+                                            <span th:text="${loanBilanz.currentBalance}"></span>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Agent</label>
+                                            <span th:text="${loanBilanz.agent}"></span>
+                                        </div>
+                                    </div> -->
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Annual Rate, VAT</label>
+                                            <span th:text="${loanBilanz.interestRate}"></span><br/>
+                                            <span th:text="${loanBilanz.vatPercent}"></span>
+                                            <!-- <br/><span th:text="${loanAccount?.vatOption}">  -->
+                                        </div>
+                                    </div>
+                                    <!--                                <div class="res-list-column">-->
+                                    <!--                                    <div class="res-list-label">-->
+                                    <!--                                        <label class="res-list-mobile-label">Notes</label>-->
+                                    <!--                                        <span th:text="${loanBilanz.notes}"></span>-->
+                                    <!--                                    </div>-->
+                                    <!--                                </div>-->
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">No of Days, Interest Due</label>
+                                            <span th:text="${loanBilanz.noOfDays}"/>
+                                            <br/>
+                                            <span th:text="${loanBilanz.interestDue}"/>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column res-aling-right">
+                                        <div class="res-list-label whitespace-nowrap">
+                                            <a th:style="${'color:' + session.runtimeSettings.themeColor + '; border-color:' + session.runtimeSettings.themeColor}"
+                                               class="radius-btn-link" href="#"
+                                               th:href="@{/registerLoanAccountTransaction/{id}(id=${loanBilanz.loanId})}">
+                                                Loan details <br> / Make payments
+                                            </a>
+                                            <a th:style="${'color:' + session.runtimeSettings.themeColor + '; border-color:' + session.runtimeSettings.themeColor}"
+                                               class="radius-btn-link" href="#"
+                                               th:href="@{/showLoanAccountBilanz/{accountId}(accountId=${loanBilanz.loanId})}">
+                                                <i class="fas fa-percentage"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--            </div>-->
+            <!--            <div class="add-account-icon" th:if="${createShareAccountEligible}">-->
+            <div th:unless="${#strings.isEmpty(session.runtimeSettings.shareAccount)}">
+                <div class="account-item">
+                    <div class="account-title">
+                        <h2>
+                            <span th:text="${session.runtimeSettings.shareAccount}"/>
+                        </h2>
+                        <span class="add-account-icon" th:if="${createShareAccountEligible}">
+                            <a href="#" th:href="@{/registerShareAccount}">
+                                <i class="fas fa-plus"></i>
+                            </a>
+                        </span>
+                    </div>
+                    <div th:if="${not #lists.isEmpty(session.customerInUse.shareAccount)}">
+                        <div class="account-body">
+                            <div class="res-list">
+                                <div class="res-list-header-row">
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            Account Number
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            Account Type
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column"
+                                         th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}">
+                                        <div class="res-list-label">
+                                            Total Value
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column"
+                                         th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}">
+                                        <div class="res-list-label">
+                                            Unit Value
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column"
+                                         th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}">
+                                        <div class="res-list-label">
+                                            Bought
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            &nbsp;
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="res-list-row"
+                                     th:each="shareAccount : ${session.customerInUse.shareAccount}">
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Account Number</label>
+                                            <a th:style="${'color:' + session.runtimeSettings.themeColor}"
+                                               th:href="@{/shareDetailsAccNumber/{id}(id=${shareAccount.accountNumber})}"
+                                               href="/shareDetails">
+                                                <b th:text="${#strings.substring(shareAccount.accountNumber,3,5)} + ' ' +${#strings.substring(shareAccount.accountNumber,5,10)} + ' ' +${#strings.substring(shareAccount.accountNumber,21,23)}"/>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Account Type</label>
+                                            <span th:text="${shareAccount.accountType}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column"
+                                         th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Total Value</label>
+                                            <span th:style="${'color:' + session.runtimeSettings.themeColor}"
+                                                  th:text="${#numbers.formatDecimal(shareAccount.accountBalance, 0, 'COMMA', 0, 'POINT')}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column"
+                                         th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Unit Value</label>
+                                            <span th:text="${#numbers.formatDecimal(shareAccount.unitSharePrice, 0, 'COMMA', 0, 'POINT')}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="res-list-column"
+                                         th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')}">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Bought</label>
+                                            <span th:text="${shareAccount.quantity}"></span>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="res-list-column">
+                                        <div class="res-list-label">
+                                            <label class="res-list-mobile-label">Created Date</label>
+                                            <span th:text="${shareAccount.createdDate}"></span>
+                                        </div>
+                                    </div> -->
+                                    <div class="res-list-column res-aling-right">
+                                        <div class="res-list-label whitespace-nowrap">
+                                            <a th:style="${'color:' + session.runtimeSettings.themeColor + '; border-color:' + session.runtimeSettings.themeColor}"
+                                               class="radius-btn-link" href="#"
+                                               th:href="@{/shareDetailsAccNumber/{id}(id=${shareAccount.accountNumber})}">
+                                                <i class="fas fa-search"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--            </div>-->
+        </div>
+    </div>
+</section>
+</div>
+
+</body>
+
+<div th:insert="footer::navbar"></div>
+</html>

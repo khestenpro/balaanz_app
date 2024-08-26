@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="ISO-8859-1">
+  <title>Reports</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+</head>
+<body>
+  <div th:insert="header::navbar" class="sticky-header"></div>
+  <div class="main-page-container">
+    <div class="container">
+      <!--    <h4> AMOUNT RECEIVED/ AMOUNT OWED</h4>-->
+
+      <!--    <div class="ledger-search">-->
+      <!--      <form action="#" th:action="@{/filterReports}" method="post" th:object="${glSearchDTO}">-->
+      <!--        <div class="row row-space-10">-->
+      <!--          <div class="col-md-2">-->
+      <!--            <label>Ledger</label>-->
+      <!--            <select name="allLedgerAccount" class="form-control" th:field="*{allLedgerAccount}">-->
+      <!--              <option value="-1">-->
+      <!--                ALL-->
+      <!--              </option>-->
+      <!--              <option th:each="i : ${allLedgerAccount}" th:value="${i.id}">-->
+      <!--                <span th:text="${i.displayName}" />-->
+      <!--              </option>-->
+      <!--            </select>-->
+      <!--          </div>-->
+      <!--          <div class="col-md-3">-->
+      <!--            <label>Start Date</label>-->
+      <!--            <input type="date" name="startDate" th:field="*{startDate}" id="startDate"-->
+      <!--                   placeholder="Start Date:" class="form-control" required>-->
+      <!--          </div>-->
+      <!--          <div class="col-md-3">-->
+      <!--            <label>End Date</label>-->
+      <!--            <input type="date" name="endDate" th:field="*{endDate}" id="endDate"-->
+      <!--                   placeholder="End Date:" class="form-control" required>-->
+      <!--          </div>-->
+      <div class="col-md-3">
+        <br>
+        <!--            <h2 th:style="${'font-size: 15px; color:' + session.runtimeSettings.themeColor2 + '; display: inline;'}" >-->
+
+        <!--              <a th:style="${'color:' + session.runtimeSettings.themeColor2}" href="#"-->
+<!--        <a th:href="@{/shortOfMinimum}">-->
+<!--          ACCOUNTS THAT ARE DUE PAYMENT-->
+<!--          <i class="far fa-file-pdf"></i>-->
+<!--        </a>-->
+        <!--            </h2>-->
+      </div>
+      <br>
+      <div class="row">
+      <div class="col-6">
+        <form class="form-bootstrap" action="#" th:action="@{/filteredReports}" method="post" th:object="${active_users}">
+          <div class="form-sections">
+            <div class="row">
+              <div class="col">
+                <div class="form-container-section">
+                  <!--<div class="form-container-section-row">
+                    <div class="row row-space-10">
+                      <div class="col-md-6">
+                        <label>Org ID</label>
+                        <input class="form-control" type="text" name="orgId" id="orgId"/>
+                      </div>
+                      <div class="col-md-6">
+                        <label>Branch ID</label>
+                        <input class="form-control" type="text" name="branchId" id="branchId"/>
+                      </div>
+                    </div>
+                  </div>-->
+                  <div class="form-container-section-row ">
+                    <div class="row justify-content-center">
+                      <div class="col-md-6 ">
+                        <label>From Date</label>
+                        <input class="form-control" type="datetime-local" name="fromDate" id="fromDate"
+                        th:value="${active_users.getReportsRequest().getFromDate()}"/>
+
+                        <label>To Date</label>
+                        <input class="form-control" type="datetime-local" name="toDate" id="toDate"
+                               th:value="${active_users.getReportsRequest().getToDate()}"/>
+                        <div class="row">
+                          <div class="col-md-12 text-center" style="padding-top: 20px;">
+                            <button class="btn btn-primary"
+                                    type="submit">Get Report
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </form>
+      </div>
+      <div class="col-6">
+        <form class="form-bootstrap"
+              action="#" th:action="@{/accountsTotal}"
+              method="post" th:object="${active_users}">
+          <div class="form-sections">
+            <div class="row">
+              <div class="col">
+                <div class="form-container-section">
+                  <div class="form-container-section-row ">
+                    <div class="row justify-content-center">
+                      <div class="col-md-12 ">
+                        <label>Press below button to download cumulative report for an organization</label>
+                        <br>
+                        <div class="row">
+                          <div class="col-md-12 text-center" style="padding-top: 20px;">
+                            <button class="btn btn-primary"
+                                    type="submit">Download cumulative report
+                            </button>
+                          </div>
+                        </div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <span><i>be patient this might take sometime as we process for your organization</i></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </form>
+      </div>
+      </div>
+
+      <!--          <div class="col-auto">-->
+      <!--            <label>&nbsp;</label>-->
+      <!--            <button type="submit" class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}">SEARCH</button>-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      </form>-->
+      <!--    </div>-->
+
+
+      <!--    <div class="welcome-page-container">-->
+      <!--      <div class="row">-->
+      <!--        <div class="col-md-12">-->
+      <!--          <canvas id="myChart"></canvas>-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <!--    </div>-->
+    </div>
+
+    <div class="container">
+      <br />
+      <!-- <h4 class="text-center display-3">ledger accounts categories</h4> -->
+      <!-- <div class="row">
+          <div class="col-xs-6">
+              <div id="ledgerAccountPieChart"></div>
+          </div>
+          <div class="col-xs-6">
+              <div id="ledgerPieChart"></div>
+          </div>
+      </div> -->
+      <!-- <h4 class="text-center display-3">Issues</h4>
+      <div class="row">
+          <div class="col-md-8">
+              <div id="issuesColumnChart"></div>
+          </div>
+      </div> -->
+      <!-- <div class="row">
+          <div class="col-md-12">
+              <div id="issuesLineChart"></div>
+          </div>
+      </div> -->
+
+      <div class="container">
+        <div class="welcome-page-container">
+          <div class="row row-space-14">
+            <div class="col-md-4">
+              <div class="content-block-item">
+                <div class="content-block-header">
+                  <h4>Ledger account occupency</h4>
+                </div>
+                <div class="content-block-container">
+                  <canvas id="jsLedgerPieChart"></canvas>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-md-8">
+              <div class="content-block-item">
+                <div class="content-block-header">
+                  <h4>Ledger account types</h4>
+                </div>
+                <div class="content-block-container">
+                  <canvas id="jsLedgerAccounts"></canvas>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-md-6">
+              <div class="content-block-item">
+                <div class="content-block-header">
+                  <h4>User accounts</h4>
+                </div>
+                <div class="content-block-container">
+                  <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="content-block-item">
+                <div class="content-block-header">
+                  <h4>Transactions</h4>
+                </div>
+                <div class="content-block-container">
+                  <canvas id="transactionsChart" style="width:100%;max-width:600px"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!--<div class="col-md-6">
+              <div class="content-block-item">
+                <div class="content-block-header">
+                  <h4>Issues per day</h4>
+                </div>
+                <div class="content-block-container">
+                  <canvas id="speedChart" style="width:100%;max-width:600px"></canvas>
+                </div>
+              </div>
+            </div>-->
+            <!--<div class="col-md-6">
+              <div class="content-block-item">
+                <div class="content-block-header">
+                  <h4>Issues status</h4>
+                </div>
+                <div class="content-block-container">
+                  <canvas id="jsIssuesAssignedBarChart" style="width:100%;max-width:600px"></canvas>
+                </div>
+              </div>
+            </div>-->
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+    <script th:inline="javascript">
+        var real_data = [[${ active_users.data }]]; /*[[${chartData}]]*/
+        var ledger_data = [[${ active_users.categorizedLedgerAccount }]]
+        var issues_data = [[${ active_users.prioritizedIssues }]]
+        var issues_date_status_data = [[${ active_users.issuesByDateStatusMap }]]
+        var transactions_data = [[${ active_users.transactions }]]
+
+        // JS Pie Chart for ledger accounts
+        var pie_labels = []
+        var pie_data = []
+        ledger_data.forEach(function (key) {
+            pie_labels.push(key.category)
+            pie_data.push(key.totalCount)
+        });
+        console.log(pie_data, pie_labels)
+        new Chart(document.getElementById("jsLedgerPieChart"), {
+            type: 'doughnut',
+            data: {
+                labels: pie_labels,
+                datasets: [{
+                    data: pie_data
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Ledger accounts occupency'
+                }, boxWidth: 80, radius: 100,
+                plugins: {
+                    datalabels: {
+                        color: '#fff', // Label text color
+                        anchor: 'end', // Position of labels (start, center, end, or auto)
+                        align: 'start', // Text alignment (start, center, end, or auto)
+                        offset: 8, // Label position offset from the element
+                        font: {
+                            weight: 'bold' // Label font weight
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels],
+            responsive: false,
+            width: 400, // Set width
+            height: 200, // Set height
+            maintainAspectRatio: false,
+        });
+
+        // Line Chart
+        function uniqueInOrder(arr) {
+            return Array.from(new Set(arr));
+        }
+
+        // JS Charts for users
+        const ctx = document.getElementById('myChart');
+        var labelss = Object.keys(real_data)
+        var datas = []
+        Object.keys(real_data).forEach(function (key) {
+            var ll = {
+                label: key,
+                data: [real_data[key].value],
+                borderWidth: 1
+            }
+            datas.push(real_data[key].value)
+        });
+        console.log("datas : ", datas)
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labelss,
+                datasets: [{
+                    label: 'Users',
+                    data: datas
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // JS Charts for ledger accounts
+        var densityCanvas = document.getElementById("jsLedgerAccounts");
+        var ledger_type = []
+        var accounts = []
+        var inactives = []
+        var actives = []
+
+        var inactive = {
+            label: 'inactive',
+            data: inactives,
+
+            borderWidth: 1
+        };
+
+        var active = {
+            label: 'active',
+            data: actives,
+
+            borderWidth: 1
+        };
+
+        var totalCount = {
+            label: 'totalCount',
+            data: accounts,
+
+            borderWidth: 1
+        };
+
+        ledger_data.forEach(function (key) {
+            ledger_type.push(key.category)
+            inactives.push(key.inactive)
+            actives.push(key.active)
+            accounts.push(key.totalCount)
+        });
+
+        var planetData = {
+            labels: ledger_type,
+            datasets: [inactive, active, totalCount]
+        };
+
+        var chartOptions = {
+            plugins: {
+                datalabels: {
+                    color: '#fff', // Label text color
+                    anchor: 'end', // Position of labels (start, center, end, or auto)
+                    align: 'start', // Text alignment (start, center, end, or auto)
+                    offset: 8, // Label position offset from the element
+                    font: {
+                        weight: 'bold' // Label font weight
+                    }
+                }
+            },
+            scales: {
+                xAxes: [{
+                    barPercentage: 1
+                }],
+                yAxes: [{
+                    id: "y-axis-totalCount"
+                }]
+            }
+        };
+
+        var barChart = new Chart(densityCanvas, {
+            type: 'bar',
+            data: planetData,
+            options: chartOptions,
+            plugins: [ChartDataLabels]
+        });
+
+        // JS Bar chart for issues assignes / unassigned
+        /*var unAssignedIssues = document.getElementById("jsIssuesAssignedBarChart");
+        var yaxis_Priority = []
+        var totalCounts = []
+        var unassigneds = []
+        var assigneds = []
+        var unassigned = {
+            label: 'unassigned',
+            data: unassigneds,
+            borderWidth: 1
+        };
+        var assigned = {
+            label: 'assigned',
+            data: assigneds,
+            borderWidth: 1
+        };
+        var totalCount = {
+            label: 'totalCount',
+            data: totalCounts,
+            borderWidth: 1
+        };
+        issues_data.forEach(function (key) {
+            yaxis_Priority.push(key.priority)
+            assigneds.push(key.assigned)
+            unassigneds.push(key.unassigned)
+            totalCounts.push(key.totalCount)
+        });
+        var planetData = {
+            labels: yaxis_Priority,
+            datasets: [unassigned, assigned, totalCount]
+        };
+        var chartOptions = {
+            plugins: {
+                datalabels: {
+                    color: '#fff', // Label text color
+                    anchor: 'end', // Position of labels (start, center, end, or auto)
+                    align: 'start', // Text alignment (start, center, end, or auto)
+                    offset: 8, // Label position offset from the element
+                    font: {
+                        weight: 'bold' // Label font weight
+                    }
+                }
+            },
+            scales: {
+                xAxes: [{
+                    barPercentage: 1
+                }],
+                yAxes: [{
+                    id: "y-axis-totalCount"
+                }]
+            }
+        };
+        var barChart = new Chart(unAssignedIssues, {
+            type: 'bar',
+            data: planetData,
+            options: chartOptions,
+            plugins: [ChartDataLabels]
+        });*/
+
+        // JS Chart Issues per day
+        /*var speedCanvas = document.getElementById("speedChart");
+        var arr = [];
+        var mapData = issues_date_status_data['issuesByDateAndStatus']
+        const keys = (Object.keys(mapData))
+        var rowDates = []
+        keys.forEach(function (l) {
+            Object.keys(mapData[l]).forEach(function (k) {
+                arr.push(k)
+                rowDates.push((l))
+            })
+        })
+        arr = uniqueInOrder(arr)
+        rowDates = uniqueInOrder(rowDates)
+        var cols = []
+        arr.forEach(function (item, index) {
+            cols.push(item);
+        })
+        var vall = []
+        keys.forEach(function (l) {
+            var row = Array(arr.length + 1).fill(0)
+            labels = ''
+            Object.keys(mapData[l]).forEach(function (k, indexe) {
+                labels = k
+                row[0] = (l)
+                const index = arr.indexOf(k)
+                row[index + 1] = mapData[l][k]
+            })
+            vall.push({
+                label: labels,
+                data: row,
+                lineTension: 0,
+                fill: false
+            })
+        })
+
+        var speedData = {
+            labels: rowDates,
+            datasets: vall
+        };
+        var chartOptions = {
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                    boxWidth: 80,
+                    fontColor: 'black'
+                }
+            },
+            scales: {
+                xAxes: [{
+                    type: 'time',
+                    distribution: 'linear',
+                    time: {
+                        parser: 'YYYY-MM-DD',
+                        unit: 'day',
+                        unitStepSize: 1,
+                        displayFormats: {
+                            'day': 'MM/DD/YYYY'
+                        }
+                    }
+                }]
+            }
+        };
+        var lineChart = new Chart(speedCanvas, {
+            type: 'line',
+            data: speedData,
+            options: chartOptions
+        });*/
+
+        // JS Charts for transactions
+        const transactions_ctx = document.getElementById('transactionsChart');
+        let transactions_labels = Object.keys(transactions_data)
+        let transactions_dt = []
+
+        Object.keys(transactions_data).forEach(function (key) {
+
+            transactions_dt.push(transactions_data[key])
+        });
+
+        new Chart(transactions_ctx, {
+            type: 'bar',
+            data: {
+                labels: transactions_labels,
+                datasets: [{
+                    label: 'Transactions',
+                    data: transactions_dt
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+
+    </script>
+
+  </div>
+  <div th:insert="blog::navbar"></div>
+  <div th:insert="footer::navbar"></div>
+</body>
+</html>

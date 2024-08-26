@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <div class="container">
+        <div class="radius-container">
+            <div class="radius-container-title" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                <h2>COBAC ACCOUNTING CLASSES</h2>
+                <span>Select Sub-sub-Class to proceed.</span>
+            </div>
+            <div class="gl-account-container">
+                <div class="gl-account-form" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_GL_ACCOUNT'')')}">
+                    <h2>CREATE LEDGER ACCOUNT</h2>
+                    <span class="alert alert-info" th:if="${ledgerAccountInfo}" th:text="${ledgerAccountInfo}"/>
+                    <form action="#" th:action="@{/saveCobacGLAccount}" method="post" th:object="${ledgerAccount}">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Name:</label>
+                                    <input type="text" name="name" th:field="*{name}" id="name"
+                                            placeholder="e.g NFC BANK" class="form-control" required/>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Balaanz Code:</label>
+                                    <input type="text" name="code" th:field="*{code}" id="code"
+                                            placeholder="e.d 4004" class="form-control" required/>
+                                    <input type="hidden" name="category" th:field="*{category}">
+                                    <input type="hidden" name="cobacCode" id="cobacCode" th:field="*{displayName}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{status}" type="checkbox" id="active" name="status"
+                                            th:value="*{status}"
+                                            checked>
+                                        <label class="form-check-label" for="active">Active</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{creditBalance}" type="checkbox" id="creditBalance"
+                                            name="creditBalance" th:value="*{creditBalance}"
+                                            checked>
+                                        <label class="form-check-label" for="creditBalance">Credit Balance</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{cashAccountTransfer}" type="checkbox"
+                                            id="cashAccountTransfer" name="cashAccountTransfer" th:value="*{cashAccountTransfer}"
+                                            checked>
+                                        <label class="form-check-label" for="cashAccountTransfer">Cash Account Transfers</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{interAccountTransfer}" type="checkbox"
+                                            id="interAccountTransfer" name="interAccountTransfer"
+                                            th:value="*{interAccountTransfer}"
+                                            checked>
+                                        <label class="form-check-label" for="interAccountTransfer">Inter Account Transfer</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">CREATE LEDGER ACCOUNT</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="cobac-accounting">
+                    <h4 class="section-title" th:style="${'color:' + session.runtimeSettings.themeColor}">REVENUE ACCOUNTS - CLASS 7</h4>
+                    <table class="default-list">
+                        <thead>
+                            <tr>
+                                <!-- <th colspan="2" class="capital-accounts">CLASSES</th> -->
+                                <th colspan="2">SUB-CLASSES</th>
+                                <th>SUB-SUB-CLASSES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <!-- <td width="10%" rowspan="10">CLASS 1</td>
+                                <td width="17%" rowspan="10" class="capital-accounts"><h6>CAPITAL ACCOUNTS</h6></td> -->
+                                <td>70</td>
+                                <td>REVENUE FROM TREASURY AND INTER-BANK OPERATIONS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="1" name="class7" onclick=updateSelectedLabel()  value="701">
+                                            <label for="1">701 – Interest on money market operations </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="2" name="class7" onclick=updateSelectedLabel()  value="702">
+                                            <label for="2">702 – Interest on other securities received in pawn </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="3" name="class7" onclick=updateSelectedLabel()  value="703">
+                                            <label for="3">703 – Interest on term loans and accounts </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="4" name="class7" onclick=updateSelectedLabel()  value="704">
+                                            <label for="4">704 – Interest on day-to-day loans  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="5" name="class7" onclick=updateSelectedLabel()  value="705">
+                                            <label for="5">705 – Interest on demand accounts </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="6" name="class7" onclick=updateSelectedLabel()  value="706">
+                                            <label for="6">706 – Charges on treasury and inter-bank operations </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="7" name="class7" onclick=updateSelectedLabel()  value="707">
+                                            <label for="7"> 707 – Proceeds on network treasury operations </label>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>71</td>
+                                <td>REVENUE FROM OPERATIONS WITH CLIENTS AND MEMBERS</td>
+                                <td>
+                                    <ul>
+                                        
+                                        <li>
+                                            <input type="radio" id="8" name="class7" onclick=updateSelectedLabel()  value="711">
+                                            <label for="8">711 – Interest on long-term loans  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="9" name="class7" onclick=updateSelectedLabel()  value="712">
+                                            <label for="9">712 – Interest on medium-term loans </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="10" name="class7" onclick=updateSelectedLabel()  value="713">
+                                            <label for="10">713 – Interest on short-term loans </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="11" name="class7" onclick=updateSelectedLabel()  value="714">
+                                            <label for="11">714 – Interest on clients’ debit accounts </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="12" name="class7" onclick=updateSelectedLabel()  value="715">
+                                            <label for="12">715 – Charges on operations with customers </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="13" name="class7" onclick=updateSelectedLabel()  value="716">
+                                            <label for="13"> <strong>716 – Other proceeds </strong></label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="14" name="class7" onclick=updateSelectedLabel()  value="717">
+                                            <label for="14">717 – Revenue from operations with MFI clients</label>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr> 
+                            <tr> 
+                                <td>72</td>
+                                <td>REVENUE FROM SUNDRY OPERATIONS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="15" name="class7" onclick=updateSelectedLabel()  value="720">
+                                            <label for="15">720 – Account maintenance charges </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="16" name="class7" onclick=updateSelectedLabel()  value="721">
+                                            <label for="16">721 – Charges on payment instruments </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="17" name="class7" onclick=updateSelectedLabel()  value="722">
+                                            <label for="17">722 – Charges on commitments by signature </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="18" name="class7" onclick=updateSelectedLabel()  value="723">
+                                            <label for="18">723 – Charges and profits on exchange operations carried out on a principal basis </label>
+                                        </li> 
+                                        
+                                        <li>
+                                            <input type="radio" id="19" name="class7" onclick=updateSelectedLabel()  value="724">
+                                            <label for="19"> 724– Charges and costs collected on fund transfer operations </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="20" name="class7" onclick=updateSelectedLabel()  value="725">
+                                            <label for="20">725 – Charges for managing the securities portfolio on behalf of third parties </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="21" name="class7" onclick=updateSelectedLabel()  value="726">
+                                            <label for="21">726 - Profits on investment and transaction securities </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="22" name="class7" onclick=updateSelectedLabel()  value="727">
+                                            <label for="22"> 727 – Bank operating costs recovery and re invoicing </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="23" name="class7" onclick=updateSelectedLabel()  value="728">
+                                            <label for="23">728 – Proceeds from payment instruments  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="24" name="class7" onclick=updateSelectedLabel()  value="729">
+                                            <label for="24">729 – Sundry proceeds from MFI banking operations</label>
+                                        </li>  
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>73</td>
+                                <td>REVENUE FROM PORTFOLIO SECURITIES AND COMPULSORY SUBSCRIPTION LOANS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="25" name="class7" onclick=updateSelectedLabel()  value="731">
+                                            <label for="25"><strong>731- Revenue from participation portfolio </strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="26" name="class7" onclick=updateSelectedLabel()  value="7311">
+                                            <label for="26">7311- Revenue from equity shares held  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="27" name="class7" onclick=updateSelectedLabel()  value="7312">
+                                            <label for="27">7312- Revenue from MFI shares </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="28" name="class7" onclick=updateSelectedLabel()  value="7313">
+                                            <label for="28"> 7313- Revenue from shares of other members  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="29" name="class7" onclick=updateSelectedLabel()  value="7314">
+                                            <label for="29"> 7314- Revenue from capitalized government bonds  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="30" name="class7" onclick=updateSelectedLabel()  value="7315">
+                                            <label for="30"> 7315- Revenue from capitalized private securities  </label>
+                                        </li>  
+                                        
+                                        <li>
+                                            <input type="radio" id="31" name="class7" onclick=updateSelectedLabel()  value="7316">
+                                            <label for="31">7316- Revenue from overdue securities  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="32" name="class7" onclick=updateSelectedLabel()  value="732">
+                                            <label for="32"> <strong> 732- Revenue from loans and compulsory subscription securities</strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="33" name="class7" onclick=updateSelectedLabel()  value="7321">
+                                            <label for="33">7321- Revenue from development and related bonds  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="34" name="class7" onclick=updateSelectedLabel()  value="7322">
+                                            <label for="34">7322- Revenue from securitized receivables on the State   </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="35" name="class7" onclick=updateSelectedLabel()  value="162">
+                                            <label for="35"> 7323- Revenue from other loans and compulsory subscription securities  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="36" name="class7" onclick=updateSelectedLabel()  value="7326">
+                                            <label for="36">7326- Revenue from unpaid loans and securities  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="37" name="class7" onclick=updateSelectedLabel()  value="733">
+                                            <label for="37"> <strong>733- Investment portfolio revenue </strong> </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="38" name="class7" onclick=updateSelectedLabel()  value="7331">
+                                            <label for="38"> 7331- Revenue from stocks and shares of lending institution  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="39" name="class7" onclick=updateSelectedLabel()  value="7332">
+                                            <label for="39">7332- Revenue from treasury bills  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="40" name="class7" onclick=updateSelectedLabel()  value="7333">
+                                            <label for="40">7333- Revenue from other negotiable stocks  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="41" name="class7" onclick=updateSelectedLabel()  value="7334">
+                                            <label for="41">7334- Revenue from debentures and allied bonds </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="42" name="class7" onclick=updateSelectedLabel()  value="7335">
+                                            <label for="42">7335- Revenue from own liabilities redeemed by anticipation  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="43" name="class7" onclick=updateSelectedLabel()  value="7336">
+                                            <label for="43">7336- Revenue from other short-term securities </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="44" name="class7" onclick=updateSelectedLabel()  value="7337">
+                                            <label for="44">7337- Revenue from doubtful securities </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="45" name="class7" onclick=updateSelectedLabel()  value="734">
+                                            <label for="45"> <strong>734- Transaction portfolio revenue </strong>  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="46" name="class7" onclick=updateSelectedLabel()  value="7341">
+                                            <label for="46">7341- Revenue from stocks and shares of lending institutions </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="46" name="class7" onclick=updateSelectedLabel()  value="7342">
+                                            <label for="46">7342- Revenue from treasury bills </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="47" name="class7" onclick=updateSelectedLabel()  value="7343">
+                                            <label for="47">7343- Revenue from other negotiable stocks  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="48" name="class7" onclick=updateSelectedLabel()  value="7344">
+                                            <label for="48">7344- Revenue from debentures and allied bonds  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="49" name="class7" onclick=updateSelectedLabel()  value="7345">
+                                            <label for="49">7345- Revenue from own liabilities redeemed by anticipation </label>
+                                        </li>  
+                                        
+                                        <li>
+                                            <input type="radio" id="50" name="class7" onclick=updateSelectedLabel()  value="7346">
+                                            <label for="50">7346- Revenue from other short-term securities </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="51" name="class7" onclick=updateSelectedLabel()  value="7347">
+                                            <label for="51">7347-Revenue from the MFI transaction portfolio.</label>
+                                        </li>  
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>74</td>
+                                <td>SUNDRY INCOME </td>
+                                <td>
+                                    <li>
+                                        <input type="radio" id="52" name="class7" onclick=updateSelectedLabel()  value="740">
+                                        <label for="52"><strong> 740- Sales of merchandise </strong></label>
+                                    </li>   
+                                    <li>
+                                        <input type="radio" id="53" name="class7" onclick=updateSelectedLabel()  value="741">
+                                        <label for="53"> <strong>741- Other proceeds linked to ancillary and incidental activities</strong> </label>
+                                    </li> 
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>75</td>
+                                <td>OTHER REVENUES</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="54" name="class7" onclick=updateSelectedLabel()  value="751">
+                                            <label for="54"> <strong>751- Session allowances </strong> </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="55" name="class7" onclick=updateSelectedLabel()  value="752">
+                                            <label for="55"> <strong>752- Studies ceded</strong>  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="56" name="class7" onclick=updateSelectedLabel()  value="753">
+                                            <label for="56"> <strong>753- Self-constructed assets </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="57" name="class7" onclick=updateSelectedLabel()  value="754">
+                                            <label for="57"><strong>754- Non-banking operating costs recovery and re-invoicing </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="58" name="class7" onclick=updateSelectedLabel()  value="755">
+                                            <label for="58"> <strong>755- Other proceeds from clients or members </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="59" name="class7" onclick=updateSelectedLabel()  value="756">
+                                            <label for="59"> <strong>756- Other proceeds from MFI operations</strong> </label>
+                                        </li> 
+                                        
+                                         
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>76</td>
+                                <td>OPERATING AND BALANCING SUBSIDIES</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="60" name="class7" onclick=updateSelectedLabel()  value="761">
+                                            <label for="60"><strong>761- Operating subsidies </strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="61" name="class7" onclick=updateSelectedLabel()  value="762">
+                                            <label for="61"><strong>762- Balancing subsidies</strong>   </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="62" name="class7" onclick=updateSelectedLabel()  value="763">
+                                            <label for="62"> <strong> 763- MFI operating and balancing subsidies </strong></label>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>78</td>
+                                <td>TRADE-IN OF AMORTIZATION</td>
+                                <td>
+                                    <ul> 
+                                        <li>
+                                            <input type="radio" id="100" name="class7" onclick=updateSelectedLabel()  value="780">
+                                            <label for="100">   780- Trade-in of amortization of capitalized costs and values </strong>   </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="101" name="class7" onclick=updateSelectedLabel()  value="782">
+                                            <label for="101"> 782- Trade-in of amortization of tangible fixed assets   </label>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>77</td>
+                                <td>EXCEPTIONAL PROFITS INCLUDING THOSE FOR PREVIOUS YEARS – ASSETS TRANSFER PRICE</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="63" name="class7" onclick=updateSelectedLabel()  value="770">
+                                            <label for="63"><strong>770- banking revenue from previous years  </strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="64" name="class7" onclick=updateSelectedLabel()  value="7701">
+                                            <label for="64">7701- Proceeds from treasury operations </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="65" name="class7" onclick=updateSelectedLabel()  value="7702">
+                                            <label for="65">7702- Proceeds from customer and financial lease operations </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="66" name="class7" onclick=updateSelectedLabel()  value="7703">
+                                            <label for="66">7703- Proceeds from sundry banking operations </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="67" name="class7" onclick=updateSelectedLabel()  value="771">
+                                            <label for="67"> <strong>771- Sundry proceeds from previous years </strong> </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="68" name="class7" onclick=updateSelectedLabel()  value="7711">
+                                            <label for="68">7711- Proceeds from security portfolio  </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="68" name="class7" onclick=updateSelectedLabel()  value="7711">
+                                            <label for="68">7711- Proceeds from security portfolio  </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="69" name="class7" onclick=updateSelectedLabel()  value="7712">
+                                            <label for="69">7712- Incidental proceeds  </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="70" name="class7" onclick=updateSelectedLabel()  value="7713">
+                                            <label for="70">7713- Operating and balancing subsidies  </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="71" name="class7" onclick=updateSelectedLabel()  value="7719">
+                                            <label for="72">7719- Other sundry proceeds </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="72" name="class7" onclick=updateSelectedLabel()  value="772">
+                                            <label for="72"> <strong >772- Insurance benefits </strong> </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="73" name="class7" onclick=updateSelectedLabel()  value="773">
+                                            <label for="73"><strong>773- Special prov. and revaluation reserves traded in </strong></label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="74" name="class7" onclick=updateSelectedLabel()  value="774">
+                                            <label for="74"> <strong>774- Investment subsidies traded in </strong>  </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="75" name="class7" onclick=updateSelectedLabel()  value="775">
+                                            <label for="75"> <strong>775- Fixed assets transfer price  </strong>  </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="76" name="class7" onclick=updateSelectedLabel()  value="776">
+                                            <label for="76"> <strong>776- Transfers of exceptional costs and on previous years  </strong>  </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="77" name="class7" onclick=updateSelectedLabel()  value="777">
+                                            <label for="77"> <strong>777- Salaries and benefits written off  </strong>  </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="78" name="class7" onclick=updateSelectedLabel()  value="778">
+                                            <label for="78"> <strong>778- Sundry exceptional profits  </strong>  </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="79" name="class7" onclick=updateSelectedLabel()  value="7781">
+                                            <label for="79"> 7781- Profits on treasury operations   </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="80" name="class7" onclick=updateSelectedLabel()  value="7782">
+                                            <label for="80"> 7782- Profits from operations with clients    </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="81" name="class7" onclick=updateSelectedLabel()  value="7783">
+                                            <label for="81"> 7783- Proceeds from sundry banking operations     </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="82" name="class7" onclick=updateSelectedLabel()  value="7786">
+                                            <label for="82"> 7786- Cash surplus     </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="83" name="class7" onclick=updateSelectedLabel()  value="7787">
+                                            <label for="83"> 7787- Cash discount    </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="84" name="class7" onclick=updateSelectedLabel()  value="7788">
+                                            <label for="84"> 7788- Gifts and donations obtained </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="83" name="class7" onclick=updateSelectedLabel()  value="779">
+                                            <label for="83"> <strong>779- Except. profits and on previous years - MFI assets transfer price</strong> </label>
+                                        </li>  
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>79</td>
+                                <td>TRADE-IN OF PROVISIONS AND RECOVERY OF BAD DEBTS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="83" name="class7" onclick=updateSelectedLabel()  value="791">
+                                            <label for="83"> <strong>791- Trade-in of provisions </strong>  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="84" name="class7" onclick=updateSelectedLabel()  value="7911">
+                                            <label for="84"> 7911- Trade-in of provisions for risks and costs </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="85" name="class7" onclick=updateSelectedLabel()  value="7912">
+                                            <label for="85"> 7912- Trade-in of provisions for depreciation of capital assets  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="86" name="class7" onclick=updateSelectedLabel()  value="7913">
+                                            <label for="86">7913- Trade-in of provisions for depreciation of customer accounts  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="87" name="class7" onclick=updateSelectedLabel()  value="7914">
+                                            <label for="87">7914- Trade-in of provisions for depreciation of third-party accounts and accruals  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="88" name="class7" onclick=updateSelectedLabel()  value="7915">
+                                            <label for="88">7915- Trade-in of provisions for depreciation of treasury accounts  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="89" name="class7" onclick=updateSelectedLabel()  value="7917">
+                                            <label for="89">7917- Trade-in of provisions for depreciation of stocks   </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="90" name="class7" onclick=updateSelectedLabel()  value="792">
+                                            <label for="90"> <strong>792- Recovery of abandoned claims </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="91" name="class7" onclick=updateSelectedLabel()  value="792">
+                                            <label for="91"> <strong>794- Trade-in of provisions for general risk  </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="92" name="class7" onclick=updateSelectedLabel()  value="797">
+                                            <label for="92"> <strong>797- Trade-in of regulated provisions  </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="93" name="class7" onclick=updateSelectedLabel()  value="798">
+                                            <label for="93"> <strong>798- Other trade-ins of provisions  </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="94" name="class7" onclick=updateSelectedLabel()  value="79909">
+                                            <label for="94"> <strong>79909- Trade-in of prov. and recovery of bad debts Network  </strong> </label>
+                                        </li> 
+                                    </ul>
+                                </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+                <div class="cobac-footer" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_GL_ACCOUNT'')')}">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">CREATE LEDGER ACCOUNT</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function updateSelectedLabel(){
+        document.getElementById('cobacCode').value = document.querySelector('input[name="class7"]:checked + label').innerText;
+    }
+</script>
+<div th:insert="footer::navbar"></div>
+</html>

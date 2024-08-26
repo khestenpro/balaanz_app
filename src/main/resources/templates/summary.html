@@ -1,0 +1,106 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <style>
+        tr:nth-child(even) {background-color: red;}
+
+    </style>
+</head>
+<div class="container" th:fragment="navbar">
+    <div class="account-summary">
+        <div class="summary-profile">
+            <div class="summary-profile-snapshot">
+                <span class="summary-profile-image">
+                    <a href="#" th:href="@{/reloadUser/{id}(id=${session.customerInUse.id})}">
+                        <img width="30px" th:src="@{/getImage}"/>
+                    </a>
+                </span>
+                <div class="summary-profile-title">
+                    <div th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}">
+                        <a th:href="@{/welcomeGlobal}">
+                        <h4 th:text="${session.customerInUse.gender +'. '+session.customerInUse.firstName +' '+session.customerInUse.lastName }"></h4>
+                            <label><span th:text="${session.runtimeSettings.contextName} +' No:'"/> <span
+                                                     th:text="${session.customerInUse.customerNumber}"></span></label>
+                        </a>
+                    </div>
+
+                    <div th:unless="${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}">
+                        <a href="#" th:href="@{/showCustomer/{id}(id=${session.customerInUse.id})}">
+                            <span th:text="${session.customerInUse.gender +'. '+session.customerInUse.firstName +' '+session.customerInUse.lastName }"></span>
+                            <label><span th:text="${session.runtimeSettings.contextName} +' No:'"/><span
+                                                         th:text="${session.customerInUse.customerNumber}"></span></label>
+                            <span th:text="${session.customerInUse.accountStatus.name}"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_CUSTOMER_ACCOUNT'')')}">
+                <div class="summary-profile-button">
+                    <button type="button" class="btn btn-gray">
+                        <a href="#" th:href="@{/file/{userName}(userName=${session.customerInUse.userName})}">
+                            Upload I.D
+                        </a>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div th:unless="${#strings.isEmpty(session.runtimeSettings.currentAccount)}">
+            <div class="balance-summary current-account" th:style="${'border-color:' + session.runtimeSettings.themeColor}">
+                <label><span th:text="${session.runtimeSettings.currentAccount}"/></label>
+                <div th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')} or ${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}">
+                    <h4 th:if="${#strings.isEmpty(session.currentBilanzList.totalCurrent)}">0</h4>
+                    <h4 th:unless="${#strings.isEmpty(session.currentBilanzList.totalCurrent)}">
+                        <span th:text="${session.currentBilanzList.totalCurrent} + ' frs'"/>
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="balance-summary saving-account" th:style="${'border-color:' + session.runtimeSettings.themeColor}">
+            <div th:unless="${#strings.isEmpty(session.runtimeSettings.savingAccount)}">
+                <label><span th:text="${session.runtimeSettings.savingAccount}"/></label>
+            </div>
+            <div th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')} or ${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}">
+
+                <h4 th:if="${#strings.isEmpty(session.savingBilanzList.totalSaving)}">0</h4>
+                <h4 th:unless="${#strings.isEmpty(session.savingBilanzList.totalSaving)}">
+                    <span th:text="${session.savingBilanzList.totalSaving} + ' frs'"/>
+                </h4>
+            </div>
+        </div>
+        <div th:unless="${#strings.isEmpty(session.runtimeSettings.dailySavingAccount)}">
+            <div class="balance-summary daily-account" th:style="${'border-color:' + session.runtimeSettings.themeColor}">
+                <label><span th:text="${session.runtimeSettings.dailySavingAccount}"/></label>
+                <div th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')} or ${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}">
+
+                    <h4 th:if="${#strings.isEmpty(session.dailySavingBilanzList?.totalSaving)}">0</h4>
+                    <h4 th:unless="${#strings.isEmpty(session.dailySavingBilanzList.totalSaving)}">
+                        <span th:text="${session.dailySavingBilanzList.totalSaving} + ' frs'"/>
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div th:unless="${#strings.isEmpty(session.runtimeSettings.loanAccount)}">
+            <div class="balance-summary loan-account" th:style="${'border-color:' + session.runtimeSettings.themeColor}">
+                <label><span th:text="${session.runtimeSettings.loanAccount}"/></label>
+                <div th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')} or ${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}">
+                    <h4 th:if="${#strings.isEmpty(session.loanBilanzList.currentLoanBalance)}">0</h4>
+                    <h4 th:unless="${#strings.isEmpty(session.loanBilanzList.currentLoanBalance)}">
+                        <span th:text="${session.loanBilanzList.currentLoanBalance} + ' frs'"/>
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div th:unless="${#strings.isEmpty(session.runtimeSettings.shareAccount)}">
+            <div class="balance-summary shared-account" th:style="${'border-color:' + session.runtimeSettings.themeColor}">
+                <label><span th:text="${session.runtimeSettings.shareAccount}"/></label>
+                <div th:if="${#authorization.expression('hasAnyAuthority(''ROLE_ACCOUNT_BALANCES'')')} or ${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}">
+                    <h4 th:if="${#strings.isEmpty(session.shareAccountBilanzList.totalShare)}">0</h4>
+                    <h4 th:unless="${#strings.isEmpty(session.shareAccountBilanzList.totalShare)}">
+                        <span th:text="${session.shareAccountBilanzList.totalShare} + ' frs'"/>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header" >  </div>
+<br/>
+<br/>
+
+<!-- Contact form area start -->
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="project-title-content">
+                        <h3>REGISTER A NEW ACCOUNT TYPE</h3>
+                        <span><i class="fas fa-crosshairs"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Project title area end-->
+
+    <div class="contact-from-area">
+        <div class="container">
+            <div class="row">
+                <div class="offset-md-2 col-md-8">
+                    <font size="6" color="#fd7e14"><span th:text="${accountInfo}"/> </font>
+                    <font color="blue"><b><div class="error" th:text="${error}"/></b></font> <a href="#" th:href="@{/accountTypes}"> See Account Types </a>
+                    <form action="#" th:action="@{/registerAccountTypeForm}" method="post" th:object="${accountType}">
+                        <div class="col-md-12">
+                            <label for="category">Choose a Category:</label>
+                            <select class="selectMedium" name="category" id="category">
+                                <option value="SAVINGS">SAVINGS</option>
+                                <option value="LOANS">LOANS</option>
+                                <option value="SHARE">SHARES</option>
+<!--                                <option value="200">HOSPITALITY</option>-->
+                            </select>
+
+                            <br/>
+                            Code: e.g 7455<br/>
+                            <input type="text" name="code" id="code"
+                                   class="form-control" required>
+                            <br/>
+
+                            Name: e.g LakeView2 <br/>
+                            <input type="text" name="name" th:field="*{name}" id="name"
+                                   class="form-control" required>
+                            <br/>
+                            COBAC Code: e.g LakeView2 <br/>
+                            <input type="text" name="displayName" th:field="*{displayName}" id="displayName"
+                                   class="form-control" required>
+
+                            <br/>
+                            Number: 19<br/>
+                            <input type="text" name="number" th:field="*{number}" id="number"
+                                   class="form-control">
+                            <br/>
+
+                            <input type="submit" class="btn-block btn contact-btn" value="CREATE ACCOUNT TYPE"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="footer::navbar">  </div>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="account-dashboard-container">
+
+        <!-- <i class="fas fa-exchange-alt"></i>
+        <i class="fas fa-search"></i>
+        <i class="fas fa-percentage"></i> -->
+
+        <div th:insert="summary::navbar"></div>
+        <div class="container">
+            <div th:unless="${#strings.isEmpty(session.runtimeSettings.currentAccount)}">
+                <div class="account-item">
+                    <div class="account-title">
+                        <h2>
+                            <span th:text="${session.runtimeSettings.currentAccount}"/>
+                        </h2>
+                        <span class="add-account-icon" th:if="${createCurrentAccountEligible}">
+                        <a href="#" th:href="@{/registerCurrentAccount}">
+                            <i class="fas fa-plus"></i>
+                        </a>
+                    </span>
+                    </div>
+                    <div class="account-body">
+                        <p>No  <span th:text="${session.runtimeSettings.currentAccount}"/> exist for <span style th:text="${session.customerInUse.userName}"/>. Create an
+                            account</p>
+                    </div>
+                </div>
+            </div>
+            <div th:unless="${#strings.isEmpty(session.runtimeSettings.savingAccount)}">
+                <div class="account-item">
+                    <div class="account-title">
+                        <h2>
+                            <span th:text="${session.runtimeSettings.savingAccount}"/>
+
+                        </h2>
+                        <span class="add-account-icon" th:if="${createSavingAccountEligible}">
+                        <a href="#" th:href="@{/registerSavingAccount}">
+                            <i class="fas fa-plus"></i>
+                        </a>
+                    </span>
+                    </div>
+                    <div class="account-body">
+                        <p>No  <span th:text="${session.runtimeSettings.savingAccount}"/> exist for <span style th:text="${session.customerInUse.userName}"/>. Create an
+                            account</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div th:unless="${#strings.isEmpty(session.runtimeSettings.dailySavingAccount)}">
+                <div class="account-item">
+                    <div class="account-title">
+                        <h2>
+                            <span th:text="${session.runtimeSettings.dailySavingAccount}"/>
+
+                        </h2>
+                        <span class="add-account-icon" th:if="${createDailySavingAccountEligible}">
+                        <a href="#" th:href="@{/registerDailySavingAccount}">
+                            <i class="fas fa-plus"></i>
+                        </a>
+                    </span>
+                    </div>
+                    <div class="account-body">
+                        <p>No <span th:text="${session.runtimeSettings.dailySavingAccount}"/> exist for <span style th:text="${session.customerInUse.userName}"/>. Create an
+                            account</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div th:unless="${#strings.isEmpty(session.runtimeSettings.loanAccount)}">
+                <div>
+                    <div class="account-item">
+                        <div class="account-title">
+                            <h2>
+                                <span th:text="${session.runtimeSettings.loanAccount}"/>
+                            </h2>
+                            <span class="add-account-icon" th:if="${createLoanAccountEligible}">
+                        <a href="#" th:href="@{/registerLoanAccount}">
+                            <i class="fas fa-plus"></i>
+                        </a>
+                    </span>
+                        </div>
+                        <div class="account-body">
+                            <p>No <span th:text="${session.runtimeSettings.loanAccount}"/> exist for <span style th:text="${session.customerInUse.userName}"/>. Create an
+                                account</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:unless="${#strings.isEmpty(session.runtimeSettings.shareAccount)}">
+                <div class="account-item">
+                    <div class="account-title">
+                        <h2>
+                            <span th:text="${session.runtimeSettings.shareAccount}"/>
+                        </h2>
+                        <span class="add-account-icon" th:if="${createShareAccountEligible}">
+                        <a href="#" th:href="@{/registerShareAccount}">
+                            <i class="fas fa-plus"></i>
+                        </a>
+                    </span>
+                    </div>
+                    <div class="account-body">
+                        <p>No Share Accounts exist for <span style th:text="${session.customerInUse.userName}"/>. Create an
+                            account</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</div>
+
+
+<div th:insert="footer::navbar"></div>
+</html>

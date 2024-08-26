@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <!-- <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">TASK DETAILS
+                        </h2>
+                        <span>Add a new Comment to the task</span><a href="#" th:href="@{/issues}"> See Issues</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container">
+            <div class="radius-container-title" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                <h2>TASK DETAILS</h2>
+                <a th:href="@{/issues}">See Issues <i class="far fa-arrow-alt-circle-right"></i></a>
+            </div>
+            <form action="#" th:action="@{/registerCommentForm}" method="post" th:object="${task}">
+                <div class="branch-form-container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="priority">Priority:</label>
+                                <select class="form-control" id="priority" name="aPriority" th:field="*{priority}">
+                                    <option th:each="aPriority : ${T(com.bitsvalley.micro.utils.PriorityStatus).values()}"
+                                            th:value="${aPriority}" th:text="${aPriority}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="title">Title:</label>
+                                <input type="text" th:field="*{title}" name="title" id="title"
+                                    class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Task Status:</label>
+
+                                <select class="form-control" name="aStatus" th:field="*{ticketStatus}">
+                                    <option th:each="aStatus : ${T(com.bitsvalley.micro.utils.TicketStatus).values()}"
+                                            th:value="${aStatus}" th:text="${aStatus}">
+                                    </option>
+                                </select>
+                                <input type="hidden" name="id" th:value="${task.id}" th:field="*{id}"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="assignedTo">Assigned To:</label>
+                                <select class="form-control" name="assignedTo" id="assignedTo"
+                                        th:field="*{assignedTo}">
+                                    <option value="">UNASSIGNED</option>
+                                    <option th:each="employee: ${employees}"
+                                            th:text="${employee.userName}"
+                                            th:value="${employee.userName}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="comment">Task Description:</label>
+                                <textarea class="form-control" name="comment" th:field="*{comment}" id="comment"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Comment List -->
+                <h4 class="section-title" th:style="${'color:' + session.runtimeSettings.themeColor}">Comments</h3>
+                <div class="task-comments-container">
+                    <div class="task-comment-field">
+                        <textarea class="form-control" name="issueComment" id="issueComment"></textarea>
+                        <input type="hidden" name="id" th:value="${task.id}" th:field="*{id}"/>
+                        <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">Save New Comment</button>
+                    </div>
+                    <div class="task-comment-list">
+                        <div class="task-comment no-record-found" th:if="${task.taskCommentList.empty}">
+                            No Comment Found
+                        </div>
+                        <div class="task-comment" th:each="comment : ${task.taskCommentList}">
+                            <p th:text="${comment.notes}"></p>
+                            <span th:text="'Created by '+${comment.createdBy +' on '+ #dates.format(comment.createdDate, 'dd-MMM-yyyy HH:mm')}"></span>
+                        </div>
+                    </div>
+                </div>                    
+            </form>
+        </div>
+    </div>
+</section>
+<div th:insert="footer::navbar"></div>
+</html>

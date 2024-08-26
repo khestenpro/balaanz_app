@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <div class="container">
+        <div class="radius-container">
+            <div class="radius-container-title" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                <h2>COBAC ACCOUNTING CLASSES</h2>
+                <span>Select Sub-sub-Class to proceed.</span>
+            </div>
+            <div class="gl-account-container">
+                <div class="gl-account-form" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_GL_ACCOUNT'')')}">
+                    <h2>CREATE LEDGER ACCOUNT</h2>
+                    <span class="alert alert-info" th:if="${ledgerAccountInfo}" th:text="${ledgerAccountInfo}"/>
+                    <form action="#" th:action="@{/saveCobacGLAccount}" method="post" th:object="${ledgerAccount}">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Name:</label>
+                                    <input type="text" name="name" th:field="*{name}" id="name"
+                                            placeholder="e.g NFC BANK" class="form-control" required/>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Balaanz Code:</label>
+                                    <input type="text" name="code" th:field="*{code}" id="code"
+                                            placeholder="e.d 4004" class="form-control" required/>
+                                    <input type="hidden" name="category" th:field="*{category}">
+                                    <input type="hidden" name="cobacCode" id="cobacCode" th:field="*{displayName}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{status}" type="checkbox" id="active" name="status"
+                                            th:value="*{status}"
+                                            checked>
+                                        <label class="form-check-label" for="active">Active</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{creditBalance}" type="checkbox" id="creditBalance"
+                                            name="creditBalance" th:value="*{creditBalance}"
+                                            checked>
+                                        <label class="form-check-label" for="creditBalance">Credit Balance</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{cashAccountTransfer}" type="checkbox"
+                                            id="cashAccountTransfer" name="cashAccountTransfer" th:value="*{cashAccountTransfer}"
+                                            checked>
+                                        <label class="form-check-label" for="cashAccountTransfer">Cash Account Transfers</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{interAccountTransfer}" type="checkbox"
+                                            id="interAccountTransfer" name="interAccountTransfer"
+                                            th:value="*{interAccountTransfer}"
+                                            checked>
+                                        <label class="form-check-label" for="interAccountTransfer">Inter Account Transfer</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">CREATE LEDGER ACCOUNT</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="cobac-accounting">
+                    <h4 class="section-title" th:style="${'color:' + session.runtimeSettings.themeColor}">FIXED ASSET ACCOUNTS CLASS 2</h4>
+                    <table class="default-list">
+                        <thead>
+                            <tr>
+                                <!-- <th colspan="2" class="capital-accounts">CLASSES</th> -->
+                                <th colspan="2">SUB-CLASSES</th>
+                                <th>SUB-SUB-CLASSES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <!-- <td width="10%" rowspan="10">CLASS 1</td>
+                                <td width="17%" rowspan="10" class="capital-accounts"><h6>CAPITAL ACCOUNTS</h6></td> -->
+                                <td>20</td>
+                                <td>COSTS AND INTANGIBLE ASSETS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="1" name="class2" onclick=updateSelectedLabel() value="201">
+                                            <label for="1">201- CAPITALIZED COSTS </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="2" name="class2" onclick=updateSelectedLabel() value="2011">
+                                            <label for="2">2011- Cost related to the social covenant </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="3" name="class2" onclick=updateSelectedLabel() value="2012">
+                                            <label for="3">2012- Cost of loans issue </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="4" name="class2" onclick=updateSelectedLabel() value="2013">
+                                            <label for="4"><strong> 2013- COST OF ACQUISITION OF FIXED ASSETS  </strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="5" name="class2" onclick=updateSelectedLabel() value="2014">
+                                            <label for="5">2014- Cost to be spread over several years </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="6" name="class2" onclick=updateSelectedLabel() value="2017">
+                                            <label for="6">2017- Redemption premium of bond loans </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="7" name="class2" onclick=updateSelectedLabel() value="202">
+                                            <label for="7"><strong>202- INTANGIBLE VALUES </strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="8" name="class2" onclick=updateSelectedLabel() value="2021">
+                                            <label for="8">2021- Current intangible assets  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="9" name="class2" onclick=updateSelectedLabel() value="2022">
+                                            <label for="9">2022- Goodwill </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="10" name="class2" onclick=updateSelectedLabel() value="2023">
+                                            <label for="10">2023- Lease right paid to or owed the previous lessee </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="11" name="class2" onclick=updateSelectedLabel() value="2024">
+                                            <label for="11">2024- Patents, software, licenses, trademarks, processes, models, drawings </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="12" name="class2" onclick=updateSelectedLabel() value="2025">
+                                            <label for="12">2025- Studies and researches that can be capitalized </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="13" name="class2" onclick=updateSelectedLabel() value="2026">
+                                            <label for="13">2026- Other intangible assets</label>
+                                        </li> 
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>21</td>
+                                <td>LANDS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="14" name="class2" onclick=updateSelectedLabel() value="211">
+                                            <label for="14"><strong>211- Land under bank management</strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="15" name="class2" onclick=updateSelectedLabel() value="212">
+                                            <label for="15"><strong>212- Land given in operating lease </strong></label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="16" name="class2" onclick=updateSelectedLabel() value="1411">
+                                            <label for="16"><strong>213- Land acquired by financial lease or with lease-purchase option </strong></label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="17" name="class2" onclick=updateSelectedLabel() value="214">
+                                            <label for="17"><strong>214- Land acquired through realization of guarantees </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="18" name="class2" onclick=updateSelectedLabel() value="215">
+                                            <label for="18"><strong>215- Revaluation variance </strong></label>
+                                        </li> 
+                                        
+                                        <li>
+                                            <input type="radio" id="19" name="class2" onclick=updateSelectedLabel() value="2151">
+                                            <label for="19"> 2151- land under bank management </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="20" name="class2" onclick=updateSelectedLabel() value="2152">
+                                            <label for="20">2152- Land under lease </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="21" name="class2" onclick=updateSelectedLabel() value="219">
+                                            <label for="21">219- Other lands</label>
+                                        </li>   
+                                    </ul>
+                                </td>
+                            </tr> 
+                            <tr> 
+                                <td>22</td>
+                                <td>OTHER TANGIBLE ASSETS IN USE</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="22" name="class2" onclick=updateSelectedLabel() value="221">
+                                            <label for="22"><strong>221- Business premises  </strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="23" name="class2" onclick=updateSelectedLabel() value="222">
+                                            <label for="23"><strong>222- Buildings given out on lease </strong></label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="24" name="class2" onclick=updateSelectedLabel() value="2221">
+                                            <label for="24">2221- Buildings on dry lease built on own land  </label>
+                                        </li>  
+                                        
+                                        <li>
+                                            <input type="radio" id="25" name="class2" onclick=updateSelectedLabel() value="2222">
+                                            <label for="25">2222- Buildings given in dry lease built on the land of a third party </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="26" name="class2" onclick=updateSelectedLabel() value="223">
+                                            <label for="26"><strong> 223- Buildings acquired by financial lease or under lease-purchase option  </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="27" name="class2" onclick=updateSelectedLabel() value="224">
+                                            <label for="27"><strong>224- Buildings acquired through realization of guarantees </strong></label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="28" name="class2" onclick=updateSelectedLabel() value="225">
+                                            <label for="28"><strong>225- Materials and exploitation inventory </strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="29" name="class2" onclick=updateSelectedLabel() value="226">
+                                            <label for="29"><strong>226- Materials and furniture on dry lease </strong></label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="30" name="class2" onclick=updateSelectedLabel() value="227">
+                                            <label for="30"><strong>227- Materials and furniture acquired through financial lease or with lease-purchase option </strong></label>
+                                        </li>  
+                                        
+                                        <li>
+                                            <input type="radio" id="31" name="class2" onclick=updateSelectedLabel() value="228">
+                                            <label for="31"><strong>228- Materials and furniture acquired in realization of guarantees</strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="32" name="class2" onclick=updateSelectedLabel() value="229">
+                                            <label for="32"><strong>229- Other tangible assets</strong></label>
+                                        </li> 
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>23</td>
+                                <td>OTHER TANGIBLE ASSETS UNDER CONSTRUCTION</td>
+                                <td>
+                                    <ul>  
+                                        <li>
+                                            <input type="radio" id="33" name="class2" onclick=updateSelectedLabel() value="231">
+                                            <label for="33"><strong>231- Business premises </strong> </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="34" name="class2" onclick=updateSelectedLabel() value="232">
+                                            <label for="34"><strong>232- Buildings under dry lease </strong></label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="35" name="class2" onclick=updateSelectedLabel() value="233">
+                                            <label for="35"><strong>233- Buildings acquired in financial lease or in lease-purchase option  </strong></label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="36" name="class2" onclick=updateSelectedLabel() value="239">
+                                            <label for="36"><strong>239- Other tangible assets</strong> </label>
+                                        </li>   
+                                        
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>24</td>
+                                <td>ADVANCE PAYMENTS ON ORDER OF FIXED ASSETS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="37" name="class2" onclick=updateSelectedLabel() value="241">
+                                            <label for="37">241- Business premises  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="38" name="class2" onclick=updateSelectedLabel() value="242">
+                                            <label for="38">242- Buildings in dry lease</label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="39" name="class2" onclick=updateSelectedLabel() value="245">
+                                            <label for="39"><strong>245- Materials and exploitation inventory</strong> </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="40" name="class2" onclick=updateSelectedLabel() value="249">
+                                            <label for="40"><strong>249- Other tangible assets</strong> </label>
+                                        </li>   
+                                        
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>25</td>
+                                <td>NON-COMMERCIAL DEPOSITS AND GUARANTEES PAID</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="41" name="class2" onclick=updateSelectedLabel() value="251">
+                                            <label for="41">251- Deposits and guarantees paid in</label>
+                                        </li>   
+                                        
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>26</td>
+                                <td>INVESTMENT AND OTHER PERMANET FINANCIAL INVESTMENTS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="42" name="class2" onclick=updateSelectedLabel() value="262">
+                                            <label for="42"><strong>262- Shares of the microfinance institution </strong></label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="43" name="class2" onclick=updateSelectedLabel() value="263">
+                                            <label for="43"><strong>263- Other investments </strong></label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="44" name="class2" onclick=updateSelectedLabel() value="264">
+                                            <label for="44"><strong>264- Portfolio activity securities </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="45" name="class2" onclick=updateSelectedLabel() value="265">
+                                            <label for="45"><strong>265- Investment securities </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="46" name="class2" onclick=updateSelectedLabel() value="266">
+                                            <label for="46"><strong>266- Outstanding securities</strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="47" name="class2" onclick=updateSelectedLabel() value="2661">
+                                            <label for="47">2661 – Unpaid securities </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="48" name="class2" onclick=updateSelectedLabel() value="2662">
+                                            <label for="48">2662 – Doubtful securities  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="49" name="class2" onclick=updateSelectedLabel() value="267">
+                                            <label for="49"><strong>267- Own shares or partnership shares bought back </strong> </label>
+                                        </li>  
+                                        
+                                        <li>
+                                            <input type="radio" id="50" name="class2" onclick=updateSelectedLabel() value="268">
+                                            <label for="50"><strong>268- Other permanent financial investments </strong></label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="51" name="class2" onclick=updateSelectedLabel() value="269">
+                                            <label for="51"><strong> 269- Attached debts on investment and other permanent financial investments</strong></label>
+                                        </li>  
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>27</td>
+                                <td>LOANS, PUBLIC SECURITIES AND RELATED</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="52" name="class2" onclick=updateSelectedLabel() value="271">
+                                            <label for="52"><strong> 271- Public securities and related  </strong></label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="53" name="class2" onclick=updateSelectedLabel() value="272">
+                                            <label for="53"><strong> 272- Other loans and public securities</strong>  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="54" name="class2" onclick=updateSelectedLabel() value="273">
+                                            <label for="54"><strong> 273- Unpaid loans and securities</strong> </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="55" name="class2" onclick=updateSelectedLabel() value="274">
+                                            <label for="55"> <strong>274- Attached claims</strong> </label>
+                                        </li>    
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>28</td>
+                                <td>AMORTIZATION OF INTANGIBLE AND TANGIBLE FIXED ASSETS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="56" name="class2" onclick=updateSelectedLabel() value="280">
+                                            <label for="56"><strong>280- Capitalized intangible values</strong>   </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="57" name="class2" onclick=updateSelectedLabel() value="2802">
+                                            <label for="57">2802- Intangible assets </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="58" name="class2" onclick=updateSelectedLabel() value="282">
+                                            <label for="58"><strong>282- Tangible assets </strong></label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="59" name="class2" onclick=updateSelectedLabel() value="2821">
+                                            <label for="59">2821- Business premises </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="60" name="class2" onclick=updateSelectedLabel() value="2822">
+                                            <label for="60">2822- Buildings on dry lease </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="61" name="class2" onclick=updateSelectedLabel() value="2823">
+                                            <label for="61">2823- Buildings on financial lease or on leasepurchase option </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="62" name="class2" onclick=updateSelectedLabel() value="2824">
+                                            <label for="62">2824- Buildings acquired by realization of guarantees  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="63" name="class2" onclick=updateSelectedLabel() value="2825">
+                                            <label for="63">2825- Materials and exploitation inventory </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="64" name="class2" onclick=updateSelectedLabel() value="2826">
+                                            <label for="64">2826- Materials and furniture in dry lease </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="65" name="class2" onclick=updateSelectedLabel() value="2827">
+                                            <label for="65">2827- Material and furniture on dry lease or on lease-purchase option </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="66" name="class2" onclick=updateSelectedLabel() value="2828">
+                                            <label for="66">2828- Material and furniture acquired in realization of guarantees  </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="67" name="class2" onclick=updateSelectedLabel() value="2828">
+                                            <label for="67">2829- Other tangible assets</label>
+                                        </li>  
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>19</td>
+                                <td>PROVISIONS FOR RISKS AND EXPENSES</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="67" name="class2" onclick=updateSelectedLabel() value="290">
+                                            <label for="67"><strong>290- Capital assets </strong></label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="68" name="class2" onclick=updateSelectedLabel() value="291">
+                                            <label for="68"><strong>291- Lands  </strong></label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="69" name="class2" onclick=updateSelectedLabel() value="292">
+                                            <label for="69"><strong>292- Intangible assets </strong></label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="70" name="class2" onclick=updateSelectedLabel() value="293">
+                                            <label for="70"><strong>293- Other tangible assets under construction </strong></label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="71" name="class2" onclick=updateSelectedLabel() value="294">
+                                            <label for="71"><strong>294- Advance payments on orders of fixed assets  </strong></label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="72" name="class2" onclick=updateSelectedLabel() value="295">
+                                            <label for="72"><strong>295- Deposits and guarantees  </strong></label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="73" name="class2" onclick=updateSelectedLabel() value="296">
+                                            <label for="73"><strong>296- Participation securities and other permanent financial investments  </strong></label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="74" name="class2" onclick=updateSelectedLabel() value="297">
+                                            <label for="74"><strong>297- Loans and public securities and related </strong></label>
+                                        </li> 
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="cobac-footer" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_GL_ACCOUNT'')')}">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">CREATE LEDGER ACCOUNT</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function updateSelectedLabel(){
+        document.getElementById('cobacCode').value = document.querySelector('input[name="class2"]:checked + label').innerText;
+    }
+</script>
+<div th:insert="footer::navbar"></div>
+</html>

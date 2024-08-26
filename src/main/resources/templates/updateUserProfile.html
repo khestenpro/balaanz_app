@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">UPDATE INFORMATION</h2>
+                        <span>Update Information below and click save to update profile data</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container update-profile-container">
+            <span class="alert alert-info" th:if="${updatedInfo}" th:text="${updatedInfo}"/>
+            <span class="alert alert-danger" th:if="${updatedError}" th:text="${updatedError}"/>
+
+            <form action="#" th:action="@{/updatePasswordForm}" method="post" th:object="${user}">
+
+
+                <div th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Username:</label>
+                                <input type="text" name="userName" th:field="*{userName}" id="userName1"
+                                       placeholder="Username" class="form-control" disabled required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>First Name:</label>
+                                <input type="text" name="firstName" th:field="*{firstName}" id="firstName1"
+                                       placeholder="First Name" class="form-control" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Last Name:</label>
+                                <input type="text" name="lastName" th:field="*{lastName}" id="lastName1"
+                                       placeholder="Last Name" class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Telephone 1:</label>
+                                <input type="number" name="telephone1" th:field="*{telephone1}" id="telephone11"
+                                       placeholder="Telephone 1" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Telephone 2:</label>
+                                <input type="text" name="telephone2" th:field="*{telephone2}" id="telephone21"
+                                       placeholder="Telephone 2" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Address:</label>
+                                <input type="text" name="address" th:field="*{address}" id="address1"
+                                       placeholder="Address" class="form-control" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Email:</label>
+                                <input type="text" name="emailInput" th:field="*{email}" id="emailInout1"
+                                       placeholder="Email" class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Password:</label>
+                                <input type="password" name="passwordInput" th:field="*{password}" id="passwordInput1"
+                                       placeholder="Password" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Balaanz Pin</label>
+                                    <input type="text" name="balaanzPin" th:field="*{terminalCode}"
+                                           id="balaanzPin"
+                                           th:maxlength="6" pattern="\d{6}"
+                                           class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input class="form-check-input" style="width:20px;height:20px;"
+                                       th:field="*{receiveEmailNotifications}" type="checkbox"
+                                       id="receiveEmailNotifications" name="receiveEmailNotifications"
+                                       value="*{receiveEmailNotifications}"/><br/>
+                                <label>Send Email Notifications</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div th:if="${#authorization.expression('hasAnyAuthority(''ROLE_EDIT_CUSTOMER_ACCOUNT'')')}">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Username:</label>
+                                <input type="text" name="userName" th:field="*{userName}" id="userName"
+                                       placeholder="Username" class="form-control" disabled required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>First Name:</label>
+                                <input type="text" name="firstName" th:field="*{firstName}" id="firstName"
+                                       placeholder="First Name" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Last Name:</label>
+                                <input type="text" name="lastName" th:field="*{lastName}" id="lastName"
+                                       placeholder="Last Name" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Telephone 1:</label>
+                                <input type="text" name="telephone1" th:field="*{telephone1}" id="telephone1"
+                                       placeholder="Telephone 1" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Telephone 2:</label>
+                                <input type="text" name="telephone2" th:field="*{telephone2}" id="telephone2"
+                                       placeholder="Telephone 2" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Address:</label>
+                                <input type="text" name="address" th:field="*{address}" id="address"
+                                       placeholder="Address" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Email:</label>
+                                <input type="text" name="emailInput" th:field="*{email}" id="emailInout"
+                                       placeholder="Email" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Password:</label>
+                                <input type="password" name="passwordInput" th:field="*{password}" id="passwordInput"
+                                       placeholder="Password" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Referral:</label>
+                                <input type="text" name="referralInput" th:field="*{referral}" id="referral"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Profession:</label>
+                                <input type="text" name="professionInput" th:field="*{profession}" id="professionInput"
+                                       placeholder="profession" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="identityCardNumber">Identity Card Number:</label>
+                                <input type="text" name="identityCardNumber" th:field="*{identityCardNumber}"
+                                       id="identityCardNumber"
+                                       placeholder="Identity Card No" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="identityCardExpiry">Identity Expiry Date:</label>
+                                <input type="date" name="identityCardExpiry" th:field="*{identityCardExpiry}"
+                                       id="identityCardExpiry"
+                                       class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <input type="hidden" name="id" th:field="*{id}" id="idUserControl"
+                               class="form-control" required>
+
+                        <a class="radius-btn-link"
+                           th:style="${'color:' + session.runtimeSettings?.themeColor + '; border-color:' + session.runtimeSettings?.themeColor}"
+                           th:href="@{/welcomeGlobal}">
+                            Cancel/ Go Back
+                        </a>
+
+                        <button class="btn btn-orange"
+                                th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}"
+                                type="submit">UPDATE USER
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <br/><br/><br/>
+
+            <form action="#" th:action="@{/updateUserControl}" method="post" th:object="${user}">
+
+                <div th:if="${#authorization.expression('hasAnyAuthority(''ROLE_EDIT_CUSTOMER_ACCOUNT'')')}">
+                    <br/><br/>
+                    <h4 th:style="${'color:' + session.runtimeSettings.themeColor2}">UPDATE USER RIGHTS</h4>
+
+                    <div class="row">
+<!--                        <div class="col-md-6">-->
+
+<!--                            <div class="form-group">-->
+<!--                                <input class="form-check-input" style="width:20px;height:20px;"-->
+<!--                                       th:field="*{userControl.curr2currActive}" type="checkbox"-->
+<!--                                       id="curr2currActive" name="curr2currActive" value="true"/><br/>-->
+<!--                                <label><span th:text="${session.runtimeSettings.contextName}"/> to <span-->
+<!--                                        th:text="${session.runtimeSettings.contextName}"/> Account Transfer</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Not Signed Collection Limit:</label>
+                                <input type="text" name="notSignedCollectionLimit"
+                                       th:field="*{userControl.notSignedCollectionLimit}"
+                                       id="notSignedCollectionLimit"
+                                       placeholder="50 000" class="form-control" required/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="form-group">-->
+<!--                                <label>Monthly Limit:</label>-->
+<!--                                <input type="text" name="mobileMoneyMonthlyLimit"-->
+<!--                                       th:field="*{userControl.mobileMoneyMonthlyLimit}" id="mobileMoneyMonthlyLimit"-->
+<!--                                       placeholder="10000" class="form-control" required/>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="form-group">-->
+<!--                                <input class="form-check-input" th:field="*{userControl.mobileMoneyActive}"-->
+<!--                                       style="width:20px;height:20px;" type="checkbox"-->
+<!--                                       id="mobileMoneyActive" name="mobileMoneyActive" value="true"/><br/>-->
+<!--                                <label>Momo Enabled:</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+
+                        <button class="btn btn-orange"
+                                th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}"
+                                type="submit">UPDATE USER LIMITS
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <input type="hidden" name="id" th:field="*{id}" id="id"
+                               class="form-control" required>
+
+
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</section>
+<div th:insert="footer::navbar"></div>
+</html>

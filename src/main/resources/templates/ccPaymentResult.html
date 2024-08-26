@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+<!--    <div th:insert="summary::navbar"></div>-->
+
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container payment-status-modal">
+            <span class="status-icon success" th:unless='${error}'><i class="far fa-check-circle"></i></span>
+            <span class="status-icon error" th:if='${error}'><i class="far fa-times-circle"></i></span>
+            <form th:action="@{/charge}" method='POST' id='checkout-form'>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 th:style="${'color:' + session?.runtimeSettings?.themeColor2}"><span th:text="'$'+${#numbers.formatDecimal(amount, 0, 'COMMA', 0, 'POINT')}"/></h4>
+
+                        <div class="payment-status-content" th:if='${error}'>
+                            <b>TRANSACTION UNSUCCESSFUL</b>
+                            <p th:text='${error}'></p>
+                        </div>
+                        <div class="payment-status-content" th:unless='${error}'>
+                            <b>TRANSACTION SUCCESSFUL</b>
+                            <p>Your account has been successfully updated.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <a class="radius-btn-link" th:style="${'color:' + session.runtimeSettings.themeColor + '; border-color:' + session.runtimeSettings.themeColor}" th:href="@{/welcomeGlobal}">
+                            Home/ Go Back
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<div th:insert="footer::navbar"></div>
+</html>

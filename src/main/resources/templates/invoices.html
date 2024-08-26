@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header" ></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <!-- <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">INVOICES</h2>
+                        <span th:style="${'color:' + session.runtimeSettings.themeColor2}">List of INVOICES. - <a href="#" th:href="@{/registerInvoice}" th:style="${'color:' + session.runtimeSettings.themeColor2}"> Create invoice </a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container">
+            <div class="radius-container-title" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                <h2>INVOICES</h2>
+                <a th:href="@{/registerInvoice}">Create Invoice <i class="fas fa-plus"></i></a>
+            </div>
+            <div class="user-list">
+                <table class="default-list">
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Username</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                        <th>Created By</th>
+                        <th>Created Date</th>
+                        <th></th>
+                    </tr>
+                    <tr th:each="invoice : ${invoices}">
+                        <td th:text="${invoice.invoiceNumber}"></td>
+                        <td th:text="${invoice.notes}"></td>
+                        <td th:text="${invoice.username}"></td>
+                        <td th:text="${invoice.dueDate}"></td>
+                        <td th:text="${invoice.invoiceStatus}"></td>
+                        <td th:text="${invoice.createdBy}"></td>
+                        <td th:text="${#dates.format(invoice.createdDate, 'dd-MMM-yyyy HH:mm')}"></td>
+                        <td class="text-right">
+                            <a class="table-list-button-icon" href="#" th:href="@{/invoiceDetails/{id}(id=${invoice.id})}"><i class="fas fa-ellipsis-h"></i></a>
+                            <a class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/printInvoice/{id}(id=${invoice.id})}">
+                                <i class="far fa-file-pdf"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="footer::navbar"></div>
+</html>

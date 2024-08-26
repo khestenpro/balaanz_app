@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header">  </div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">SYSTEM SETTINGS <a th:style="${'color:' + session.runtimeSettings.themeColor}" href="/registerSetting"><i class="fas fa-plus"></i></a></h2>
+                         <span>Click on Plus to create/edit a Property.<div th:text="'('+${session.current_org}+')'"></div></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Project title area end -->
+    <div class="container">
+        <div class="radius-container setting-container">
+            <div class="setting-file-uploader">
+                <div class="row">
+                    <div class="col-md-6">
+                        <form action="#" method="post" th:action="@{/uploadLogo}" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <input type="file" name="file" class="form-control-file">
+                            </div>
+                            <button type="submit" class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}">Upload logo And Save To See Changes</button>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <form action="#" method="post" th:action="@{/uploadUnionLogo}" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <input type="file" name="file" class="form-control-file">
+                            </div>
+                            <button type="submit" class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}">Upload Union logo And Save To See Changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <form action="#" th:action="@{/saveSettingForm}" method="post" th:object="${runtimeSetting}">
+                <span class="alert alert-info save-setting-form-msg" th:if="${settingsInfo}" th:text="${settingsInfo}"/>
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <img width="100px" th:src="@{/getLogoImage}"/>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <img width="100px" th:src="@{/getUnionLogoImage}"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Logo:</label>
+                            <input type="text" name="logo" th:field="*{logo}" id="logo"
+                                         placeholder="Upload logo" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Union logo:</label>
+                            <input type="text" name="unionLogo" th:field="*{unionLogo}" id="unionLogo"
+                                         placeholder="Upload Union logo" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Image Prefix:</label>
+                            <input type="text" name="imagePrefix" th:field="*{imagePrefix}" id="imagePrefix"
+                                               placeholder="file:/" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Business Name:</label>
+                            <input type="text" name="businessName" th:field="*{businessName}" id="businessName"
+                                   placeholder="Enter business name" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Slogan:</label>
+                            <input type="text" name="slogan" th:field="*{slogan}" id="slogan"
+                                                 placeholder="Enter slogan" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>VAT Percent:</label>
+                            <input type="text" name="vatPercent" th:field="*{vatPercent}" id="vat"
+                                                 placeholder="VAT" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Address:</label>
+                            <input type="text" name="address" th:field="*{address}" id="address"
+                                                 placeholder="Enter address name" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Telephone:</label>
+                            <input type="text" name="telephone" th:field="*{telephone}" id="telephone"
+                                           class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Telephone2:</label>
+                            <input type="text" name="telephone2" th:field="*{telephone2}" id="telephone2"
+                                             class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Email:</label>
+                            <input type="text" name="email" th:field="*{email}" id="email"
+                                          class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Website:</label>
+                            <input type="text" name="website" th:field="*{website}" id="website"
+                                            class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Unit Ordinary Share Price:</label>
+                            <input type="text" name="unitSharePrice" th:field="*{unitSharePrice}" id="unitSharePrice"
+                                            class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Currency:</label>
+                            <input type="text" name="currency" th:field="*{currency}" id="currency"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Business ID:</label>
+                            <input type="text" name="bid" th:field="*{bid}" id="bid"
+                                   class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Bill Selection Enable:</label>
+                            <input type="text" name="billSelectionEnabled" th:field="*{billSelectionEnabled}" id="billSelectionEnabled"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Invoice Footer:</label>
+                            <input type="text" name="invoiceFooter" th:field="*{invoiceFooter}" id="invoiceFooter"
+                                   class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Country Code(CMR):</label>
+                            <input type="text" name="countryCode" th:field="*{countryCode}" id="countryCode"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Make A Payment:</label>
+                            <input type="text" name="makeAPayment" th:field="*{makeAPayment}" id="makeAPayment"
+                                   class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Unit Preference Share Price:</label>
+                            <input type="text" name="unitPreferenceSharePrice" th:field="*{unitPreferenceSharePrice}" id="unitPreferenceSharePrice"
+                                                     class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Fax:</label>
+                            <input type="text" name="fax" th:field="*{fax}" id="fax"
+                                            class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>ThemeColor2:</label>
+                            <input type="text" name="themeColor2" th:field="*{themeColor2}" id="themeColor2"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>ThemeColor:</label>
+                            <input type="text" name="themeColor" th:field="*{themeColor}" id="themeColor"
+                                        class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Context Name:</label>
+                            <input type="text" name="contextName" th:field="*{contextName}" id="contextName"
+                                        class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Upload Directory:</label>
+                            <input type="text" name="uploadDirectory" th:field="*{uploadDirectory}" id="uploadDirectory"
+                                                class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Momo Org Account:</label>
+                            <input type="text" name="momoOrgAccount" th:field="*{momoOrgAccount}" id="momoOrgAccount"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Momo Platform fee(%):</label>
+                            <input type="text" name="platformFee" th:field="*{platformFee}" id="platformFee"
+                                   class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Wallet Enabled:</label>
+                            <input type="text" name="walletEnabled" th:field="*{walletEnabled}" id="walletEnabled"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Savings Account Minimum Balance:</label>
+                            <input type="text" name="savingMinBalance" th:field="*{savingMinBalance}" id="savingMinBalance"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+                <h5 class="text-md-center">Email Notification Content</h5>
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="emailDescription1">Email summary 1:</label>
+                            <textarea name="emailDescription1"
+                                      rows="2" cols="10" maxlength="300"
+                                      th:text="*{emailDescription1}" id="emailDescription1"
+                                      class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="emailDescription2">Email summary 2:</label>
+                            <textarea name="emailDescription2"
+                                      rows="2" cols="10" maxlength="300"
+                                      th:text="*{emailDescription2}" id="emailDescription2"
+                                      class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="tag-group-field">
+                            <label for="itemInput">Services Offer:</label>
+                            <div class="form-group"> 
+                                <input class="form-control" type="text" placeholder="ex: free appetizers or free laundry" id="itemInput">
+                                <button type="button" class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" onclick="addItem()">Add</button>
+                                <input type="hidden" id="itemsInput" th:field="*{organizationProvidedServices}" name="items" />
+                                <div class="d-inline-flex flex-wrap flex-wrap tag-list" id="itemList"></div>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                
+                <div class="row">
+                    <div class="col-md-12 text-center pad-t-20">
+                        <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+    let itemList = [];
+    let maxItems = 20;
+    itemList = document.getElementById("itemsInput").value.split(",");
+    if(itemList.length === 1 && itemList[0] === ''){
+        itemList = [];
+    }
+    console.log(document.getElementById("itemsInput").value)
+    prepareItemsToDisplay()
+    function addItem() {
+        let itemInput = document.getElementById("itemInput");
+        let newItem = itemInput.value.trim();
+        if (newItem !== "") {
+            if (itemList.length < maxItems) {
+                itemList.push(newItem);
+                displayItems();
+                itemInput.value = "";
+            } else {
+                alert("Maximum number of items reached (" + maxItems + ").");
+            }
+        }
+    }
+
+    function deleteItem(index) {
+        itemList.splice(index, 1);
+        displayItems();
+    }
+
+    function prepareItemsToDisplay() {
+        let itemListDiv = document.getElementById("itemList");
+        itemListDiv.innerHTML = "";
+        for (let i = 0; i < itemList.length; i++) {
+            if(itemList[i] === ''){continue}
+            let closeButton = document.createElement("button");
+            closeButton.className = "close";
+            closeButton.innerHTML = "&nbsp;&times;";
+            closeButton.onclick = (function (index) {
+                return function () {
+                    deleteItem(index);
+                };
+            })(i);
+            let spanItem = document.createElement("span");
+            spanItem.className = "badge badge-pill badge-primary d-flex align-items-center justify-content-center";
+            spanItem.style.marginTop = "3px";
+            spanItem.style.marginRight = "3px";
+            spanItem.textContent = itemList[i];
+            spanItem.appendChild(closeButton)
+            itemListDiv.appendChild(spanItem);
+        }
+    }
+
+    function displayItems() {
+        let itemsInput = document.getElementById("itemsInput");
+        prepareItemsToDisplay();
+        console.log("display items ",itemList)
+        itemsInput.value = itemList.join(',');
+    }
+</script>
+
+<div th:insert="footer::navbar"></div>
+<script src="/assets/js/jquery-3.5.1.min.js"></script>
+<script src="/assets/js/currencyFormatter.js"></script>
+</html>

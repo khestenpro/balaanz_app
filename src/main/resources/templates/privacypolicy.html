@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitsvalley Payments</title>
+    <!-- Favicon  -->
+    <link rel="icon" type="image/x-icon" th:href="@{assets/images/favicon/faviconn.ico}">
+    <link rel="stylesheet" th:href="@{../css/main.css}" type="text/css}"/>
+
+    <!--Bootstrap-->
+    <link rel="stylesheet" type="text/css" th:href="@{../assets/css/bootstrap.min.css}">
+    <!--Fontawesome-->
+    <link rel="stylesheet" type="text/css" th:href="@{../assets/css/all.min.css}">
+    <!--Owl-carousel-->
+    <link rel="stylesheet" type="text/css" th:href="@{../assets/css/owl.carousel.min.css}">
+    <!--Owl Carousel theme-->
+    <link rel="stylesheet" type="text/css" th:href="@{../assets/css/owl.theme.default.min.css}">
+    <!--Animate-->
+    <link rel="stylesheet" type="text/css" th:href="@{../assets/css/animate.min.css}">
+    <!-- magnific CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{../assets/css/magnific-popup.css}">
+    <!-- Mmenu CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{../assets/css/slicknav.min.css}">
+    <!--Style-->
+    <link rel="stylesheet" type="text/css" th:href="@{../assets/css/style.css}">
+    <!-- Responsive -->
+    <link rel="stylesheet" type="text/css" th:href="@{../assets/css/responsive.css}">
+    <!-- Material Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+</head>
+
+<header class="header">
+    <div class="container">
+        <div class="inner-header">
+            <div class="logo">
+                <a href="/login"><img src="/assets/images/home-logo.png" /></a>
+            </div>
+            <div class="login-section">
+                <form class="login-form" name='f' action="login" method='POST'>
+                    <input type="text" name="username" id="username" required placeholder="Username" />
+                    <input type="password" name="password" id="password" required placeholder="Password" />
+                    <button type="submit" class="login-button">
+                        <span class="material-symbols-outlined">
+                            lock
+                        </span>
+                        Login
+                    </button>
+                </form>
+
+            </div>
+            <div class="nav-bar">
+                <button class="nav-bar-btn">
+                    <span class="material-symbols-outlined">
+                        menu
+                    </span>
+                </button>
+            </div>
+            <!-- <div class="navigation">
+                <ul>
+                    <li><a href="/login">Home</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">App</a></li>
+                    <li class="mobile-only">
+                        <a class="login-link" href="#" data-toggle="modal" data-target="#exampleModal">
+                            <span class="material-symbols-outlined">
+                                lock
+                            </span>
+                            Login
+                        </a>
+                    </li>
+                </ul>
+            </div> -->
+            <!-- <div class="user web-only">
+                <ul>
+                    <li>
+                        <a href="#" class="login-link" data-toggle="modal" data-target="#exampleModal">
+                            <span class="material-symbols-outlined">
+                                lock
+                            </span>
+                            Login
+                        </a>
+                    </li>
+                    <li>
+                        <button class="trial-button">Free Trial</button>
+                    </li>
+                </ul>
+            </div> -->
+        </div>
+    </div>
+</header>
+<!-- <section class="banner slider-area-start owl-carousel">
+    <div class="banner-slide">    
+        <div class="container">
+            <div class="inner-banner">
+                <div class="banner-slide">
+                    <div class="banner-content">
+                        <h2>bala@nz - Online Banking</h2>
+                        <p>Sign On To View Your Accounts</p>
+                    </div>
+                    <div class="banner-image">
+                        <img src="/assets/images/main-slider/banner-image.png" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+
+
+    <!--Choosen main area start-->
+    <div class="content-container">
+        <div class="container">
+            <h2>Privacy Policy</h2>
+            <p>
+                Evolution Credit Union Ltd has designed a privacy policy and established the necessary means and procedures to fulfill it.
+            </p>
+            <div class="content-list">
+                <h3><span class="counter">1)</span>Definitions</h3>
+                <p>
+                    Hereinafter, any reference to “we,” “us,” “Evolution Credit Union Ltd” and “Company” will be to all of them Evolution Credit Union Ltd and of its subsidiaries or any successor or assignee of the Company.
+                </p>
+                <p>
+                    This Website/Product is the property of Evolution Credit Union Ltd, Company registered under Cameroon law, Office Toll Gate Tiko.
+                </p>
+                <p>
+                    All of the products and services provided by Evolution Credit Union Ltd are subject to the Cameroon legislation in force. We are in the business of providing an online platform that our customers may use to create, send and manage clients, client savings and client loan accounts. The term “Evolution Credit Union Ltd” refers either to the business or the online platform as the context requires. The term “Services” refers to the services offered by Evolution Credit Union Ltd. The term “Customer” refers to an individual or entity who or which is registered with us to use the Services. The term “you” refers to any Customer (or other party whose contact information has been provided to us over the internet) who is reading this Privacy Policy, or on behalf of whom this policy is being read. The term “Website” refers to the website with the URL https://www.evolutioncreditunion.com. The term “Personal Information” means information about an individual who is a Customer and includes any “Customer Data”.
+                </p>
+            </div>
+            <div class="content-list">
+                <h3><span class="counter">2)</span> Categories of Information We Collect</h3>
+                <ul class="bullet-list">
+                    <li>
+                        <strong>Information You Provide to Us :</strong> When you register to use Evolution Credit Union Ltd on a free or other basis, communicate with customer service, or send us an email, you provide us with information that we collect. Such information may include your IP address, name, physical address, email address, phone number, cell phone number, credit card information, alternative payment details and other information such as gender, occupation and other demographic information. By providing us with this information, you consent to your information being collected, used, disclosed and stored by us in accordance with this Privacy Policy.
+                    </li>
+                    <li>
+                        <strong>Other Information We Receive and Store :</strong> When you register to use Evolution Credit Union Ltd, we store “cookies,” which are strings of code, on your computer. We also use electronic images known as Web beacons. With those cookies, we are aware of and collect information concerning when you visit our Website, when you use Evolution Credit Union Ltd, your browser type and version, your operating system and platform and other similar information. With Web beacons, we can determine when you open email we send you, and collect other data. You may turn off all cookies that have been placed on your computer by following the instructions on your browser on how to block cookies that have been placed on your computer. However, if you block our cookies it will be more difficult, and maybe impossible, to use the Services.
+                    </li>
+                    <li>
+                        <strong>Tracking Our Emails to Our Customers :</strong> When we send emails to our own registered Evolution Credit Union Ltd customers, we'll sometimes track who opened the emails and who went so far as to click on any of the hyperlinks. We do this to measure the performance of our Email Campaigns, and to improve our offerings to specific customer segments.4.
+                    </li>
+                    <li>
+                        <strong>Information From Other Sources :</strong> We may obtain additional information about you by using your email address, or other information, to directly, or through one or more services, search over the internet, or elsewhere. We thereby obtain information that appears to be related to such email address or other information, such as a name, age and participation in social media websites.
+                    </li>
+                </ul>
+            </div>
+            <div class="content-list">
+                <h3><span class="counter">3)</span> Use and Disclosure of Your Personal Information</h3>
+                <p>
+                    We will use and disclose your Personal Information only as follows:
+                </p>
+                <ul class="bullet-list">
+                    <li>
+                        To promote use, including continued use, of our Services. For example, if you leave your personal information when you visit our Website and do not sign up for any of the Services, we may send you one or more emails asking whether you wish to sign up. If you use any of our Services, and may benefit from using one or more other Services we offer, we may send you an email telling you about the other Service or Services.
+                    </li>
+                    <li>
+                        To bill and collect sums owed to us. Uses for this purpose include sending you emails, invoices, receipts and notices of delinquency, to alert you if we need a different credit card number, and to otherwise try to collect money owed. We use third parties to handle secure credit card transaction processing and send billing information to such third parties, who maintain all information in confidence, to process your orders and credit card payments.
+                    </li>
+                    <li>
+                        To send you System Alert Messages to let you know about temporary or permanent changes to our Services including planned outages, new features offered, version updates, point releases, major releases, abuse warnings, changes to our Privacy Policy and possibly other documents and agreements.
+                    </li>
+                    <li>
+                        To help enforce compliance with our Terms of Use and applicable law including, but not limited to, helping to create credit bureau information, to develop and test algorithms, heuristics and other methods and tools for detecting violations and to apply those methods and tools.
+                    </li>
+                    <li>
+                        To provide customer support and obtain feedback.
+                    </li>
+                    <li>
+                        To protect the rights and safety of us and our employees, Customers, owners, officers and others.
+                    </li>
+                    <li>
+                        To meet legal requirements such as complying with court orders and valid subpoenas.
+                    </li>
+                    <li>
+                        To provide information received hereunder to representatives and advisors such as attorneys and accountants to help us comply with legal and other requirements.
+                    </li>
+                    <li>
+                        To prosecute and defend a court, arbitration or similar proceeding.
+                    </li>
+                    <li>
+                        To support and improve the Services we offer including adding features and providing benchmarking and other comparison information regarding, for example, the relative success of a Customers compared to other institutions in the same or different regions. Benchmarking and similar information is derived from aggregating and analyzing data.
+                    </li>
+                    <li>
+                        To communicate with you concerning your account for an informational, as opposed to promotional, purpose.
+                    </li>
+                    <li>
+                        To transfer your information in the event of the sale of substantially all of the assets of our business to a third-party or in the event of a merger, consolidation or acquisition. However, in such event, any acquirer will be subject to our obligations under this Privacy Policy.
+                    </li>
+                    <li>
+                        To send you informational and promotional materials that you elect (“opt-in”) to receive.
+                    </li>
+                </ul>
+            </div>
+            <div class="content-list">
+                <h3><span class="counter">4)</span> Customer Data</h3>
+                <p>
+                    Your clients and client's information is stored on a secure Evolution Credit Union Ltd server. We do not, under any circumstances, steal your data, contact people on your database, sell your data, or share your data with any other party, except as required by law or, regarding contacting, except in response to a complaint. Only carefully selected, authorized personnel have access to view your data. We do not hold your data hostage. We do not make it difficult for you to reclaim it. You may export (download) your data from Evolution Credit Union Ltd at any time so long as we have a copy.
+                </p>
+                <p>
+                    We will use and disclose the information in your Data only for one or more of the following purposes:
+                </p>
+                <ul class="bullet-list">
+                    <li>
+                        To help enforce compliance with our Terms of Use and applicable law including, but not limited to, helping to create white lists and black lists, to develop and test algorithms, heuristics and other methods and tools for detecting violations, and to apply those methods and tools.
+                    </li>
+                    <li>
+                        To bill and collect sums owed to us.
+                    </li>
+                    <li>
+                        To protect the rights and safety of us and our employees, Customers, owners, officers and others.
+                    </li>
+                    <li>
+                        To meet legal requirements such as complying with court orders and valid subpoenas.
+                    </li>
+                    <li>
+                        To prosecute and defend a court, arbitration or similar proceeding.
+                    </li>
+                    <li>
+                        To support and improve the services we offer including adding features and providing benchmarking and other comparison information based on aggregating and analyzing data.
+                    </li>
+                    <li>
+                        To transfer your information in the event of the sale of all, or substantially all, of the assets of our business to a third-party or in the event of a merger, consolidation or acquisition. However, in such event, any acquirer will be subject to our obligations under this Privacy Policy.
+                    </li>
+                    <li>
+                        To provide information received hereunder to representatives and advisors such as attorneys and accountants to help us comply with legal and other requirements.
+                    </li>
+                    <li>
+                        To provide customer support and obtain feedback about our Services, but only for and from the Customer whose Personal Information and User Data are being used.
+                    </li>
+                </ul>
+            </div>
+            <div class="content-list">
+                <h3><span class="counter">5)</span> Safeguarding Your Information</h3>
+                <p>
+                    In accordance with current legislation, Evolution Credit Union Ltd has adopted the necessary technical and organizational means to maintain the safety level required insofar as the personal data dealt with. It also has the specific mechanisms available to it to prevent unauthorized access, illicit removal and modifications and the loss of data.
+                </p>
+                <p>
+                    To protect your information, our credit card processing vendor uses the latest 128-bit Secure Socket Layer (SSL) technology for secure transactions. In addition, our vendor is certified as compliant with card association security initiatives, such as the Visa Cardholder Information Security and Compliance (CISP), MasterCard® (SDP), and Discovery Information Security and Compliance (DISC).
+                </p>
+                <p>
+                    Evolution Credit Union Ltd accounts require a username and password to log in. When you're finished using Evolution Credit Union Ltd, please click the “log out” link in the top right corner of your screen, to prevent someone from using your computer to access your account. You must keep your username and password secure and not disclose it to a third party.
+                </p>
+                <p>
+                    Due to the sensitive nature of your Data, we do not re-send forgotten passwords. Your Users must contact you directly to reset their passwords if they forget them. Should you forget your password then you must follow online instructions to reset your password.
+                </p>
+                <p>
+                    Account passwords are encrypted. We cannot see your passwords. We can only reset them.
+                </p>
+            </div>
+            <div class="content-list">
+                <h3><span class="counter">6)</span> Notice of Breach of Security</h3>
+                <p>
+                    Nobody is safe from hackers these days. Evolution Credit Union Ltd will notify you, as soon as possible, if a breach in security results in an unauthorized intrusion into our system which materially affects you or people on your Data, and will subsequently report the corrective action taken in response to the intrusion.
+                </p>
+            </div>
+            <div class="content-list">
+                <h3><span class="counter">7)</span> Notification of Changes</h3>
+                <p>
+                    Any changes to this Privacy Policy will be posted to this Website and emailed to the last email address you have given to us, and will become effective as of the later of the date we post on the Website or, send the email. You may object to any changes within 20 days after they are posted on our Website or delivered to you, in which case none of the proposed changes will be effective with respect to information that we have already collected from you; but will apply only to information we collect or access from you in the future. There are purposes, other than marketing, for which we are not willing or able to treat information of any open account differently from that of any other open account. Therefore, if you object to changes in our Privacy Policy which relate to those purposes, we will have to terminate your account. In contrast, in the event we ever changed our Privacy Policy to allow us to have an expanded right to use or disclose Personal Information for marketing purposes, you would be able to opt out without any such termination.
+                </p>
+            </div>
+            <div class="content-list">
+                <h3><span class="counter">8)</span> Accuracy of Data and Rights</h3>
+                <p>
+                    We do our best to keep your data accurate and up-to-date to the extent that you provide us with the information we require to do that. If your data changes (including, but not limited to, a change in your email address) then you are responsible for notifying us of those changes so that we can keep your records up-to-date.
+                </p>
+                <p>
+                    We retain the data about you only so long as reasonably required to meet the purposes for which we have the right to use the information.
+                </p>
+                <p>
+                    We will give you access to any of your Personal Information that we hold about you within 30 days of any request you make for such information. We may charge for providing this information to you, as permitted by applicable law.
+                </p>
+                <div class="content-sections">
+                    <h4>Effective Date</h4>
+                    <p>
+                        This Privacy Policy is effective with respect to all data that we have collected, or collect, about and/or from you, both prior to your registration as a Customer and/or during the Term, in accordance with the Terms of Use.
+                    </p>
+                </div>
+                <div class="content-sections">
+                    <h4>Data Protection Clause</h4>
+                    <p>
+                        <strong>A.1.</strong> Users, in the case of individuals, are informed that their personal data, to which Evolution Credit Union Ltd has access as a result of enquiries, transactions, operations, contract applications, and product and service commissioning appointed through any means or computer processes in relation to already registered data, will be included in the corresponding file of Evolution Credit Union Ltd.
+                    </p>
+                    <p>
+                        Evolution Credit Union Ltd is hereby authorized to treat the necessary data for its use in relation to the undertaking of the agreed operation or service. Such data will be considered compulsory.
+                    </p>
+                    <p>
+                        <strong>A.2.</strong> Evolution Credit Union Ltd is also expressly authorized to use your data in the offering and contracting of products and services and for the undertaking of commercial action, whether this be general or adapted to their personal characteristics. Said commercial action may be undertaken by e-mail or equivalent electronic means of communication.
+                    </p>
+                    <p>
+                        <strong>A.3.</strong> Users also authorize the communication or transfer of said data to companies belonging to Evolution Credit Union Ltd for the same purpose indicated in the above paragraphs, giving said companies the express authorisation to use e-mail or equivalent means. The interested parties are informed that said data are hereby transferred at this time to the Companies whose name, activity and registered offices are indicated below. The parties agree that Evolution Credit Union Ltd will inform the interested parties of such transfers in the usual manner used to inform them of the products contracted with the company.
+                    </p>
+                    <p>
+                        <strong>A.4.</strong> Users are informed of their right to oppose, access, rectify and cancel their personal data under the terms established by Law. and may exercise these rights in writing together with a copy of their National Identity Document addressed to:
+                    </p>
+                    <p>
+                        Evolution Credit Union Ltd<br>
+                        Privacy Department<br>
+                        Tiko Toll Gate<br>
+                        Tiko, South West Region
+                    </p>
+                    <p>
+                        Cameroon <br>
+                        <a href="mailto:info@evolutioncreditunion.com">info@evolutioncreditunion.com</a>
+                    </p>
+                    <p>
+                        <strong>A.5.</strong> Users may revoke the authorisation given for the use or transfer of their personal data, except for what it is established under Section A.1. of this Clause, which is compulsory, in the manner established in Section A.4 above.
+                    </p>
+                </div>
+            </div>
+            <div class="content-list">
+                <h3><span class="counter">9)</span> Questions</h3>
+                <p>
+                    If you have any questions, comments, or concerns or wish to update, delete or change any Personal Information submitted on this Site, or have any questions about our Privacy Policy, please notify us through postal mail at:
+                </p>
+                <p>
+                    Evolution Credit Union Ltd<br>
+                    Privacy Department<br>
+                    Tiko Toll Gate<br>
+                    Tiko, South West Region<br>
+                    Cameroon<br>
+                    <a href="mailto:info@evolutioncreditunion.com">info@evolutioncreditunion.com</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+<div th:insert="blog::navbar"></div>
+
+<!--Blog area end-->
+
+<!--<div th:insert="footer::navbar">  </div>-->
+
+
+
+<div th:fragment="navbar" class="app-footer">
+
+    <table width="100%" class="center" border="0"><tr><td>
+
+        <!--Footer area start-->
+        <footer class="footer-area-start">
+
+            <!--Footer content area start-->
+            <div class="footer-content-area-start">
+                <div class="container">
+<!--                    <div class="row">-->
+<!--                        &lt;!&ndash;Single footer widget start&ndash;&gt;-->
+<!--                        <div class="col-md-3 mb-sm-5 mb-md-0">-->
+<!--                            <div class="single-footer-widget">-->
+<!--                                <div class="logo-area">-->
+<!--                                </div>-->
+<!--                                <p>The financial institution on your side. We will consult with you on a one on one basis?</p>-->
+<!--                                <div class="team-member-social-icon">-->
+<!--                                    <a href="#"><i class="fab fa-facebook-f"></i></a>-->
+<!--                                    <a href="#"><i class="fab fa-dribbble"></i></a>-->
+<!--                                    <a href="#"><i class="fab fa-instagram"></i></a>-->
+<!--                                    <a href="#"><i class="fab fa-twitter"></i></a>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash;Single footer widget end&ndash;&gt;-->
+
+<!--                        &lt;!&ndash;Single footer widget footer menu start&ndash;&gt;-->
+<!--                        <div class="col-md-2 mb-sm-5 mb-md-0">-->
+<!--                            <div class="single-footer-widget">-->
+<!--                                <h5>Features</h5>-->
+<!--                                <ul class="footer-menu">-->
+<!--                                    <li><a href="#">Home</a></li>-->
+<!--&lt;!&ndash;                                    <li><a href="#">About</a></li>&ndash;&gt;-->
+<!--                                    <li><a href="#">Portfolio</a></li>-->
+<!--&lt;!&ndash;                                    <li><a href="#">Help</a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <li><a href="#">Policy</a></li>&ndash;&gt;-->
+<!--                                </ul>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash;Single footer widget footer menu end&ndash;&gt;-->
+
+<!--                        &lt;!&ndash;Single footer widget footer menu start&ndash;&gt;-->
+<!--                        <div class="col-md-4 mb-sm-5 mb-md-0">-->
+<!--                            <div class="single-footer-widget">-->
+<!--                                <h5>Recent News</h5>-->
+<!--                                <div class="media">-->
+<!--                                    <div class="media-body">-->
+<!--                                        <p>Microfinance institutions are still largely concentrated in the cities, although 60% of the total populatio a growing share of ACEP Cameroun’s activity.</p>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash;Single footer widget footer menu end&ndash;&gt;-->
+
+<!--                        &lt;!&ndash;Single footer widget footer menu start&ndash;&gt;-->
+<!--                        <div class="col-md-3">-->
+<!--                            <div class="single-footer-widget">-->
+
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash;Single footer widget footer menu end&ndash;&gt;-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </footer>
+        <!--Footer area end-->
+
+    </td></tr></table>
+
+    <!--jQuery-->
+    <script src="/assets/js/jquery-3.5.1.min.js"></script>
+    <!--Bootstrap-->
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <!-- Waypoint js -->
+    <script src="/assets/js/jquery.waypoints.js"></script>
+    <!-- Counter Up -->
+    <script src="/assets/js/jquery.counterup.min.js"></script>
+    <!--Owl-Carousel-->
+    <script src="/assets/js/owl.carousel.min.js"></script>
+    <!--Parallax-->
+    <script src="/assets/js/parallax.min.js"></script>
+    <!-- Isotope JS -->
+    <script src="/assets/js/isotope.pkgd.min.js"></script>
+    <!-- MMenu JS -->
+    <script src="/assets/js/jquery.slicknav.min.js"></script>
+    <!-- magnific Js -->
+    <script src="/assets/js/jquery.magnific-popup.min.js"></script>
+    <!-- Progress Bar -->
+    <script src="/assets/js/jquery.lineProgressbar.js"></script>
+    <!-- Countdown Js -->
+    <script src="/assets/js/jquery.countdown.min.js"></script>
+    <!--Custom Js-->
+    <script src="/assets/js/custom.js"></script>
+
+</div>
+<!--Footer area end-->
+
+<!--Modal area start-->
+<!-- Modal -->
+<!--<div class="modal login-modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+<!--    <div class="modal-dialog">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header  bg-primary text-light">-->
+<!--                <h5 class="modal-title text-uppercase" id="exampleModalLabel">Secure Login</h5>-->
+<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                    <span aria-hidden="true">&times;</span>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--                    <form name='f' action="login" method='POST'>-->
+<!--                        <label for="username">Username</label>-->
+<!--                        <input type="text"  name="username" id="username" required-->
+<!--                               class="form-control mb-3">-->
+
+<!--                        <label for="password">Password</label>-->
+<!--                        <input type="password" name="password" id="password" required-->
+<!--                               class="form-control">-->
+
+<!--                        <button type="submit" class=" mt-3 btn btn-primary text-uppercase text-light">Login</button>-->
+<!--                    </form>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+
+</body>
+
+</html>

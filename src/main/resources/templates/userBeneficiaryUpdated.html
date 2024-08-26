@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header" >  </div>
+    <br/>
+    <br/>
+<div class="contact-from-area">
+    <div class="container">
+<span class="alert alert-info" th:if="${updatedInfo}" th:text="${updatedInfo}"></span>
+    <font color="#fd7e14" size="6"> Updated User Beneficiaries - TOTAL MUST BE 100% </font>
+    <form action="#" th:action="@{/update}" method="post" th:object="${user}">
+        <font color="green" size="5">
+            <div th:each="aBeneficiary : ${user.beneficiary}">
+                <span th:text="${aBeneficiary.name}"></span> -
+                <span th:text="${aBeneficiary.relation}"></span> -
+                <span th:text="${aBeneficiary.percentage}"></span>% -
+                <span th:text="${aBeneficiary.notes}"></span>
+            </div>
+        </font>
+    </form>
+    </div>
+</div>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header" ></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">LOAN PAYMENT DETAILS</h2>
+                        <span>Review Amortization Report.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container amortization-container">
+            <div class="amortization-details">
+                <div class="row vertical-space-20">
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Customer Name:</label>
+                            <span th:text="${session.customerInUse.gender +'. '+session.customerInUse.firstName +' '+session.customerInUse.lastName }"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Telephone No:</label>
+                            <span th:text="${session.customerInUse.telephone1}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Number:</label>
+                            <span th:text="${amortization.loanMonths}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Start Date:</label>
+                            <span th:text="${amortization.startDate}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Annual Rate HT:</label>
+                            <span th:text= "${amortizationHT.interestRate}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Annual Rate TTC:</label>
+                            <span th:text="${amortization.interestRate}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>VAT:</label>
+                            <span th:text="${session.runtimeSettings.vatPercent}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Total VAT Interest:</label>
+                            <span th:text="${#numbers.formatDecimal(amortization.interestVAT, 0, 'COMMA', 0, 'POINT')}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Total Interest:</label>
+                            <span th:text="${#numbers.formatDecimal(amortization.totalInterest, 0, 'COMMA', 0, 'POINT')}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Monthly Payment:</label>
+                            <span th:text="${amortization.monthlyPayment}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Total Payment:</label>
+                            <span th:text="${amortization.totalInterestLoanAmount}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-snippet">
+                            <label>Total Principal:</label>
+                            <span th:text="${#numbers.formatDecimal(amortization.loanAmount, 0, 'COMMA', 0, 'POINT')}"></span>
+                        </div>
+                    </div>
+                </div>
+                <a class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" href="#" th:href="@{/amortizationPDF}">
+                    <i class="far fa-file-pdf"></i> Download AMORTIZATION PLAN
+                </a>
+            </div>
+            <div class="amortization-list">
+                <table class="default-list">
+                    <tr>
+                        <th>Number</th>
+                        <th>Balance</th>
+                        <th>Principal</th>
+                        <th>Interest on TTC</th>
+                        <th>VAT on Interest</th>
+                        <th>Interest on HT</th>
+                        <th>Payment</th>
+                        <th>Date</th>
+                    </tr>
+                    <tr th:each="entry : ${amortization.amortizationRowEntryList}">
+                        <td th:text="${entry.monthNumber}"></td>
+                        <td th:text="${entry.loanBalance}"></td>
+                        <td th:text="${entry.principal}"></td>
+                        <td th:text="${#numbers.formatDecimal(entry.monthlyInterest, 0, 'COMMA', 0, 'POINT')}"></td>
+                        <td th:text="${#numbers.formatDecimal(entry.vATOnInterest, 0, 'COMMA', 0, 'POINT')}">   </td>
+                        <td th:text="${#numbers.formatDecimal(entry.interestOnHT, 0, 'COMMA', 0, 'POINT')}">  </td>
+                        <td th:text="${entry.payment}"></td>
+                        <td th:text="${entry.date}"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="footer::navbar"></div>
+</html>

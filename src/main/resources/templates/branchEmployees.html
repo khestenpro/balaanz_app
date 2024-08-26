@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header" ></div>
+<body>
+
+    <section class="main-page-container">
+        <!--Project title area start-->
+        <div class="project-title-area text-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="page-title">
+                            <h2 th:style="${'color:' + session.runtimeSettings?.themeColor2}">Branch Users</h2>
+                            <span>List of branch users.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Project title area end-->
+        <div class="container">
+            <div class="radius-container branch-user-container">
+                <div class="branch-details">
+                    <div class="row vertical-space-20">
+                        <div class="col-md-4">
+                            <div class="data-snippet">
+                                <label>Branch Name:</label>
+                                <span th:text="${branch.name}"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="data-snippet">
+                                <label>Branch Code:</label>
+                                <span th:text="${branch.code}"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="data-snippet">
+                                <label>Street:</label>
+                                <span th:text="${branch.street}"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="data-snippet">
+                                <label>City:</label>
+                                <span th:text="${branch.city}"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="data-snippet">
+                                <label>Telephone:</label>
+                                <span th:text="${branch.telephone}"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="data-snippet">
+                                <label>Email:</label>
+                                <span th:text="${branch.email}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="branch-table">
+                    <h4 th:style="${'color:' + session.runtimeSettings.themeColor2}">BRANCH USERS</h4>
+                    <div class="user-list">
+                        <table class="default-list">
+                            <tr>
+                                <td>Username</td>
+                                <td>Firstname</td>
+                                <td>Lastname</td>
+                                <td>Role</td>
+                                <td>Telephone</td>
+                                <td>Member Since</td>
+                                <td>Creator</td>
+                                <td>Action</td>
+                            </tr>
+                            <tr th:each="user : ${branchUserList}">
+                                <td th:text="${user.userName}"></td>
+                                <td th:text="${user.firstName}"></td>
+                                <td th:text="${user.lastName}"></td>
+                                <td>
+                                    <a class="model-view-link" href="javascript:void(0)">
+                                        <span class="role-link">View Roles</span>
+                                        <span class="model-view">
+                                            <h5><span th:text="${user.firstName}"></span> &nbsp; <span th:text="${user.lastName}"></span>&nbsp; (<span th:text="${user.userName}"></span>)</h5>
+                                            <span class="role-list">
+                                                <span class="role-item" th:each="userRole : ${user.userRole}">
+                                                    <span th:text="${userRole.name}"></span>
+                                                </span>
+                                            </span>
+                                        </span>
+                                    </a>
+                                </td>
+                                <td th:text="${user.telephone1}"></td>
+                                <td th:text="${#dates.format(user.created, 'dd-MMM-yyyy HH:mm')}"></td>
+                                <td th:text="${user.createdBy}"></td>
+                                <td>
+                                    <a class="table-list-button-icon" th:href="${'/removeCustomerFromBranch/' + {user.id} + '/' + {branch.id}}">
+                                        <i th:style="${'color:' + session.runtimeSettings.themeColor}" class="fas fa-arrow-down"></i>
+                                        Move from&nbsp;<span th:text="${branch.name}"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="branch-table">
+                    <h4 th:style="${'color:' + session.runtimeSettings.themeColor2}">OTHER BRANCH USERS</h4>
+                    <div class="user-list">
+                        <table class="default-list">
+                            <tr>
+                                <td>Username</td>
+                                <td>Name</td>
+                                <td>Role</td>
+                                <td>telephone</td>
+                                <td>Member Since</td>
+                                <td>Branch</td>
+                                <td>Creator</td>
+                                <td>Action</td>
+                            </tr>
+                            <tr th:each="user : ${otherUserList}">
+                                <td th:text="${user.userName}"></td>
+                                <td><span th:text="${user.firstName}"></span>&nbsp; <span th:text="${user.lastName}"></span></td>
+                                <td>
+                                    <a class="model-view-link" href="javascript:void(0)">
+                                        <span class="role-link">View Roles</span>
+                                        <span class="model-view">
+                                            <h5><span th:text="${user.firstName}"></span> &nbsp; <span th:text="${user.lastName}"></span>&nbsp; (<span th:text="${user.userName}"></span>)</h5>
+                                            <span class="role-list">
+                                                <span class="role-item" th:each="userRole : ${user.userRole}">
+                                                    <span th:text="${userRole.name}"></span>
+                                                </span>
+                                            </span>
+                                        </span>
+                                    </a>
+                                </td>
+                                <td th:text="${user.telephone1}"></td>
+                                <td th:text="${#dates.format(user.created, 'dd-MMM-yyyy HH:mm')}"></td>
+                                <td th:text="${user.branch.name}"></td>
+                                <td th:text="${user.createdBy}"></td>
+                                <td>
+                                    <a class="table-list-button-icon" th:href="${'/addCustomerToBranch/' + {user.id} + '/' + {branch.id}}">
+                                        <i th:style="${'color:green'}" class="fas fa-arrow-up"></i>
+                                        Move to &nbsp;<span th:text="${branch.name}"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="branch-table">
+                    <h4 th:style="${'color:' + session.runtimeSettings.themeColor2}">ASSIGN A BRANCH TO THESE USERS</h4>
+                    <div class="user-list">
+                        <table class="default-list">
+                            <tr>
+                                <th>Username</th>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>telephone</th>
+                                <th>Member Since</th>
+                                <th>Creator</th>
+                                <th>Action</th>
+                            </tr>
+                            <tr th:each="user : ${noBranchUserList}">
+                                <td th:text="${user.userName}"></td>
+                                <td><span th:text="${user.firstName}"></span>&nbsp; <span th:text="${user.lastName}"></span></td>
+                                <td>
+                                    <a class="model-view-link" href="javascript:void(0)">
+                                        <span class="role-link">View Roles</span>
+                                        <span class="model-view">
+                                            <h5><span th:text="${user.firstName}"></span> &nbsp; <span th:text="${user.lastName}"></span>&nbsp; (<span th:text="${user.userName}"></span>)</h5>
+                                            <span class="role-list">
+                                                <span class="role-item" th:each="userRole : ${user.userRole}">
+                                                    <span th:text="${userRole.name}"></span>
+                                                </span>
+                                            </span>
+                                        </span>
+                                    </a>
+                                </td>
+                                <td th:text="${user.telephone1}"></td>
+                                <td th:text="${#dates.format(user.created, 'dd-MMM-yyyy HH:mm')}"></td>
+                                <td th:text="${user.createdBy}"></td>
+                                <td>
+                                    <a class="table-list-button-icon" th:href="${'/addCustomerToBranch/' + {user.id} + '/' + {branch.id}}">
+                                        <i th:style="${'color:green'}" class="fas fa-arrow-up"></i>
+                                        Move to&nbsp;<span th:text="${branch.name}"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+<div th:insert="footer::navbar"></div>
+</html>

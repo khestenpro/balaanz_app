@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+
+
+<div class="page-container">
+    <div class="container">
+        <form class="form-bootstrap" action="#" th:action="@{/registerShareAccountForm}" method="post"
+              th:object="${shareAccount}">
+            <span th:text="${ShareAccountInfo}"/>
+            <div class="error" th:text="${error}"/>
+            <div class="form-sections">
+                <h3 th:style="${'color:' + session.runtimeSettings.themeColor2}">CREATE A <span
+                        th:text="${session.runtimeSettings.shareAccount}"/></h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="names">Account Owner:</label>
+                            <span id="names" class="form-field-value"
+                                  th:text="${session.customerInUse.gender +' '+session.customerInUse.firstName +' '+session.customerInUse.lastName }"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+
+
+                            <label for="shareType">Account Type:</label>
+                            <select class="form-control" name="shareType" id="shareType" th:field="*{productCode}">
+                                <option th:each="accountType: ${accountTypes}"
+                                        th:text="${accountType.displayName} +' - '+ ${accountType.number}"
+                                        th:value="${accountType.displayName} +'_GL_'+ ${accountType.number}">
+                                </option>
+                            </select>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <!--                        <div class="form-group">-->
+                        <!--                            <label for="unitPrice">Share Price(s):</label>-->
+                        <!--                            Ordinary: <span class="form-field-value" id="unitPrice"-->
+                        <!--                                            th:text="${#numbers.formatDecimal(session.runtimeSettings.unitSharePrice, 0, 'COMMA', 0, 'POINT')}"/>-->
+                        <!--                            <div th:unless="${#strings.isEmpty(session.runtimeSettings.unitPreferenceSharePrice)}">-->
+                        <!--                                Preference: <span class="form-field-value" id="unitPreferenceSharePrice"-->
+                        <!--                                                  th:text="${#numbers.formatDecimal(session.runtimeSettings.unitPreferenceSharePrice, 0, 'COMMA', 0, 'POINT')}"/>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Quantity:</label>
+                            <input class="form-control" type="text" name="quantity" th:field="*{quantity}"
+                                   id="quantity"
+                                   placeholder="quantity" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="notes">Notes:</label>
+                            <textarea class="form-control" id="notes" rows="2" cols="70"
+                                      th:field="*{notes}">
+                                </textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 text-center">
+                        <button class="btn btn-orange"
+                                th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}"
+                                type="submit">Next - Share Application
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>Share Information </h3>
+                        <table>
+                            <tr th:each="shareInfo: ${sharePriceInfo}">
+                                <td>
+                                    <span th:text="${shareInfo}"/><br/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div th:insert="footer::navbar"></div>
+</html>

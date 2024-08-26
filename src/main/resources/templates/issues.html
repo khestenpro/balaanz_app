@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header" ></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <!-- <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">ISSUES</h2>
+                        <span>List of ISSUES. - <a href="#" th:href="@{/registerIssue}"> Create issue  </a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container">
+            <div class="radius-container-title" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                <h2>ISSUES</h2>
+                <a th:href="@{/registerIssue}">Create issue <i class="fas fa-plus"></i></a>
+            </div>
+            <div class="user-list">
+                <table class="default-list">
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Prority</th>
+                        <th>Assigned To</th>
+                        <th>Created By</th>
+                        <th>Created Date</th>
+                        <th></th>
+                    </tr>
+                    <tr th:each="issue : ${issues}">
+                        <td th:text="${issue.title}"></td>
+                        <td th:text="${issue.comment}"></td>
+                        <td th:text="${issue.ticketStatus}"></td>
+                        <td th:text="${issue.priority}"></td>
+                        <td th:text="${issue.assignedTo}"></td>
+                        <td th:text="${issue.createdBy}"></td>
+                        <td th:text="${#dates.format(issue.createdDate, 'dd-MMM-yyyy HH:mm')}"></td>
+                        <td>
+                            <a class="table-list-button-icon" href="#" th:href="@{/issueDetails/{id}(id=${issue.id})}"><i class="fas fa-ellipsis-h"></i></a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="footer::navbar"></div>
+</html>

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <div class="container">
+        <div class="radius-container">
+            <div class="radius-container-title" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                <h2>COBAC ACCOUNTING CLASSES</h2>
+                <span>Select Sub-sub-Class to proceed.</span>
+            </div>
+            <div class="gl-account-container">
+                <div class="gl-account-form" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_GL_ACCOUNT'')')}">
+                    <h2>CREATE LEDGER ACCOUNT</h2>
+                    <span class="alert alert-info" th:if="${ledgerAccountInfo}" th:text="${ledgerAccountInfo}"/>
+                    <form action="#" th:action="@{/saveCobacGLAccount}" method="post" th:object="${ledgerAccount}">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Name:</label>
+                                    <input type="text" name="name" th:field="*{name}" id="name"
+                                            placeholder="e.g NFC BANK" class="form-control" required/>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Balaanz Code:</label>
+                                    <input type="text" name="code" th:field="*{code}" id="code"
+                                            placeholder="e.d 4004" class="form-control" required/>
+                                    <input type="hidden" name="category" th:field="*{category}">
+                                    <input type="hidden" name="cobacCode" id="cobacCode" th:field="*{displayName}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{status}" type="checkbox" id="active" name="status"
+                                            th:value="*{status}"
+                                            checked>
+                                        <label class="form-check-label" for="active">Active</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{creditBalance}" type="checkbox" id="creditBalance"
+                                            name="creditBalance" th:value="*{creditBalance}"
+                                            checked>
+                                        <label class="form-check-label" for="creditBalance">Credit Balance</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{cashAccountTransfer}" type="checkbox"
+                                            id="cashAccountTransfer" name="cashAccountTransfer" th:value="*{cashAccountTransfer}"
+                                            checked>
+                                        <label class="form-check-label" for="cashAccountTransfer">Cash Account Transfers</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" th:field="*{interAccountTransfer}" type="checkbox"
+                                            id="interAccountTransfer" name="interAccountTransfer"
+                                            th:value="*{interAccountTransfer}"
+                                            checked>
+                                        <label class="form-check-label" for="interAccountTransfer">Inter Account Transfer</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">CREATE LEDGER ACCOUNT</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="cobac-accounting">
+                    <h4 class="section-title" th:style="${'color:' + session.runtimeSettings.themeColor}">EXPENSE ACCOUNTS - CLASS 6</h4>
+                    <table class="default-list">
+                        <thead>
+                            <tr>
+                                <!-- <th colspan="2" class="capital-accounts">CLASSES</th> -->
+                                <th colspan="2">SUB-CLASSES</th>
+                                <th>SUB-SUB-CLASSES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <!-- <td width="10%" rowspan="10">CLASS 1</td>
+                                <td width="17%" rowspan="10" class="capital-accounts"><h6>CAPITAL ACCOUNTS</h6></td> -->
+                                <td>60</td>
+                                <td>EXPENSES ON TREASURY AND INTER-BANK OPERATIONS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="1" name="class6" onclick=updateSelectedLabel()  value="601">
+                                            <label for="1">601 – Interest on inter-bank operations </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="2" name="class6" onclick=updateSelectedLabel()  value="602">
+                                            <label for="2">602 – Interests on other securities given in pawn </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="3" name="class6" onclick=updateSelectedLabel()  value="603">
+                                            <label for="3">603 – Interest on loans and term accounts </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="4" name="class6" onclick=updateSelectedLabel()  value="604">
+                                            <label for="4">604 – Day-to-day interest on loans </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="5" name="class6" onclick=updateSelectedLabel()  value="605">
+                                            <label for="5">605 – Interest on demand accounts </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="6" name="class6" onclick=updateSelectedLabel()  value="606">
+                                            <label for="6">606 – Charges on treasury and inter-bank operations  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="7" name="class6" onclick=updateSelectedLabel()  value="607">
+                                            <label for="7">607 – Costs of in-network treasury operations</label>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>61</td>
+                                <td>INTERESTS ON OPERATIONS WITH CLIENTS OR MEMBERS</td>
+                                <td>
+                                    <ul>
+                                        
+                                        <li>
+                                            <input type="radio" id="8" name="class6" onclick=updateSelectedLabel()  value="611">
+                                            <label for="8">611 – Interest on special regime deposits  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="9" name="class6" onclick=updateSelectedLabel()  value="612">
+                                            <label for="9">612 – Interest on time deposits </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="10" name="class6" onclick=updateSelectedLabel()  value="613">
+                                            <label for="10">613 – Interest on passbook accounts </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="11" name="class6" onclick=updateSelectedLabel()  value="614">
+                                            <label for="11">614 – Interest on other demand accounts </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="12" name="class6" onclick=updateSelectedLabel()  value="615">
+                                            <label for="12">615 – Interest on operations with MFIs </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="13" name="class6" onclick=updateSelectedLabel()  value="619">
+                                            <label for="13">619 – Interest on other trade accounts</label>
+                                        </li> 
+                                    </ul>
+                                </td>
+                            </tr> 
+                            <tr> 
+                                <td>62</td>
+                                <td>SUNDRY EXPENSES ON BANKING OPERATIONS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="14" name="class6" onclick=updateSelectedLabel()  value="621">
+                                            <label for="14">621 – Costs committed and charges on payment instruments </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="15" name="class6" onclick=updateSelectedLabel()  value="622">
+                                            <label for="15">622 – Charges and costs on securities </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="16" name="class6" onclick=updateSelectedLabel()  value="623">
+                                            <label for="16">623 – Charges, costs and losses on exchange operations carried on a principal basis</label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="17" name="class6" onclick=updateSelectedLabel()  value="624">
+                                            <label for="17">624 – Charges and costs paid on fund transfer operations </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="18" name="class6" onclick=updateSelectedLabel()  value="625">
+                                            <label for="18">625 – Charges on commitments by signature </label>
+                                        </li> 
+                                        
+                                        <li>
+                                            <input type="radio" id="19" name="class6" onclick=updateSelectedLabel()  value="626">
+                                            <label for="19">626 – Other bank charges and fees </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="20" name="class6" onclick=updateSelectedLabel()  value="627">
+                                            <label for="20">627 – Losses on investment and transaction securities </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="21" name="class6" onclick=updateSelectedLabel()  value="628">
+                                            <label for="21">628 – Sundry charges on operations with MFIs</label>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>63</td>
+                                <td>COSTS ON PERMANENT RESOURCES</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="22" name="class6" onclick=updateSelectedLabel()  value="631">
+                                            <label for="22"><strong>631 – Interest on permanent resources </strong></label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="23" name="class6" onclick=updateSelectedLabel()  value="6311">
+                                            <label for="23"> 6311- Interest on bonded loans </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="24" name="class6" onclick=updateSelectedLabel()  value="6312">
+                                            <label for="24">6312- Interest on participative loans  </label>
+                                        </li>  
+                                        
+                                        <li>
+                                            <input type="radio" id="25" name="class6" onclick=updateSelectedLabel()  value="6313">
+                                            <label for="25"> 6313- Interest on subordinated debts </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="26" name="class6" onclick=updateSelectedLabel()  value="6314">
+                                            <label for="26"> <strong>6314- Interest on blocked accounts of shareholders and members </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="27" name="class6" onclick=updateSelectedLabel()  value="6315">
+                                            <label for="27">6315- Interest on other blocked accounts </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="28" name="class6" onclick=updateSelectedLabel()  value="6316">
+                                            <label for="28">6316- Interest on negotiable debt securities </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="29" name="class6" onclick=updateSelectedLabel()  value="6317">
+                                            <label for="29">6317- Interest on other medium- and long-term loans </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="30" name="class6" onclick=updateSelectedLabel()  value="632">
+                                            <label for="30"> <strong>632- Charges: </strong> </label>
+                                        </li>  
+                                        
+                                        <li>
+                                            <input type="radio" id="31" name="class6" onclick=updateSelectedLabel()  value="6321">
+                                            <label for="31">6321- on bonded loans </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="32" name="class6" onclick=updateSelectedLabel()  value="6322">
+                                            <label for="32">6322- on participative loans </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="33" name="class6" onclick=updateSelectedLabel()  value="6323">
+                                            <label for="33">6323- on subordinated debts  </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="34" name="class6" onclick=updateSelectedLabel()  value="6324">
+                                            <label for="34">6324- on shareholders’ blocked accounts </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="35" name="class6" onclick=updateSelectedLabel()  value="6325">
+                                            <label for="35"> 6325- on other blocked accounts </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="36" name="class6" onclick=updateSelectedLabel()  value="6326">
+                                            <label for="36">6326- on negotiable debt securities  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="38" name="class6" onclick=updateSelectedLabel()  value="6327">
+                                            <label for="38">6327- on other medium- and long-term loans </label>
+                                        </li>   
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>64</td>
+                                <td>COSTS LINKED TO SECONDARY ACTIVITIES</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="39" name="class6" onclick=updateSelectedLabel()  value="640">
+                                            <label for="39"> <strong>640- Purchases and inventory changes </strong> </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="40" name="class6" onclick=updateSelectedLabel()  value="641">
+                                            <label for="40"> <strong>641- Other costs linked to accessory activities</strong> </label>
+                                        </li>       
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>65</td>
+                                <td>STAFF EXPENSES AND GENERAL OPERATING COSTS</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="41" name="class6" onclick=updateSelectedLabel()  value="651">
+                                            <label for="41"> <strong>651- Staff expenses </strong> </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="42" name="class6" onclick=updateSelectedLabel()  value="652">
+                                            <label for="42"> <strong>652- General operating expenses</strong> </label>
+                                        </li> 
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>66</td>
+                                <td>TAXES AND DUES</td>
+                                <td>
+                                    <ul> 
+                                        <li>
+                                            <input type="radio" id="43" name="class6" onclick=updateSelectedLabel()  value="661">
+                                            <label for="43">661- State, direct taxes and dues </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="44" name="class6" onclick=updateSelectedLabel()  value="662">
+                                            <label for="44"> <strong>662- State, indirect taxes and dues </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="45" name="class6" onclick=updateSelectedLabel()  value="663">
+                                            <label for="45"> <strong>663- State, registration fees </strong>  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="46" name="class6" onclick=updateSelectedLabel()  value="664">
+                                            <label for="46"> <strong>664- State, tax penalties and fines </strong> </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="47" name="class6" onclick=updateSelectedLabel()  value="665">
+                                            <label for="47">665- State, other taxes and dues</label>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>67</td>
+                                <td>EXCEPTIONAL LOSSES INCLUDING THOSE FOR PREVIOUS YEARS / NET VALUE OF ASSETS</td>
+                                <td>
+                                    <ul>
+                                        
+                                        <li>
+                                            <input type="radio" id="48" name="class6" onclick=updateSelectedLabel()  value="671">
+                                            <label for="48"> <strong> 671- Bank operating costs on previous years </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="49" name="class6" onclick=updateSelectedLabel()  value="672">
+                                            <label for="49"><strong> 672 General operating costs on previous years</strong>  </label>
+                                        </li>  
+                                        
+                                        <li>
+                                            <input type="radio" id="50" name="class6" onclick=updateSelectedLabel()  value="673">
+                                            <label for="50"> <strong>673- Other costs on previous years </strong> </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="51" name="class6" onclick=updateSelectedLabel()  value="676">
+                                            <label for="51"> <strong>676- Net book value of capitalized assets transferred </strong> </label>
+                                        </li>  
+                                        <li>
+                                            <input type="radio" id="52" name="class6" onclick=updateSelectedLabel()  value="677">
+                                            <label for="52"><strong>677- Subsidies granted </strong></label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="53" name="class6" onclick=updateSelectedLabel()  value="678">
+                                            <label for="53"> <strong>678- Gifts and donations granted </strong> </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="54" name="class6" onclick=updateSelectedLabel()  value="679">
+                                            <label for="54"> <strong>679- Exceptional losses</strong> </label>
+                                        </li>   
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>68</td>
+                                <td>DEPRECIATION EXPENSES</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="55" name="class6" onclick=updateSelectedLabel()  value="680">
+                                            <label for="55"> <strong> 680- Depreciation expenses of intangible assets </strong> </label>
+                                        </li>   
+                                        <li>
+                                            <input type="radio" id="56" name="class6" onclick=updateSelectedLabel()  value="682">
+                                            <label for="56"> <strong>682- Depreciation expenses of tangible fixed assets</strong> </label>
+                                        </li>  
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td>69</td>
+                                <td>ALLOTMENT FOR RESERVES AND LOSSES ON BAD DEBTS</td>
+                                <td>
+                                    <ul>
+                                          
+                                         
+                                        <li>
+                                            <input type="radio" id="57" name="class6" onclick=updateSelectedLabel()  value="691">
+                                            <label for="57"> <strong>691- Provisions </strong> </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="58" name="class6" onclick=updateSelectedLabel()  value="6911">
+                                            <label for="58"> 6911- Provisions for risks and charges  </label>
+                                        </li> 
+                                        <li>
+                                            <input type="radio" id="59" name="class6" onclick=updateSelectedLabel()  value="6912">
+                                            <label for="59">6912- Provisions for depreciation of fixed assets  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="60" name="class6" onclick=updateSelectedLabel()  value="6914">
+                                            <label for="60"> 6914- Provisions for depreciation of third-party accounts </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="61" name="class6" onclick=updateSelectedLabel()  value="6915">
+                                            <label for="61">6915- Provisions for depreciation of treasury accounts  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="62" name="class6" onclick=updateSelectedLabel()  value="6916">
+                                            <label for="62">6916- Provisions of MFI accounts  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="63" name="class6" onclick=updateSelectedLabel()  value="692">
+                                            <label for="63">  <strong>692- Losses of bad debts </strong>  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="64" name="class6" onclick=updateSelectedLabel()  value="6921">
+                                            <label for="64">6921- Losses on bad debts covered by reserves  </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="65" name="class6" onclick=updateSelectedLabel()  value="19399">
+                                            <label for="65">6922- Losses on bad debts not covered by provisions </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="66" name="class6" onclick=updateSelectedLabel()  value="6923">
+                                            <label for="66">6923- Losses on bad debts of MFIs </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="67" name="class6" onclick=updateSelectedLabel()  value="694">
+                                            <label for="67"> <strong>694- Provisions for general risks </strong> </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="68" name="class6" onclick=updateSelectedLabel()  value="697">
+                                            <label for="68"> <strong>697- Regulated provisions </strong> </label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="69" name="class6" onclick=updateSelectedLabel()  value="698">
+                                            <label for="69"> <strong>698- Other provisions </strong> </label>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="cobac-footer" th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CREATE_GL_ACCOUNT'')')}">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">CREATE LEDGER ACCOUNT</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function updateSelectedLabel(){
+        document.getElementById('cobacCode').value = document.querySelector('input[name="class6"]:checked + label').innerText;
+    }
+</script>
+<div th:insert="footer::navbar"></div>
+</html>

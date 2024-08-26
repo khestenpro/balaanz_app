@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<!-- Contact form area start -->
+<section class="contact-form-area-start space-40 df-bg">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">UPDATE USER INFORMATION</h2>
+                        <span>Fill below form to update user information</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Project title area end-->
+
+    <div class="contact-from-area">
+        <div class="container">
+            <span class="alert alert-info" th:if="${reloadUserInfo}" th:text="${updatedInfo}"></span>
+            <span class="alert alert-info" th:if="${reloadUserError}" th:text="${updatedError}"></span>
+
+            <!--            <form class="form-bootstrap" action="#" th:action="@{/registerUserForm}" method="post" th:object="${user}">-->
+<!--                <div class="form-sections">-->
+<!--                    <h3 th:style="${'color:' + session.runtimeSettings.themeColor2}">Personal Information</h3>-->
+
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="form-group">-->
+<!--                                <label for="userName">Username:</label>-->
+<!--                                <input type="text" name="userName" th:field="*{userName}" id="userName"-->
+<!--                               placeholder="Username" class="form-control" disabled required>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="form-group">-->
+<!--                                <label for="firstName">Firstname:</label>-->
+<!--                                <input type="text" name="firstName" th:field="*{firstName}" id="firstName"-->
+<!--                               placeholder="First Name" class="form-control" required>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="form-group">-->
+<!--                                <label for="lastName">Lastname:</label>-->
+<!--                                <input type="text" name="lastName" th:field="*{lastName}" id="lastName"-->
+<!--                               placeholder="Last Name" class="form-control" required>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="form-group">-->
+<!--                                <label for="profession">Profession:</label>-->
+<!--                                <input type="text" name="profession" th:field="*{profession}" id="profession"-->
+<!--                               placeholder="Profession" class="form-control" required>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="form-group">-->
+<!--                                <label style="width: 100%;">Gender:</label>-->
+<!--                                <div class="form-check form-check-inline">-->
+<!--                                    <input class="form-check-input" type="radio" id="mr" value="Mr" th:field="*{gender}" name="gender" checked>-->
+<!--                                    <label class="form-check-label" for="mr">Mr</label>-->
+<!--                                </div>-->
+<!--                                <div class="form-check form-check-inline">-->
+<!--                                    <input class="form-check-input" id="mrs" type="radio" value="Mrs" th:field="*{gender}" name="gender">-->
+<!--                                    <label class="form-check-label" for="mrs">Mrs</label>-->
+<!--                                </div>-->
+<!--                                <div class="form-check form-check-inline">-->
+<!--                                    <input class="form-check-input" id="miss" type="radio" value="Miss" th:field="*{gender}" name="gender">-->
+<!--                                    <label class="form-check-label" for="miss">Miss</label>-->
+<!--                                </div>-->
+<!--                                <div class="form-check form-check-inline">-->
+<!--                                    <input class="form-check-input" id="org" type="radio" value="" th:field="*{gender}" name="org">-->
+<!--                                    <label class="form-check-label" for="org">Org</label>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="form-group">-->
+<!--                                <label for="profession">Note:</label>-->
+<!--                                <textarea id="notes" class="form-control" rows="3" cols="70" th:field="*{notes}">-->
+<!--                                </textarea>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="form-group">-->
+<!--                                <label for="dateOfBirth">Date of Birth:</label>-->
+<!--                                <input type="date" name="dateOfBirth" th:field="*{dateOfBirth}" id="dateOfBirth"-->
+<!--                               placeholder="Date of Birth:" class="form-control" required>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="form-group">-->
+<!--                                <label for="passwordInput">Password:</label>-->
+<!--                                <input type="password" name="passwordInput" th:field="*{password}" id="passwordInput"-->
+<!--                               placeholder="Password" class="form-control" required>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="form-group">-->
+<!--                                <label for="identityCardNumber">Identity Card Number:</label>-->
+<!--                                <input type="text" name="identityCardNumber" th:field="*{identityCardNumber}"-->
+<!--                               id="identityCardNumber"-->
+<!--                               placeholder="Identity Card No" class="form-control" required>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="form-group">-->
+<!--                                <label for="identityCardExpiry">Identity Expiry Date:</label>-->
+<!--                                <input type="date" name="identityCardExpiry" th:field="*{identityCardExpiry}" id="identityCardExpiry"-->
+<!--                               class="form-control"/>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <div class="form-sections">-->
+<!--                    <h3 th:style="${'color:' + session.runtimeSettings.themeColor2}">Address Information</h3>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="form-group">-->
+<!--                                <label for="emailInout">Email:</label>-->
+<!--                                <input type="text" name="emailInput" th:field="*{email}" id="emailInout"-->
+<!--                               placeholder="Email" class="form-control" required>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="form-group">-->
+<!--                                <label for="address">Address:</label>-->
+<!--                                <input type="text" name="address" th:field="*{address}" id="address"-->
+<!--                               placeholder="Address" class="form-control" required>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="form-group">-->
+<!--                                <label for="telephone1">Telephone 1:</label>-->
+<!--                                <input type="text" name="telephone1" th:field="*{telephone1}" id="telephone1"-->
+<!--                               placeholder="Telephone 1" class="form-control" required>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="form-group">-->
+<!--                                <label for="telephone2">Telephone 2:</label>-->
+<!--                                <input type="text" name="telephone2" th:field="*{telephone2}" id="telephone2"-->
+<!--                               placeholder="Telephone 2" class="form-control" required>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="form-sections">-->
+<!--                    <h3 th:style="${'color:' + session.runtimeSettings.themeColor2}">Active / Inactive User Account</h3>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-12">-->
+<!--                            <div class="form-group">-->
+<!--                                <label style="width: 100%;">Activate Internet online Banking for this new user</label>-->
+<!--                                <div class="form-check form-check-inline">-->
+<!--                                    <input class="form-check-input" th:field="*{accountLocked}" type="radio" id="false" name="accountLocked" value="true">-->
+<!--                                    <label class="form-check-label" for="false">True</label>-->
+<!--                                </div>-->
+<!--                                <div class="form-check form-check-inline">-->
+<!--                                    <input class="form-check-input" th:field="*{accountLocked}" type="radio" id="true" name="accountLocked"-->
+<!--                                    value="false"-->
+<!--                                    checked>-->
+<!--                                    <label class="form-check-label" for="true">False</label>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="form-sections">-->
+<!--                    <h3 th:style="${'color:' + session.runtimeSettings.themeColor2}">Identity Information</h3>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="id-view">-->
+<!--                                <input type="hidden" th:field="*{idFilePath}" readonly/>-->
+<!--                                <img width="450px" th:src="@{/getImage}"/>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="id-view">-->
+<!--                                <input type="hidden" th:field="*{idFilePath2}" readonly/>-->
+<!--                                <img width="450px" th:src="@{/getImage2}"/>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="id-view">-->
+<!--                                <input type="hidden" th:field="*{idFilePath3}" readonly/>-->
+<!--                                <img width="450px" th:src="@{/getImage3}"/>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="id-view">-->
+<!--                                <input type="hidden" th:field="*{idFilePath4}" readonly/>-->
+<!--                                <img width="450px" th:src="@{/getImage4}"/>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-12 text-center" style="padding-top: 20px;">-->
+<!--                            <input type="hidden" name="id" th:field="*{id}" id="id"-->
+<!--                               class="form-control" required>-->
+<!--                            <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">Update User Information</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </form>-->
+            <form class="form-bootstrap"  action="#" th:action="@{/updateBeneficiaryForm}" method="post" th:object="${user}">
+                <div class="form-sections">
+                    <h3 th:style="${'color:' + session.runtimeSettings.themeColor2}">  <span th:text="${user.gender + ' '+user.firstName + ' '+ user.lastName}"/>
+                         Beneficiaries - 100%</h3>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="beneficiary-view-container">
+                                <input type="hidden" name="userId" th:value="${user.id}">
+                                <div class="beneficiary-view-list" th:each="aBeneficiary : ${user.beneficiary}">
+                                    <span th:text="${aBeneficiary.name}"></span> -
+                                    <span th:text="${aBeneficiary.relation}"></span> -
+                                    <span th:text="${aBeneficiary.percentage}"></span>% -
+                                    <span th:text="${aBeneficiary.notes}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:unless="${#strings.isEmpty(session.runtimeSettings.shareAccount)}">
+                <div class="form-sections">
+                    <h3 th:style="${'color:' + session.runtimeSettings.themeColor2}">Beneficiary Information</h3>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-container-section">
+                                <div class="form-container-section-row">
+                                    <h4>Beneficiary 1</h4>
+                                    <div class="row row-space-10">
+                                        <div class="col-md-4">
+                                            <input type="text" name="beneficiary1" id="beneficiary1"
+                                        class="form-control"/>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <select class="form-control" name="relation1" id="relation1">
+                                                <option value="">-------</option>
+                                                <option value="Spouse">Spouse</option>
+                                                <option value="Son">Son</option>
+                                                <option value="Daughter">Daughter</option>
+                                                <option value="Friend">Friend</option>
+                                                <option value="Friend">Parent</option>
+                                                <option value="Relation">Relation</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input class="form-control" type="text" name="perc1" id="perc1"
+                                        placeholder="%" max="100" maxlength="3">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="text" name="notes1" id="notes1"
+                                        placeholder="Notes ...">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-container-section-row">
+                                    <h4>Beneficiary 2</h4>
+                                    <div class="row row-space-10">
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="text" name="beneficiary2" id="beneficiary2"/>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <select class="form-control" name="relation2" id="relation2">
+                                                <option value="">-------</option>
+                                                <option value="Spouse">Spouse</option>
+                                                <option value="Son">Son</option>
+                                                <option value="Daughter">Daughter</option>
+                                                <option value="Friend">Friend</option>
+                                                <option value="Friend">Parent</option>
+                                                <option value="Relation">Relation</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input class="form-control" type="text" name="perc2" id="perc2"
+                                        placeholder="%" max="100" maxlength="3"/>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="text" name="notes2" id="notes2"
+                                        placeholder="Notes ...">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-container-section-row">
+                                    <h4>Beneficiary 3</h4>
+                                    <div class="row row-space-10">
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="text" name="beneficiary3" id="beneficiary3"/>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <select class="form-control" name="relation3" id="relation3">
+                                                <option value="">-------</option>
+                                                <option value="Spouse">Spouse</option>
+                                                <option value="Son">Son</option>
+                                                <option value="Daughter">Daughter</option>
+                                                <option value="Friend">Friend</option>
+                                                <option value="Friend">Parent</option>
+                                                <option value="Relation">Relation</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input class="form-control" type="text" name="perc3" id="perc3"
+                                        placeholder="%" max="100" maxlength="3"/>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="text" name="notes3" id="notes3"
+                                        placeholder="Notes ...">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-container-section-row">
+                                    <h4>Beneficiary 4</h4>
+                                    <div class="row row-space-10">
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="text" name="beneficiary4" id="beneficiary4"/>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <select class="form-control" name="relation4" id="relation4">
+                                                <option value="">-------</option>
+                                                <option value="Spouse">Spouse</option>
+                                                <option value="Son">Son</option>
+                                                <option value="Daughter">Daughter</option>
+                                                <option value="Friend">Friend</option>
+                                                <option value="Friend">Parent</option>
+                                                <option value="Relation">Relation</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input class="form-control" type="text" name="perc4" id="perc4"
+                                        placeholder="%" max="100" maxlength="3"/>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="text" name="notes4" id="notes4"
+                                        placeholder="Notes ...">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-container-section-row">
+                                    <h4>Beneficiary 5</h4>
+                                    <div class="row row-space-10">
+                                        <div class="col-md-4">
+                                            <input type="text" name="beneficiary5" id="beneficiary5" class="form-control"/>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <select class="form-control" name="relation5" id="relation5">
+                                                <option value="">-------</option>
+                                                <option value="Spouse">Spouse</option>
+                                                <option value="Son">Son</option>
+                                                <option value="Daughter">Daughter</option>
+                                                <option value="Friend">Friend</option>
+                                                <option value="Friend">Parent</option>
+                                                <option value="Relation">Relation</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="text" class="form-control" name="perc5" id="perc5"
+                                        placeholder="%" max="100" maxlength="3"/>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="text" name="notes5" id="notes5"
+                                        placeholder="Notes ...">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center" style="padding-top: 20px;">
+                            <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">UPDATE BENEFICIARY</button>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<div th:insert="footer::navbar"></div>
+</html>

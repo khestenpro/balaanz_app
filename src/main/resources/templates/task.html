@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <!-- <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">CREATE A TASK
+                        </h2>
+                        <span th:text="'For issue '+ ${task.issue.title}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container">
+            <div class="radius-container-title" th:style="${'background-color:' + session.runtimeSettings.themeColor2}">
+                <h2>CREATE A TASK</h2>
+                <span th:text="${task.issue.title}"></span>
+            </div>
+            <div class="branch-form-container">
+                <form action="#" th:action="@{/registerTaskForm}" method="post" th:object="${task}">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="priority">Priority:</label>
+                                <select id="priority" class="form-control" name="priority">
+                                    <option th:each="aStatus : ${T(com.bitsvalley.micro.utils.PriorityStatus).values()}"
+                                            th:value="${aStatus}" th:text="${aStatus}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="title">Title:</label>
+                                <input type="text" name="title" id="title"
+                                    class="form-control" th:value="${task.issue.title}" th:field="*{title}" required>
+                                <input type="hidden" name="issueId" th:value="${task.issue.id}"/> <br/>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Issue Status:</label>
+
+                                <select class="form-control" name="aStatus" th:field="*{ticketStatus}">
+                                    <option th:each="aStatus : ${T(com.bitsvalley.micro.utils.TicketStatus).values()}"
+                                            th:value="${aStatus}" th:text="${aStatus}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="assignedTo">Assigned To:</label>
+                                <select class="form-control" name="savingType" id="assignedTo"
+                                        th:field="*{assignedTo}">
+                                    <option value="">UNASSIGNED</option>
+                                    <option th:each="employee: ${employees}"
+                                            th:text="${employee.userName}"
+                                            th:value="${employee.userName}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="comment">Comment:</label>
+                                <textarea class="form-control" name="comment" th:field="*{comment}" id="comment"/>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">Create Task</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:insert="footer::navbar"></div>
+</html>

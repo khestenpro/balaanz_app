@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+<div th:insert="header::navbar" class="sticky-header"></div>
+<!--<style>
+    ::-ms-reveal {
+        display: none;
+    }
+</style>-->
+<section class="main-page-container">
+
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container payment-status-modal">
+            <!--            <span class="status-icon success" th:unless='${error}'><i class="far fa-check-circle"></i></span>-->
+            <!--            <span class="status-icon error" th:if='${error}'><i class="far fa-times-circle"></i></span>-->
+            <form th:action="@{/sendCurrentToMomoConfirm}" class="payment-confirm-send" method='POST'
+                  id='checkout-form'>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="error" th:text="${error}"/>
+                        <div class="confirm-message-section">
+                            <div class="money-btn-two">
+                                <div class="mtn-money">
+                                    <span class="material-symbols-outlined">
+                                        call_made
+                                    </span>
+                                </div>
+                                <div class="orange-money">
+                                    <span class="material-symbols-outlined">
+                                        call_made
+                                    </span>
+                                </div>
+                            </div>
+                            <h4>Confirm and Proceed</h4>
+                            <p>Please enter Your Balaanz Pin Below in order to proceed with payment.</p>
+                        </div>
+                        <div class="confirm-account-trasaction">
+                            <div class="confirm-ac-tbl">
+                                <div class="confirm-ac-tbl-row">
+                                    <h4><label>To:</label> <span th:text='${session.disbursementCustomerName}'></span> (<span th:text='${session.disbursementRequest.recipientPhoneNumber}'></span>)</h4>
+                                </div>
+                                <div class="confirm-ac-tbl-row">
+                                    <h4><label>Note:</label> <span th:text='${session.disbursementRequest.note}'></span></h4>
+                                </div>
+                                <div class="confirm-ac-tbl-row">
+                                    <h4><label>Date:</label> <span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy HH:mm')}"></span></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="confirm-amount-section">
+                            <h2 th:style="${'color:' + session.runtimeSettings?.themeColor}">
+                                <span th:text="${#numbers.formatDecimal(session.disbursementRequest.amount, 0, 'COMMA', 0, 'POINT')}"></span> frs
+                            </h2>
+                            <h6>(Platform Fee:
+                                <span class="confirm-transaction-fee"
+                            th:text="${session.platformFee}"></span> frs )</h6>
+                        </div>
+                        <div class="confirm-otp-form">
+                            <label>Enter pin below:</label>
+                            <input type="password" placeholder="Enter Pin" class="form-control"
+                               name="balaanzPin"
+                                   id="balaanzPin"
+                               maxlength="6"
+                               pattern="\d{6}" required
+                                   oninvalid="setCustomValidity('Pin must be a 6 digit number')" oninput="setCustomValidity('')"/>
+                            <label title="Pin must be a 6 digit number. Contact your financial Institution to setup your pin.">
+                                <img alt="not go below." width="20px" th:src="@{/assets/images/toolTip.png}"/>
+                            </label>
+                            <div class="confirm-otp-btn-row">
+                                <a class="radius-btn-link"
+                                    th:style="${'color:' + session.runtimeSettings?.themeColor + '; border-color:' + session.runtimeSettings?.themeColor}"
+                                    th:href="@{/welcomeGlobal}">
+                                        Cancel/ Go Back
+                                </a>
+                                <button type="submit"
+                                        th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}"
+                                        class="btn btn-orange">Proceed. Payment From My Account
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<div th:insert="footer::navbar"></div>
+</html>

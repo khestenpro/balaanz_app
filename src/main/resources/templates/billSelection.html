@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header" ></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">BILL SELECTION</h2>
+                        <span th:if="${showBillSelectionTable == 'false'}" th:text="${headerText}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container ledger-container">
+            <span th:text="${accountNameHeader}"/>
+            <div class="ledger-search">
+                <form action="#" th:action="@{/filterBillSelection}" method="post" th:object="${glSearchDTO}">
+                    <div class="row row-space-10">
+                        <div class="col-md-3">
+                            <label>Start Date</label>
+                            <input type="date" name="startDate" th:field="*{startDate}" id="startDate"
+                                             placeholder="Start Date:" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>End Date</label>
+                            <input type="date" name="endDate" th:field="*{endDate}" id="endDate"
+                                           placeholder="End Date:" class="form-control" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label>User</label>
+                            <select class="form-control" name="allGLEntryUsers" id="allGLEntryUsers"
+                                    th:field="*{allGLEntryUsers}">
+                                <option value="-1">ALL</option>
+                                <option th:each="username : ${allGLEntryUsers}"
+                                        th:value="${username}">
+                                    <span th:text="${username}"/>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-auto">
+                            <label>&nbsp;</label>
+                            <button type="submit" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" class="btn btn-orange">SEARCH</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="ledger-summary" th:if="${showBillSelectionTable == 'false'}">
+                <div class="count-row">
+                    <div class="count-view green-view">
+                        <label>Total</label>
+                        <span th:text="${#numbers.formatDecimal(billSelectionBilanz.total, 0, 'COMMA', 0, 'POINT')}">
+                            0
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="bill-currency-list" th:if="${showBillSelectionTable == 'false'}">
+                <div class="row row-pad-10">
+                    <div class="col-md-3">
+                        <div class="currency-thumb">
+                            <div class="currency-image">
+                                <img width="100px" th:src="@{/assets/images/tenThousand.png}"/>
+                            </div>
+                            <div class="current-data-row">
+                                <div class="currency-data">
+                                    <label>Quantity:</label><span th:text="${billSelectionBilanz.tenThousand}"></span>
+                                </div>
+                                <div class="currency-data">
+                                    <label>Amount:</label><span th:text="${#numbers.formatDecimal(billSelectionBilanz.tenThousand*10000, 0, 'COMMA', 0, 'POINT')}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="currency-thumb">
+                            <div class="currency-image">
+                                <img width="100px" th:src="@{/assets/images/fiveThousand.png}"/>
+                            </div>
+                            <div class="current-data-row">
+                                <div class="currency-data">
+                                    <label>Quantity:</label><span th:text="${billSelectionBilanz.fiveThousand}"></span>
+                                </div>
+                                <div class="currency-data">
+                                    <label>Total Amount:</label><span th:text="${billSelectionBilanz.fiveThousand * 5000}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="currency-thumb">
+                            <div class="currency-image">
+                                <img width="100px" th:src="@{/assets/images/twoThousand.png}"/>
+                            </div>
+                            <div class="current-data-row">
+                                <div class="currency-data">
+                                    <label>Quantity:</label><span th:text="${billSelectionBilanz.twoThousand}"></span>
+                                </div>
+                                <div class="currency-data">
+                                    <label>Total Amount:</label><span th:text="${billSelectionBilanz.twoThousand*2000}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="currency-thumb">
+                            <div class="currency-image">
+                                <img width="100px" th:src="@{/assets/images/oneThousand.png}"/>
+                            </div>
+                            <div class="current-data-row">
+                                <div class="currency-data">
+                                    <label>Quantity:</label><span th:text="${billSelectionBilanz.oneThousand}"></span>
+                                </div>
+                                <div class="currency-data">
+                                    <label>Total Amount:</label><span th:text="${billSelectionBilanz.oneThousand*1000}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="currency-thumb">
+                            <div class="currency-image">
+                                <img width="100px" th:src="@{/assets/images/fiveHundred.png}"/>
+                            </div>
+                            <div class="current-data-row">
+                                <div class="currency-data">
+                                    <label>Quantity:</label><span th:text="${billSelectionBilanz.fiveHundred}"></span>
+                                </div>
+                                <div class="currency-data">
+                                    <label>Total Amount:</label><span th:text="${billSelectionBilanz.fiveHundred * 500}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="currency-thumb">
+                            <div class="currency-image">
+                                <img width="60px" th:src="@{/assets/images/oneHundred.png}"/>
+                            </div>
+                            <div class="current-data-row">
+                                <div class="currency-data">
+                                    <label>Quantity:</label><span th:text="${billSelectionBilanz.oneHundred}"></span>
+                                </div>
+                                <div class="currency-data">
+                                    <label>Total Amount:</label><span th:text="${billSelectionBilanz.oneHundred * 100}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="currency-thumb">
+                            <div class="currency-image">
+                                <img width="60px" th:src="@{/assets/images/fifty.png}"/>
+                            </div>
+                            <div class="current-data-row">
+                                <div class="currency-data">
+                                    <label>Quantity:</label><span th:text="${billSelectionBilanz.fifty}"></span>
+                                </div>
+                                <div class="currency-data">
+                                    <label>Total Amount:</label><span th:text="${billSelectionBilanz.fifty * 50}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="currency-thumb">
+                            <div class="currency-image">
+                                <img width="60px" th:src="@{/assets/images/twentyFive.png}"/>
+                            </div>
+                            <div class="current-data-row">
+                                <div class="currency-data">
+                                    <label>Quantity:</label><span th:text="${billSelectionBilanz.twentyFive}"></span>
+                                </div>
+                                <div class="currency-data">
+                                    <label>Total Amount:</label><span th:text="${billSelectionBilanz.twentyFive * 25}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="currency-thumb">
+                            <div class="currency-image">
+                                <img width="60px" th:src="@{/assets/images/ten.png}"/>
+                            </div>
+                            <div class="current-data-row">
+                                <div class="currency-data">
+                                    <label>Quantity:</label><span th:text="${billSelectionBilanz.ten}"></span>
+                                </div>
+                                <div class="currency-data">
+                                    <label>Total Amount:</label><span th:text="${billSelectionBilanz.ten * 10}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="currency-thumb">
+                            <div class="currency-image">
+                                <img width="60px" th:src="@{/assets/images/five.png}"/>
+                            </div>
+                            <div class="current-data-row">
+                                <div class="currency-data">
+                                    <label>Quantity:</label><span th:text="${billSelectionBilanz.five}"></span>
+                                </div>
+                                <div class="currency-data">
+                                    <label>Total Amount:</label><span th:text="${billSelectionBilanz.five * 5}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="currency-thumb">
+                            <div class="currency-image">
+                                <img width="60px" th:src="@{/assets/images/one.png}"/>
+                            </div>
+                            <div class="current-data-row">
+                                <div class="currency-data">
+                                    <label>Quantity:</label><span th:text="${billSelectionBilanz.one}"></span>
+                                </div>
+                                <div class="currency-data">
+                                    <label>Total Amount:</label><span th:text="${billSelectionBilanz.one * 1}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="ledger-list">
+                <table class="default-list">
+                    <tr>
+                        <th>Account Name</th>
+                        <th>Account Code</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                    </tr>
+                    <tr th:each="tb : ${trialBalanceBilanz.trialBalanceWeb}">
+                        <td th:text="${tb.name}"></td>
+                        <td th:text="${tb.code}"></td>
+                        <td class="amount-td" th:style="${'color:' + session.runtimeSettings.themeColor}">
+                            <span th:if="${tb.creditBalance == 'false'}">
+                                <span th:if="${tb.totalDifference > 0}">
+                                    <span th:text="${#numbers.formatDecimal(tb.totalDifference, 0, 'COMMA', 0, 'POINT')}"/>
+                                </span>
+                                <span th:if="${tb.totalDifference < 0}">
+                                    <span th:text="${#numbers.formatDecimal(tb.totalDifference*-1, 0, 'COMMA', 0, 'POINT')}"/>
+                                </span>
+                            </span>
+                            <span th:if="${tb.creditBalance == 'true'}">
+                                0
+                            </span>
+                        </td>
+                        <td class="amount-td" th:style="${'color:' + session.runtimeSettings.themeColor}">
+                            <span th:if="${tb.creditBalance == 'true'}">
+                                <span th:if="${tb.totalDifference < 0}">
+                                    <span th:text="${#numbers.formatDecimal(tb.totalDifference*-1, 0, 'COMMA', 0, 'POINT')}"/>
+                                </span>
+                                <span th:if="${tb.totalDifference > 0}">
+                                    <span th:text="${#numbers.formatDecimal(tb.totalDifference, 0, 'COMMA', 0, 'POINT')}"/>
+                                </span>
+                            </span>
+                            <span th:if="${tb.creditBalance == 'false'}">
+                                0
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div> -->
+        </div>
+    </div>
+</section>
+
+</body>
+<div th:insert="footer::navbar"></div>
+</html>

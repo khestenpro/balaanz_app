@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session?.runtimeSettings?.themeColor2}"> MOMO/ OM Transactions </h2>
+                        <span>Enter Start Date and End Date to filter Notifications, Warnings or Information.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container ledger-container">
+
+            <font size="6px"> Wallet Balance</font> <br/>
+            <table class="default-list">
+                <tr>
+                    <td>MTN Balance</td>
+                    <td th:text="${#numbers.formatDecimal(wallet.mtnWallet.disbursementBalance, 0, 'COMMA', 0, 'POINT')}"></td>
+                </tr>
+                <tr>
+                    <td>Orange Balance</td>
+                    <td th:text="${#numbers.formatDecimal(wallet.orangeWallet.balance, 0, 'COMMA', 0, 'POINT')}"></td>
+                </tr>
+            </table>
+
+            <br/><br/>
+
+            <font size="4px"> Live FolePay Successful D-Transactions</font>
+            <div class="ledger-list">
+                <table class="default-list">
+                    <tr>
+                        <th></th>
+                        <th>Time</th>
+                        <th>Name</th>
+                        <th>Phone Number</th>
+                        <th>Amount</th>
+                        <th>FoleTransaction Id</th>
+                        <th>Transaction Type</th>
+                    </tr>
+
+                    <tr th:each="momoTransaction, state : ${folePayDTransactions}">
+                    <td th:utext="${state.count}"/>
+                        <td th:text="${#strings.substring(momoTransaction.lastModified, 0, 16)}"/>
+                        <td th:text="${momoTransaction.givenNames}+' '+${momoTransaction.familyName}"/>
+                        <td th:text="${momoTransaction.phoneNumber}"/>
+                        <td th:text="${#numbers.formatDecimal(momoTransaction.amount, 0, 'COMMA', 0, 'POINT')}"/>
+                        <td th:text="${momoTransaction.transactionId}"/>
+                        <td th:text="${momoTransaction.transactionType}"/>
+                    </tr>
+                </table>
+            </div>
+
+            <br/><br/><br/>
+
+            <font size="4px"> Balaanz D-Transactions with no MTN Response</font>
+            <div class="ledger-list">
+                <table class="default-list">
+                    <tr>
+                        <th></th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Description</th>
+                        <th>Org Id</th>
+                        <th>Customer</th>
+                        <th>Msisdn</th>
+                        <th>Telephone</th>
+                        <th>Request Id</th>
+                    </tr>
+                    <tr th:each="aMomoRequest, state : ${allBalaanzDRequests}">
+                        <td th:utext="${state.count}"></td>
+                        <td th:text="${#strings.substring(aMomoRequest.date, 0, 16)}"></td>
+                        <td><span th:text="${#numbers.formatDecimal(aMomoRequest.amount, 0, 'COMMA', 0, 'POINT')}"/></td>
+                        <td th:text="${aMomoRequest.status}"></td>
+                        <td th:text="${aMomoRequest.note}"></td>
+                        <td th:text="${aMomoRequest.orgId}"></td>
+<!--                        <td th:text="${aMomoRequest.accountNumber}"></td>-->
+                        <td th:text="${aMomoRequest.getMsisdnProvider}"></td>
+                        <td th:text="${aMomoRequest.phoneNumber}"></td>
+                        <td th:text="${aMomoRequest.requestId}"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <br/><br/><br/>
+
+            <font size="4px"> Callback MTN to Balaanz D-Transactions</font>
+            <div class="ledger-list">
+                <table class="default-list">
+                    <tr>
+                        <th></th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Description</th>
+                        <th>Customer</th>
+                        <th>Telephone</th>
+                        <th>Request Id</th>
+                        <th>Transaction Id</th>
+                    </tr>
+                    <tr th:each="aMomoRequestCallBack, state : ${allCallBackBalaanzDRequests}">
+                        <td th:utext="${state.count}"></td>
+                        <td th:text="${#strings.substring(aMomoRequestCallBack.date, 0, 16)}"></td>
+                        <td><span th:text="${#numbers.formatDecimal(aMomoRequestCallBack.amount, 0, 'COMMA', 0, 'POINT')}"/></td>
+                        <td th:text="${aMomoRequestCallBack.status}"></td>
+                        <td th:text="${aMomoRequestCallBack.note}"></td>
+<!--                        <td th:text="${aMomoRequestCallBack.accountNumber}"></td>-->
+<!--                        <td th:text="${aMomoRequestCallBack.getMsisdnProvider}"></td>-->
+                        <td th:text="${aMomoRequestCallBack.recipientPhoneNumber}"></td>
+                        <td th:text="${aMomoRequestCallBack.requestId}"></td>
+                        <td th:text="${aMomoRequestCallBack.transactionId}"></td>
+                    </tr>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+</body>
+<div th:insert="footer::navbar"></div>
+</html>

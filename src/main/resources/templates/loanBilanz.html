@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:insert="header::navbar" class="sticky-header"></div>
+
+<body>
+
+<section class="main-page-container">
+    <div th:insert="summary::navbar"></div>
+    <div class="container">
+        <div class="radius-container loan-insterest">
+            <div class="loan-account-transaction">
+                <div class="ledger-container">
+                    <div class="ledger-summary">
+                        <div class="count-row">
+                            <h2>LOAN INTEREST</h2> 
+                        </div>
+                    </div>
+                </div> 
+                <div class="loan-tran-list">
+                    <table class="default-list">
+                        <thead>
+                            <tr>
+                                <th>Date Of Payment</th>
+                                <th>Method Of Payment</th>
+                                <th>Agent</th>
+                                <th>%</th>
+                                <th>Notes</th>
+                                <th>Days</th>
+                                <th>
+                                    Interest
+                                </th>
+                                <th>VAT</th>
+                                <th>Debit</th>
+                                <th>Credit</th>
+                                <th>
+                                    <span th:if="${#authorization.expression('hasAnyAuthority(''ROLE_MANAGER'')')}"> 
+                                            <div th:text="${loanBilanzList.totalLoan}"/>  
+                                        Total Interest Paid: <span th:text="${loanBilanzList.totalLoanInterest}"/> 
+                                    </span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="bilanz : ${loanBilanzList.loanBilanzList}">
+                                <td>
+                                    <span th:text="${bilanz.createdDate}"/>
+<!--                                    <form action="#" th:action="@{/updateTrxDateForm}" method="post"> -->
+<!--                                        <div class="input-group input-group-sm"> -->
+<!--                                            <input class="form-control" name="dateChange" type="date"/>-->
+<!--                                            <input type="hidden" name="transactionID" th:value="${bilanz.id}"> -->
+<!--                                            <div class="input-group-append"> -->
+<!--                                                <button  class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}" type="submit">Submit</button>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </form>-->
+                                </td>
+                                <td th:text="${bilanz.modeOfPayment}"></td>
+                                <td th:text="${bilanz.agent}"></td> 
+                                <td th:text="${bilanz.interestRate}">
+                                </td>
+                                <td th:text="${bilanz.notes}"></td>
+                                <td th:text="${bilanz.noOfDays}"></td> 
+                                <td th:text="${bilanz.interestDue}"></td>
+                                <td th:text="${bilanz.vatPercent}"></td>
+                                <td th:text="${bilanz.loanAmount}"></td>
+                                <td th:text="${bilanz.amountReceived}"></td>
+                                <td th:text="${bilanz.currentBalance}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> 

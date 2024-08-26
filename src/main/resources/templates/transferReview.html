@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:insert="header::navbar" class="sticky-header"></div>
+<br/>
+<br/>
+<br/>
+<div th:insert="summary::navbar"></div>
+
+<div class="container">
+    <div class="radius-container payment-status-modal">
+        <form action="#" th:action="@{/transferb2bAccount}" method="post"
+              th:object="${transferBilanz}">
+            <table class="center" width="100%" border="0">
+                <tr>
+                    <td align="center">
+                        <img width="25" src="assets/images/b-icon.png"> <font style="<font-size:1.0em;">SUMMARY OF
+                        TRANSFER - REVIEW</font>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2">
+
+                        <br/>
+                        <div class="error" th:text="${error}"/>
+                        <br/>
+
+                        <label> <b>From Account:</b></label><br/>
+                        <span class="selectNormal" th:text="${fromTransferText}"/>
+                        <input type="hidden" id="transferFromAccount" th:field="*{transferFromAccount}">
+                        <br/><br/>
+                        <label> <b>To Account:</b></label><br/>
+                        <span style='font-size:25px;color:green' class="selectNormal" th:text="${toTransferText}"/>
+                        <input type="hidden" id="transferToAccount" th:field="*{transferToAccount}">
+                        <br/>
+                        <span style='font-size:60px;color:green' class="selectNormal" th:text="${transferAmount}"/>frs
+                        <input type="hidden" id="amount" th:field="*{transferAmount}">
+                        <input type="hidden" id="transferType" th:field="*{transferType}" value="${transferType}">
+                        <br/>
+                        <span class="selectNormal" th:text="${notes}"/>
+                        <br/>
+                        <input type="hidden" class="selectNormal" id="notes" rows="3" cols="30" th:field="*{notes}"/>
+                        <br/>
+
+                        <div th:if="${#authorization.expression('hasAnyAuthority(''ROLE_CUSTOMER'')')}">
+                            PIN:<input type="password" name="balaanzPin" maxlength="6"
+                                       id="balaanzPin" th:field="*{terminalCode}"
+                                       placeholder="Enter Your Balaanz PIN" class="form-control" required/><br/>
+                        </div>
+
+                        <button type="submit" class="btn btn-success">
+                            Submit Transfer
+                        </button>
+                        <br/>
+
+                        <a class="radius-btn-link"
+                           th:style="${'color:' + session.runtimeSettings.themeColor + '; border-color:' + session.runtimeSettings.themeColor}"
+                           th:href="@{/welcomeGlobal}">Home/ Go Back</a>
+
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <br>
+</div>
+<div th:insert="footer::navbar"></div>
+</html>

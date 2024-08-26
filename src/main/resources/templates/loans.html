@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="header::navbar" class="sticky-header" ></div>
+<section class="main-page-container">
+    <!--Project title area start-->
+    <div class="project-title-area text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-title">
+                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor2}">LOAN APPLICATIONS IN PROCESS</h2>
+                        <span>List of Loan applications in progress.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Project title area end-->
+    <div class="container">
+        <div class="radius-container">
+            <div class="user-list">
+                <table class="default-list">
+                    <tr>
+                        <th>Created By</th>
+                        <th>Created Date</th>
+                        <th>Loan Amount</th>
+                        <th>Loan Owner</th>
+                        <th>Account No.</th>
+                        <th>Rate(%)</th>
+                        <th>Term</th>
+                        <th>Branch</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                    <tr th:each="loan : ${loansList}">
+                        <td th:text="${loan.createdBy}"></td>
+                        <td th:text="${#dates.format(loan.createdDate, 'dd-MMM-yyyy HH:mm')}"></td>
+                        <td th:text="${#numbers.formatDecimal(loan.loanAmount, 0, 'COMMA', 0, 'POINT')}"></td>
+                        <td th:text="${loan.user.gender}+'. '+ ${loan.user.firstName} +' '+ ${loan.user.lastName}"></td>
+                        <td th:text="${loan.accountNumber}"></td>
+                        <td th:text="${loan.interestRate}"></td>
+                        <td th:text="${loan.termOfLoan}"></td>
+                        <td th:text="${loan.branchCode}"></td>
+                        <td>
+                            <span th:if="${loan.accountStatus.name == 'PENDING_APPROVAL'}">
+                                <span class="table-list-status">P. Approval</span>
+                            </span>
+                            <span th:if="${loan.accountStatus.name == 'PENDING_PAYOUT'}">
+                                <span class="table-list-status">Approved</span>
+                                <!-- <span class="table-list-status" th:text="${loan.approvedBy}"></span>
+                                <span class="table-list-status" th:text="${#dates.format(loan.approvedDate, 'dd-MMM-yyyy HH:mm')}"></span> -->
+                            </span>
+                        </td>
+                        <td>
+                            <a class="table-list-button-icon" href="#" th:href="@{/loanDetails/{id}(id=${loan.id})}"><i class="fas fa-ellipsis-h"></i></a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="footer::navbar"></div>
+</html>

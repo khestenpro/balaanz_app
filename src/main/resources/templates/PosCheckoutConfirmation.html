@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+<div th:insert="header::navbar" class="sticky-header"></div>
+
+<section class="main-page-container">
+
+  <div class="container">
+    <div class="radius-container payment-status-modal">
+      <!--            <span class="status-icon success" th:unless='${error}'><i class="far fa-check-circle"></i></span>-->
+      <!--            <span class="status-icon error" th:if='${error}'><i class="far fa-times-circle"></i></span>-->
+      <form th:action="@{/checkoutShoppingCart}" method='POST' id='checkout-form'>
+        <div class="payment-options">
+          <h3>Payment User Confirmation</h3>
+          <div class="btn-block">
+            <div th:if="${isConfirmationNeeded == 'y'}" th:text="${confirmationMessage}"
+                 th:class="${primary == '0'} ? 'alert alert-danger' : 'alert alert-success'"
+            ></div>
+            <input type="submit" class="btn" value="Process Payment"
+                   th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}"/>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+<div th:insert="footer::navbar"></div>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="pos-page-header" th:fragment="navbar">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>bitsvalley - bala@nz</title>
+        <!-- Favicon  -->
+        <link rel="icon" type="image/x-icon" th:href="@{/assets/images/favicon/faviconn.ico}">
+        <!--Bootstrap-->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+        <!--Fontawesome-->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/all.min.css}">
+        <!--Owl-carousel-->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/owl.carousel.min.css}">
+        <!--Owl Carousel theme-->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/owl.theme.default.min.css}">
+        <!--Animate-->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/animate.min.css}">
+        <!-- magnific CSS -->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/magnific-popup.css}">
+        <!-- Mmenu CSS -->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/slicknav.min.css}">
+        <!--Style-->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/style.css}">
+        <!-- Responsive -->
+        <link type="text/css" rel="stylesheet" th:href="@{/assets/css/responsive.css}">
+    </head>
+</div>
+<div th:insert="header::navbar" class="sticky-header"></div>
+<section class="main-page-container pos-page-container">
+    <div class="pos-container">
+        <div class="pos-products">
+            <div class="pos-product-filter">
+                <!-- <div class="hamburger">
+                    <span class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="-0.5 0 25 25" fill="none">
+                            <path d="M2 12.32H22" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 18.32H22" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 6.32001H22" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Category
+                    </span>
+                </div> -->
+                <div class="product-search">
+                    <input type="text">
+                    <button class="search-btn">
+                        Search
+                        <i class="fa fa-search"></i>
+                    </button>
+                    <i class="fas fa-barcode"></i>
+                </div>
+            </div>
+            <div class="pos-category">
+                <!-- <div class="pos-category-header">
+                    Product Category
+                    <div class="close">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 0 24 24" fill="none">
+                            <path d="M20.7457 3.32851C20.3552 2.93798 19.722 2.93798 19.3315 3.32851L12.0371 10.6229L4.74275 3.32851C4.35223 2.93798 3.71906 2.93798 3.32854 3.32851C2.93801 3.71903 2.93801 4.3522 3.32854 4.74272L10.6229 12.0371L3.32856 19.3314C2.93803 19.722 2.93803 20.3551 3.32856 20.7457C3.71908 21.1362 4.35225 21.1362 4.74277 20.7457L12.0371 13.4513L19.3315 20.7457C19.722 21.1362 20.3552 21.1362 20.7457 20.7457C21.1362 20.3551 21.1362 19.722 20.7457 19.3315L13.4513 12.0371L20.7457 4.74272C21.1362 4.3522 21.1362 3.71903 20.7457 3.32851Z" fill="#0F0F0F"/>
+                        </svg>
+                    </div>
+                </div> -->
+                <ul>
+                    <li th:style="${'background-color:' + session.runtimeSettings.themeColor}" th:each="category: ${categories}">
+                        <a th:href="@{/showPosCategoryProducts/{id}(id=${category.id})}">
+                            <div class="category-content">
+                                <label th:text="${category.name}"></label>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pos-product-list">
+                <div class="row row-space-14">
+                    <div class="col-md-6 col-lg-3" th:each="produto : ${shopProducts}">
+                        <div class="pos-product-item"
+                             th:style="${'border-color:' + session.runtimeSettings.themeColor2}">
+
+                             <div class="pos-product-image">
+                                <a th:href="@{/addToCart/{id}(id=${produto.id})}">
+                                    <img
+                                            th:src="${produto.getImageUrl1() == null || produto.getImageUrl1() == ''
+                                            ? 'https://img.freepik.com/free-vector/shopping-cart-with-boxes-concept-illustration_114360-17063.jpg?w=740&t=st=1706464153~exp=1706464753~hmac=3087ca09cc650d413b37745c0adc97c080b396ace33fe7cfbdd8c32e68886b95'
+                                            : (produto.getImageUrl1().contains('C:') || produto.getImageUrl1().contains('/app/')
+                                            ? 'file:///'+produto.getImageUrl1() : produto.getImageUrl1())
+                                             }"
+                                            />
+                                </a>
+                             </div>
+                            <!--              <div class="pos-product-image">-->
+                            <!--                <a th:href="@{/addToCart/{id}(id=${produto.id})}">-->
+                            <!--                  <img src="https://media.istockphoto.com/id/1282672553/photo/glass-of-cold-cola-soft-drink-with-ice-on-wooden-background.jpg?b=1&s=170667a&w=0&k=20&c=MbKkpWJ_mG-grwt0DEHwwbBLcIKdEQdtiIk81rgnYHU=" />-->
+                            <!--                </a>-->
+                            <!--              </div>-->
+                            <div class="pos-product-desc">
+                                <a th:href="@{/addToCart/{id}(id=${produto.id})}">
+
+                                    <h4 th:text="${produto.name}"></h4>
+                                    <div class="product-desc-bottom">
+                                        <h2 th:style="${'color:' + session.runtimeSettings.themeColor}"
+                                        th:text="${#numbers.formatDecimal(produto.unitPrice, 0, 'COMMA', 0, 'POINT') + ' frs' }"></h2>
+                                        <span th:text="${produto.stockAmount}"/>
+                                    </div>
+
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="pos-checkout">
+            <h2>Shopping Cart</h2>
+            <div class="pos-checkout-products">
+                <div class="pos-checkout-item">
+                    <div class="pos-checkout-item-row"
+                         th:each="i: ${#numbers.sequence(session.shoppingCart?.orderItems.size() -1,0,-1)}" >
+<!--                         th:each="orderItem : ${session.shoppingCart?.orderItems?.reverse()}">-->
+                        <div class="pos-checkout-product-img">
+                            <img
+                                    th:src="${session.shoppingCart?.orderItems[i].getShopProduct().getImageUrl1() == null
+                                    || session.shoppingCart?.orderItems[i].getShopProduct().getImageUrl1() == ''
+                                            ? 'https://img.freepik.com/free-vector/shopping-cart-with-boxes-concept-illustration_114360-17063.jpg?w=740&t=st=1706464153~exp=1706464753~hmac=3087ca09cc650d413b37745c0adc97c080b396ace33fe7cfbdd8c32e68886b95'
+                                            : session.shoppingCart?.orderItems[i].getShopProduct().getImageUrl1()}"
+                            />
+                        </div>
+                        <div class="pos-checkout-content">
+                            <div class="product-title" th:text="${session.shoppingCart?.orderItems[i].name}"></div>
+                            <div class="pos-checkout-content-bottom">
+                                <div class="qty" th:text="' x '+${#numbers.formatDecimal(session.shoppingCart?.orderItems[i].qty, 0, 'COMMA', 0, 'POINT')}"></div>
+                                <div class="price" th:style="${'color:' + session.runtimeSettings.themeColor}" th:text="${#numbers.formatDecimal(session.shoppingCart?.orderItems[i].qty*session.shoppingCart?.orderItems[i].price, 0, 'COMMA', 0, 'POINT') + ' frs'}"></div>
+                                <a class="table-list-button-icon default-list-icon" th:href="@{/removeFromCart/{id}(id=${session.shoppingCart?.orderItems[i].shopProduct.id})}"> <i
+                                class='fas fa-trash-alt' ></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-summary-total">
+                        <label>Total:</label>
+                        <div class="title">
+                        <strong><span
+                                th:text="${#numbers.formatDecimal(session.shoppingCart?.total, 0, 'COMMA', 0, 'POINT')}"></span></strong> frs
+                            </div>
+                    </div>
+                    <!--          <div class="pos-checkout-item-row">-->
+                    <!--            <label th:text="${#numbers.formatDecimal(orderItem.price, 0, 'COMMA', 0, 'POINT')}"></label>-->
+                    <!--&lt;!&ndash;            <label>10 FRS</label>&ndash;&gt;-->
+                    <!--          </div>-->
+                    <!--          <div class="pos-checkout-item-row">-->
+                    <!--&lt;!&ndash;            <label>+ GST</label>&ndash;&gt;-->
+                    <!--&lt;!&ndash;            <label>12 FRS</label>&ndash;&gt;-->
+                    <!--          </div>-->
+                </div>
+            </div>
+            <form th:action="@{/checkoutPayments}" method="post">
+                <div class="pos-checkout-action">
+                    <!--            <div class="apply-discount">-->
+                    <!--    &lt;!&ndash;          <input type="text">&ndash;&gt;-->
+                    <!--                <button class="btn btn-orange" th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}">APPLY</button>-->
+                    <!--            </div>-->
+                    <button class="btn btn-orange"
+                            th:style="${'background-color:' + session.runtimeSettings.themeColor + ';' + 'border-color:' + session.runtimeSettings.themeColor}">
+                        CHECKOUT
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> -->
+<!-- <script>
+    'use strict';
+
+    jQuery(function($) { 
+        var isDragging = false;
+        var startPosition;
+        var startScrollLeft;
+
+        $(".pos-category ul").mousedown(function(e) {
+            isDragging = true;
+            startPosition = e.pageX;
+            startScrollLeft = $(this).scrollLeft();
+        });
+
+        $(document).mouseup(function() {
+            isDragging = false;
+        });
+
+        $(document).mousemove(function(e) {
+            if (isDragging) {
+                var distance = startPosition - e.pageX;
+                $("#scrollableDiv").scrollLeft(startScrollLeft + distance);
+            }
+        });
+    })(jQuery);    
+</script> -->
+</html>
